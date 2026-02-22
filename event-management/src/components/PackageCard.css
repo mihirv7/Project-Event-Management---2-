@@ -1,0 +1,61 @@
+/* .packages-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(260px, 1fr));
+    gap: 20px;
+} */
+
+
+.package-card {
+  width: 100%;
+  max-width: 420px;   /* must match grid min width */
+  border-radius: 16px;
+  background: #fff;
+  
+}
+
+.package-card:hover {
+  transform: translateY(-5px);
+}
+
+.package-card img {
+  width: 100%;
+  height: 230px;     /* controls height */
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+
+.package-content {
+  padding: 20px;
+}
+
+.package-content h2 {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.package-info {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0;
+  font-weight: 600;
+  font-size: 20px;;
+}
+
+.package-content button {
+  width: 100%;
+  padding: 10px;
+  background: #b08d57; /* your brown theme */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.package-link {
+  text-decoration: none;
+  color: inherit;
+}
+.packages-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
