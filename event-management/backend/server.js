@@ -5,6 +5,8 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const eventRoutes = require("./routes/eventRoutes");
 const packageRoutes = require("./routes/packageRoutes");
+const bookingRoutes = require("./routes/bookingRoutes");
+
 
 const app = express();
 
@@ -19,6 +21,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/packages", packageRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/bookings", bookingRoutes);
 
 const PORT = 5000;
 app.listen(PORT, () => {

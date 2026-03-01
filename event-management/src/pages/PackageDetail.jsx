@@ -1,12 +1,15 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./PackageDetail.css";
+
+
 
 
 export default function PackageDetail() {
   const { id } = useParams();
-
+  const navigate = useNavigate();
   const [pkg, setPkg] = useState(null);
   const [allPackages, setAllPackages] = useState([]);
 
@@ -96,7 +99,12 @@ export default function PackageDetail() {
 
 )}
 
-      <button className="book-btn">Book Event</button>
+      <button
+  className="book-btn"
+  onClick={() => navigate(`/booking/${pkg._id}`)}
+>
+  Book Event
+</button>
 
       {/* ================= OTHER PACKAGES ================= */}
       {otherPackages.length > 0 && (

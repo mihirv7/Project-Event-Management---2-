@@ -1,0 +1,85 @@
+/* ===== PAGE BACKGROUND ===== */
+.booking-page {
+  min-height: 100vh;
+  background: url("/assets/bg.jpg") center/cover no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ===== BOOKING CARD ===== */
+.booking-container {
+  width: 420px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 35px;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
+
+/* ===== TITLE ===== */
+.booking-container h2 {
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* ===== FORM ===== */
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ===== INPUTS ===== */
+.booking-form input,
+.booking-form textarea {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  outline: none;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.booking-form input:focus,
+.booking-form textarea:focus {
+  border-color: black;
+}
+
+/* readonly inputs */
+.booking-form input[readonly] {
+  background: #f3f3f3;
+  cursor: not-allowed;
+}
+
+/* ===== TEXTAREA ===== */
+.booking-form textarea {
+  resize: none;
+  height: 80px;
+}
+
+/* ===== BUTTON ===== */
+.booking-form button {
+  margin-top: 10px;
+  padding: 14px;
+  border-radius: 30px;
+  border: none;
+  background: black;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.booking-form button:hover {
+  background: #333;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 500px) {
+  .booking-container {
+    width: 90%;
+    padding: 25px;
+  }
+}

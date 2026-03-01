@@ -26,13 +26,13 @@ function App() {
         <Route path="/about" element={<About />} />
 
         <Route
-          path="/booking"
-          element={
-            <PrivateRoute>
-              <Booking />
-            </PrivateRoute>
-          }
-        />
+  path="/booking/:id"
+  element={
+    <PrivateRoute>
+      <Booking />
+    </PrivateRoute>
+  }
+/>
       </Routes>
 
       <Footer />

@@ -93,5 +93,16 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+const authMiddleware = require("../middleware/authMiddleware");
+
+// GET logged in user
+router.get("/me", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 module.exports = router;
