@@ -65,8 +65,22 @@ export default function PackageDetail() {
         
       </div>
       <div className="package-info">
-        <p className="description">Description : {pkg.description}</p>
-      </div>
+  <p className="description">
+    <strong>Description :</strong> {pkg.description}
+  </p>
+
+  <p>
+    <strong>Venue :</strong> {pkg.venue}
+  </p>
+
+  <p>
+    <strong>Coordinator Name :</strong> {pkg.coordinatorName}
+  </p>
+
+  <p>
+    <strong>Coordinator Contact :</strong> {pkg.coordinatorNumber}
+  </p>
+</div>
 
       {/* Catering */}
       {pkg.catering && pkg.catering.length > 0 && (
@@ -81,6 +95,7 @@ export default function PackageDetail() {
       <div key={index}>
         <p><strong>{item.thaliName}</strong></p>
         <p>{item.description}</p>
+
         <p className="thali-price">₹ {item.price} per plate</p>
       </div>
     ))

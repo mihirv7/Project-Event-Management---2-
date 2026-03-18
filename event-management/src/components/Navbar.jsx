@@ -20,14 +20,14 @@ export default function Navbar() {
       <ul className="nav-links">
         <li><Link to="/">Home</Link></li>
         <li><Link to="/packagecard">Packages</Link></li>
-        <li><Link to="/logi">Custom</Link></li>
+        <li><Link to="/custom">Custom</Link></li>
         <li><Link to="/contact">Contact us</Link></li>
         <li><Link to="/about">About us</Link></li>
         <li><Link to="/login">Login</Link></li>
       </ul>
 
       {/* Button */}
-      <button className="nav-btn">Start free trial</button>
+      <button></button>
     </nav>
   );
 }

@@ -10,6 +10,9 @@ import Contact from "./pages/Contact";
 import About from "./pages/About";
 import PrivateRoute from "./components/PrivateRoute";
 import Booking from "./pages/Booking";
+import Custom from "./pages/Custom";
+import CategoryProducts from "./pages/CategoryProducts";
+import ProductDetail from "./pages/ProductDetail";
 
 function App() {
   return (
@@ -24,7 +27,9 @@ function App() {
         <Route path="/packages/:id" element={<PackageDetail />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
-
+        <Route path="/custom" element={<Custom />} />
+        <Route path="/custom/:id" element={<CategoryProducts />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
         <Route
   path="/booking/:id"
   element={

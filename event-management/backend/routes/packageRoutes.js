@@ -11,6 +11,9 @@ router.post("/add", async (req, res) => {
   name,
   price,
   description,
+  venue,
+  coordinatorName,
+  coordinatorNumber,
   startDate,
   endDate,
   images,
@@ -22,6 +25,9 @@ router.post("/add", async (req, res) => {
     if (
   !name ||
   !description ||
+  !venue ||
+  !coordinatorName ||
+  !coordinatorNumber ||
   !price ||
   !startDate ||
   !endDate ||
@@ -38,6 +44,9 @@ router.post("/add", async (req, res) => {
       name,
       price,
       description,
+      venue,
+      coordinatorName,
+      coordinatorNumber,
       startDate,
       endDate,
       images,

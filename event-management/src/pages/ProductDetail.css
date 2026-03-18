@@ -1,0 +1,147 @@
+/* Wrapper */
+.detail-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+}
+
+/* Card */
+.detail-card {
+  width: 70%;
+  background: #fff;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Title */
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Image */
+.image-box img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* Price */
+.price {
+  color: rgb(7, 7, 7);
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+/* Description */
+.description {
+  color: #555;
+  margin-bottom: 15px;
+}
+.radio-box {
+  padding: 8px 18px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  cursor: pointer;
+  background: #f9f9f9;
+  margin-right: 10px;
+  display: inline-block;
+}
+
+/* Hide actual radio circle */
+.radio-box input {
+  display: none;
+}
+
+/* Active state */
+.radio-box input:checked + * {
+  background: black;
+  color: white;
+}
+
+/* Customize button */
+.custom-btn {
+  background: rgb(10, 10, 10);
+  border: none;
+  padding: 8px 15px;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+/* Options */
+.option-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.option-box {
+  padding: 8px 15px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.option-box.active {
+  background: black;
+  color: white;
+}
+
+/* Full button */
+.full-btn {
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* Related section */
+.related-section {
+  width: 70%;
+  margin-top: 30px;
+}
+/* Custom section spacing */
+.custom-section {
+  margin-top: 20px;
+}
+
+/* Each customization block */
+.custom-box {
+  margin-bottom: 20px;
+}
+
+/* Title spacing */
+.custom-box h4 {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+/* Options container */
+.option-container {
+  display: flex;
+  gap: 12px;            /* space between options */
+  flex-wrap: wrap;
+}
+
+/* Option box */
+.option-box {
+  padding: 10px 18px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: 0.3s;
+  background: #f9f9f9;
+}
+
+/* Hover */
+.option-box:hover {
+  background: #eee;
+}
+
+/* Active */
+.option-box.active {
+  background: black;
+  color: white;
+  border-color: black;
+}
