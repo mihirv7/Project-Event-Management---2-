@@ -52,7 +52,7 @@ export default function PackageDetail() {
 
       {/* Info */}
       <div className="package-info">
-        <p className="price">Price : ₹ {pkg.price}</p>
+        <p className="price"><strong>Price : ₹</strong> {pkg.price}</p>
 
         {/* <p className="date">
           📅 <strong>From:</strong>{" "}
@@ -80,6 +80,9 @@ export default function PackageDetail() {
   <p>
     <strong>Coordinator Contact :</strong> {pkg.coordinatorNumber}
   </p>
+  <p>
+    <strong>No of Guest :</strong> {pkg.guestCount}
+  </p>
 </div>
 
       {/* Catering */}
@@ -87,7 +90,7 @@ export default function PackageDetail() {
   /* Catering Section */
 <div className="catering">
 
-  <h2>Catering (Thali)</h2>
+  <h2>Catering</h2>
 
   {/* OLD FORMAT (array based) */}
   {pkg.catering && pkg.catering.length > 0 &&

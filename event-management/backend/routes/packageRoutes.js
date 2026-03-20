@@ -10,6 +10,7 @@ router.post("/add", async (req, res) => {
     const {
   name,
   price,
+  guestCount,
   description,
   venue,
   coordinatorName,
@@ -43,6 +44,7 @@ router.post("/add", async (req, res) => {
     const newPackage = new Package({
       name,
       price,
+      guestCount,
       description,
       venue,
       coordinatorName,

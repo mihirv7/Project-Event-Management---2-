@@ -11,6 +11,10 @@ const packageSchema = new mongoose.Schema(
   name: String,
   description: String,
   price: Number,
+   guestCount: {
+    type: Number,
+    required: true
+  },
   venue: String,
   coordinatorName: String,
   coordinatorNumber: String,
