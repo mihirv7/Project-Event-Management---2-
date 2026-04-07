@@ -13,6 +13,10 @@ import Booking from "./pages/Booking";
 import Custom from "./pages/Custom";
 import CategoryProducts from "./pages/CategoryProducts";
 import ProductDetail from "./pages/ProductDetail";
+import ProductBooking from "./pages/ProductBooking";
+import MyBookings from "./pages/MyBookings";
+
+
 
 function App() {
   return (
@@ -30,6 +34,8 @@ function App() {
         <Route path="/custom" element={<Custom />} />
         <Route path="/custom/:id" element={<CategoryProducts />} />
         <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/product-booking" element={<ProductBooking />} />
+        <Route path="/my-bookings" element={<MyBookings />} />
         <Route
   path="/booking/:id"
   element={

@@ -63,7 +63,7 @@ export default function Booking() {
       const token = localStorage.getItem("token");
 
       await axios.post(
-        "http://localhost:5000/api/bookings/add",
+        "http://localhost:5000/api/booking/add",
         { ...formData, packageId: id },
         {
           headers: {

@@ -5,8 +5,6 @@ import { useNavigate } from "react-router-dom";
 import "./PackageDetail.css";
 
 
-
-
 export default function PackageDetail() {
   const { id } = useParams();
   const navigate = useNavigate();

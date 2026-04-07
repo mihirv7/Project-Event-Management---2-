@@ -8,7 +8,7 @@ const packageRoutes = require("./routes/packageRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const productRoutes = require("./routes/productRoutes");  
-
+const productBookingRoutes = require("./routes/productBookingRoutes");
 
 const app = express();
 
@@ -23,9 +23,11 @@ app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/packages", packageRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/bookings", bookingRoutes);
+app.use("/api/booking", bookingRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/product-bookings", productBookingRoutes);
+
 
 
 const PORT = 5000;
