@@ -9,6 +9,7 @@ const bookingRoutes = require("./routes/bookingRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const productRoutes = require("./routes/productRoutes");  
 const productBookingRoutes = require("./routes/productBookingRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 
@@ -27,6 +28,8 @@ app.use("/api/booking", bookingRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/product-bookings", productBookingRoutes);
+app.use("/api/users", userRoutes);
+app.use("/uploads", express.static("uploads"));
 
 
 
