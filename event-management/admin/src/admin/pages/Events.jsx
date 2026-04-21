@@ -57,9 +57,8 @@ export default function Events() {
 };
 
  const handleSubmit = async (e) => {
-  e.preventDefault();
-
   const data = new FormData();
+  e.preventDefault();
   data.append("title", formData.title);
   data.append("date", formData.date);
   data.append("location", formData.location);

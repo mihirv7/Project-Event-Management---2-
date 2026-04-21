@@ -42,7 +42,7 @@ export default function PackageDetail() {
         {pkg.images?.slice(0, 2).map((img, index) => (
           <img
             key={index}
-            src={`/assets/${img}`}
+            src={`http://localhost:5000/uploads/${img}`}
             alt={pkg.name}
           />
         ))}

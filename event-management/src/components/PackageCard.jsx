@@ -6,7 +6,7 @@ export default function PackageCard({ pkg }) {
     <Link to={`/packages/${pkg._id}`} className="package-link">
       <div className="package-card">
         <img
-        src={`/assets/${pkg.images[0]}`}
+        src={`http://localhost:5000/uploads/${pkg.images[0]}`}
         alt={pkg.name}
         className="package-img"
       />
