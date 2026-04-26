@@ -50,6 +50,7 @@ export default function Events() {
   const handleDelete = async (id) => {
   try {
     await axios.delete(`http://localhost:5000/api/events/${id}`);
+    alert("Events deleted");
     fetchEvents(); // refresh
   } catch (error) {
     console.error(error);
@@ -74,7 +75,7 @@ export default function Events() {
       // CREATE
       await axios.post("http://localhost:5000/api/events", data);
     }
-
+      alert(`Event ${editId ? "updated" : "added"}`);
     fetchEvents();
 
     setFormData({
@@ -195,6 +196,7 @@ export default function Events() {
             name="date"
             value={formData.date}
             onChange={handleChange}
+            min={new Date().toISOString().split("T")[0]}
           />
 
           <input
@@ -259,21 +261,6 @@ export default function Events() {
                 <td>{event.location}</td>
                 <td><img src={`http://localhost:5000/uploads/${event.image}`}width="60"/></td>
                 <td>
-  <button
-    onClick={() => handleDelete(event._id)}
-    style={{
-       background: "#3b82f6",
-    color: "white",
-    border: "none",
-    padding: "6px 10px",
-    borderRadius: "6px",
-    cursor: "pointer",
-    marginRight: "5px"
-    }}
-  >
-
-    Delete
-  </button>
 
 <button
   onClick={() => handleEdit(event)}
@@ -288,7 +275,22 @@ export default function Events() {
   }}
 >
   Edit
-</button></td>              </tr>
+</button>
+<button
+    onClick={() => handleDelete(event._id)}
+    style={{
+       background: "#ff4d4f",
+    color: "white",
+    border: "none",
+    padding: "6px 10px",
+    borderRadius: "6px",
+    cursor: "pointer",
+    marginRight: "5px"
+    }}
+  >
+
+    Delete
+  </button></td>              </tr>
             ))}
           </tbody>
         </table>

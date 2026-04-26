@@ -185,6 +185,79 @@ button, input, select, textarea {
   border-radius: 50%;
   background: radial-gradient(circle, rgba(124,58,237,0.28), transparent 60%);
 }
+/* CARD */
+.admin-card {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #1b2235, #0f172a);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+/* HEADER */
+.card-header h3 {
+  margin: 0;
+  color: #fff;
+}
+
+.card-header p {
+  color: #aaa;
+  margin-bottom: 15px;
+}
+
+/* TABLE */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th {
+  text-align: left;
+  padding: 12px;
+  color: #aaa;
+  border-bottom: 1px solid #2a2f45;
+}
+
+.admin-table td {
+  padding: 14px;
+  color: #fff;
+  border-bottom: 1px solid #2a2f45;
+}
+
+/* IMAGE */
+.table-img {
+  width: 70px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* BUTTONS */
+.btn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 8px;
+  margin-right: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+/* EDIT */
+.btn.edit {
+  background: #3b82f6;
+  color: white;
+}
+
+/* DELETE */
+.btn.delete {
+  background: #ef4444;
+  color: white;
+}
+
+/* HOVER */
+.btn:hover {
+  opacity: 0.9;
+}
 
 .stat-top {
   display: flex;

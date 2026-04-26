@@ -22,7 +22,10 @@ export default function ProductDetail() {
           `http://localhost:5000/api/products/${res.data.categoryId}`
         );
       })
-      .then((res) => setRelated(res.data))
+      .then((res) => {
+  const filtered = res.data.filter(p => p._id !== id);
+  setRelated(filtered);
+})
       .catch((err) => console.log(err));
   }, [id]);
 
@@ -37,7 +40,7 @@ export default function ProductDetail() {
 
         {/* IMAGE */}
         <div className="image-box">
-          <img src={`/assets/${product.image}`} alt={product.name} />
+          <img src={`http://localhost:5000/uploads/${product.image}`} alt={product.name} />
         </div>
 
         {/* PRICE */}
@@ -98,7 +101,9 @@ export default function ProductDetail() {
           onClick={() =>
             navigate("/product-booking", {
               state: {
-                product,
+               productId: product._id,
+              productName: product.name,
+              price: product.price,
                 selectedOptions
               }
             })
@@ -110,19 +115,61 @@ export default function ProductDetail() {
       </div>
 
       {/* RELATED */}
-      <div className="related-section">
-        <h3>More Designs</h3>
+      
 
-        <div className="product-grid">
-          {related.map((item) => (
-            <div className="product-card" key={item._id}>
-              <img src={`/assets/${item.image}`} alt={item.name} />
-              <h4>{item.name}</h4>
-              <p>₹ {item.price}</p>
-            </div>
-          ))}
+<div className="related-section">
+  <h3>More Designs</h3>
+
+  <div
+    className="product-grid"
+    style={{
+      display: "grid",
+      gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+      gap: "20px",
+      marginTop: "15px"
+    }}
+  >
+    {related.map((item) => (
+      <div
+        key={item._id}
+        onClick={() => navigate(`/product/${item._id}`)}
+        style={{
+          background: "#fff",
+          borderRadius: "12px",
+          overflow: "hidden",
+          boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+          cursor: "pointer",
+          transition: "0.3s",
+        }}
+        onMouseEnter={(e) =>
+          (e.currentTarget.style.transform = "translateY(-5px)")
+        }
+        onMouseLeave={(e) =>
+          (e.currentTarget.style.transform = "translateY(0)")
+        }
+      >
+        {/* IMAGE */}
+        <img
+          src={`http://localhost:5000/uploads/${item.image}`}
+          alt={item.name}
+          style={{
+            width: "100%",
+            height: "200px",
+            objectFit: "cover"
+          }}
+        />
+
+        {/* CONTENT */}
+        <div style={{ padding: "10px" }}>
+          <h4 style={{ margin: "5px 0" }}>{item.name}</h4>
+          <p style={{ margin: 0, fontWeight: "bold" }}>
+            ₹ {item.price}
+          </p>
         </div>
       </div>
+    ))}
+  </div>
+</div>
 
     </div>
   );

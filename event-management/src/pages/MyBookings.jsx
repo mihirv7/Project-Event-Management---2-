@@ -61,13 +61,13 @@ export default function MyBookings() {
                 : "🎉 Product Booking"}
             </h3>
 
-            <p><b>Name:</b> {b.userName}</p>
+            <p><b>Name:</b> {b.userName?.name || b.userName}</p>
             <p><b>Email:</b> {b.email}</p>
             <p><b>Phone:</b> {b.phoneNumber}</p>
 
             {b.type === "package" ? (
               <>
-                <p><b>Package ID:</b> {b.packageId}</p>
+                <p><b>Package:</b> {b.packageId?.name || b.packageId}</p>
 
                 <p>
                   <b>Start:</b>{" "}
@@ -81,7 +81,7 @@ export default function MyBookings() {
               </>
             ) : (
               <>
-                <p><b>Product:</b> {b.productName}</p>
+                <p><b>Product:</b> {b.productName?.name || b.productName}</p>
 
                 <p>
                   <b>Date:</b>{" "}

@@ -6,6 +6,12 @@ import "./Booking.css"; // ✅ import CSS for styling
 export default function Booking() {
   const { id } = useParams();
   const navigate = useNavigate();
+   const getNextDay = (date) => {
+    if (!date) return "";
+    const d = new Date(date);
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().split("T")[0];
+  };
 
   const [formData, setFormData] = useState({
     userName: "",
@@ -105,6 +111,7 @@ export default function Booking() {
           type="date"
           name="startingDate"
           onChange={handleChange}
+          min={new Date().toISOString().split("T")[0]}
           required
         />
 
@@ -112,6 +119,7 @@ export default function Booking() {
           type="date"
           name="endingDate"
           onChange={handleChange}
+          min={getNextDay(formData.startingDate)}
           required
         />
 

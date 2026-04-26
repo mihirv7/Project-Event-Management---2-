@@ -17,7 +17,6 @@ import ProductBooking from "./pages/ProductBooking";
 import MyBookings from "./pages/MyBookings";
 
 
-
 function App() {
   return (
     <BrowserRouter>
@@ -36,14 +35,16 @@ function App() {
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/product-booking" element={<ProductBooking />} />
         <Route path="/my-bookings" element={<MyBookings />} />
+
+        {/* ✅ KEEP THIS INSIDE ROUTES */}
         <Route
-  path="/booking/:id"
-  element={
-    <PrivateRoute>
-      <Booking />
-    </PrivateRoute>
-  }
-/>
+          path="/booking/:id"
+          element={
+            <PrivateRoute>
+              <Booking />
+            </PrivateRoute>
+          }
+        />
       </Routes>
 
       <Footer />

@@ -131,7 +131,7 @@ export default function PackageDetail() {
             {otherPackages.map((p) => (
               <div key={p._id} className="package-card">
                 <img
-                  src={`/assets/${p.images[0]}`}
+                  src={`http://localhost:5000/uploads/${p.images?.[0]}`}
                   alt={p.name}
                 />
 

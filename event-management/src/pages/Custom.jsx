@@ -23,7 +23,7 @@ export default function Custom() {
             className="category-card"
             onClick={() => navigate(`/custom/${cat._id}`)}
           >
-            <img src={`/assets/${cat.image}`} alt={cat.name} />
+            <img  src={`http://localhost:5000/uploads/${cat.image}`} alt={cat.name}  />
             <h3>{cat.name}</h3>
           </div>
         ))}

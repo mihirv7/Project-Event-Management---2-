@@ -51,6 +51,9 @@ router.post("/register", async (req, res) => {
 // =========================
 // LOGIN USER
 // =========================
+// =========================
+// LOGIN USER (FIXED)
+// =========================
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -75,7 +78,7 @@ router.post("/login", async (req, res) => {
     // create token
     const token = jwt.sign(
       { id: user._id },
-      "secretkey", // later move to .env
+      "secretkey",
       { expiresIn: "1d" }
     );
 
@@ -84,12 +87,14 @@ router.post("/login", async (req, res) => {
       token,
       user: {
         id: user._id,
-        name: user.name,
-        email: user.email
+        name: user.fullName,   // ✅ FIXED
+        email: user.email,
+        role: user.role || "user"   // ✅ IMPORTANT
       }
     });
 
   } catch (error) {
+    console.log("LOGIN ERROR:", error); // 👈 debug
     res.status(500).json({ message: error.message });
   }
 });

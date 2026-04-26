@@ -7,7 +7,9 @@ export default function ProductBooking() {
   const navigate = useNavigate();
   const { state } = useLocation();
 
-  const product = state?.product;
+  const productId = state?.productId;
+  const productName = state?.productName;
+  const price = state?.price;
   const selectedOptions = state?.selectedOptions;
 
   const [formData, setFormData] = useState({
@@ -68,9 +70,9 @@ export default function ProductBooking() {
         "http://localhost:5000/api/product-bookings/add", // ✅ different API
         {
           ...formData,
-          productId: product._id,
-          productName: product.name,
-          price: product.price,
+          productId: productId,
+          productName: productName,
+          price: price,
           customizations: selectedOptions
         },
         {
@@ -88,7 +90,7 @@ export default function ProductBooking() {
     }
   };
 
-  if (!product) return <h2>No product selected</h2>;
+  if (!productId) return <h2>No product selected</h2>;
 
   return (
     <div className="booking-page">
@@ -97,8 +99,8 @@ export default function ProductBooking() {
         <h2>Book Event</h2>
 
         {/* PRODUCT INFO */}
-        <p><b>Product:</b> {product.name}</p>
-        <p><b>Price:</b> ₹ {product.price}</p>
+        <p><b>Product:</b> {productName}</p>
+        <p><b>Price:</b> ₹ {price}</p>
 
         {/* CUSTOMIZATION */}
         <div style={{ marginBottom: "10px" }}>

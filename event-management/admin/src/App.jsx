@@ -11,6 +11,7 @@ import Payments from './admin/pages/Payments'
 import Reviews from './admin/pages/Reviews'
 import Reports from './admin/pages/Reports'
 import Settings from './admin/pages/Settings'
+import Categories from './admin/pages/Categories'
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="reviews" element={<Reviews />} />
         <Route path="reports" element={<Reports />} />
         <Route path="settings" element={<Settings />} />
+        <Route path="/admin/categories" element={<Categories />} />
       </Route>
     </Routes>
   )

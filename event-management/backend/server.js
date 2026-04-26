@@ -11,6 +11,8 @@ const productRoutes = require("./routes/productRoutes");
 const productBookingRoutes = require("./routes/productBookingRoutes");
 const userRoutes = require("./routes/userRoutes");
 
+
+
 const app = express();
 
 // ✅ CONNECT DATABASE
@@ -28,8 +30,10 @@ app.use("/api/booking", bookingRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/product-bookings", productBookingRoutes);
-app.use("/api/users", userRoutes);
+app.use("/api/users", userRoutes);  
 app.use("/uploads", express.static("uploads"));
+app.use("/api/bookings", require("./routes/bookingRoutes"));
+app.use("/api/categories", require("./routes/categoryRoutes"));
 
 
 

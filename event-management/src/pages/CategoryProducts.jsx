@@ -41,7 +41,7 @@ export default function CategoryProducts() {
               className="product-card"
             >
               <img
-                src={`/assets/${p.image}`}
+                src={`http://localhost:5000/uploads/${p.image}`}
                 alt={p.name}
                 className="product-img"
               />

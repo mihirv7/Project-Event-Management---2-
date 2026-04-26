@@ -2,31 +2,35 @@ const express = require("express");
 const router = express.Router();
 const Booking = require("../models/Booking");
 const authMiddleware = require("../middleware/authMiddleware");
-const auth = require("../middleware/authMiddleware"); // ✅ import middleware properly
 
-
-// GET all package bookings
-
-
-router.get("/", auth, async (req, res) => {
+// ============================
+// GET BOOKINGS (USER + ADMIN)
+// ============================
+router.get("/", authMiddleware, async (req, res) => {
   try {
-    console.log("USER:", req.user); // 🔍 DEBUG
+    console.log("USER FROM TOKEN:", req.user);
 
-    if (!req.user || !req.user.id) {
-      return res.status(400).json({ message: "User not found in token" });
+    let data;
+
+    // ✅ ADMIN → ALL BOOKINGS
+    if (req.user.role === "admin") {
+      data = await Booking.find().populate("packageId", "name");
+    } 
+    // ✅ USER → ONLY HIS BOOKINGS
+    else {
+      data = await Booking.find({
+        userId: req.user.id   // 🔥 FIXED
+      }).populate("packageId", "name");
     }
-
-    const data = await Booking.find({
-      userId: req.user.id
-    });
 
     res.json(data);
 
   } catch (err) {
-    console.log("ERROR:", err); // 🔥 IMPORTANT
+    console.log("ERROR:", err);
     res.status(500).json({ message: err.message });
   }
 });
+
 // ============================
 // CREATE BOOKING
 // ============================
@@ -44,7 +48,6 @@ router.post("/add", authMiddleware, async (req, res) => {
       specialRequest
     } = req.body;
 
-    // check required fields
     if (
       !userName ||
       !email ||
@@ -59,7 +62,7 @@ router.post("/add", authMiddleware, async (req, res) => {
     }
 
     const newBooking = new Booking({
-      userId: req.user.id,   // from token
+      userId: req.user.id,   // 🔥 FIXED
       userName,
       email,
       packageId,
@@ -80,4 +83,20 @@ router.post("/add", authMiddleware, async (req, res) => {
   }
 });
 
-module.exports = router;   // ✅ only router exported
+// ============================
+// ADMIN - GET ALL BOOKINGS
+// ============================
+router.get("/admin", async (req, res) => {
+  try {
+    const bookings = await Booking.find()
+      .populate("packageId", "name price")
+      .sort({ createdAt: -1 });
+
+    res.json(bookings);
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+module.exports = router;

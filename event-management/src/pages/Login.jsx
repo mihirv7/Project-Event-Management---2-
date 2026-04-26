@@ -21,24 +21,31 @@ export default function Login() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
-        formData
-      );
+  try {
+    const res = await axios.post(
+      "http://localhost:5000/api/auth/login",
+      formData
+    );
 
-      // store token
-      localStorage.setItem("token", res.data.token);
+    console.log("LOGIN 👉", res.data);
 
-      // redirect to home
+    // ✅ store correctly
+    localStorage.setItem("user", JSON.stringify(res.data.user));
+    localStorage.setItem("token", res.data.token);
+
+    // ✅ FIX HERE (IMPORTANT)
+    if (res.data.user.role === "admin") {
+      navigate("/admin/dashboard");
+    } else {
       navigate("/");
-    } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
     }
-  };
 
+  } catch (err) {
+    setError(err.response?.data?.message || "Login failed");
+  }
+};
   return (
     <div className="login-container">
       <div className="login-card">

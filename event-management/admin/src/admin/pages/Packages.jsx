@@ -4,6 +4,15 @@ import SimpleTable from '../components/SimpleTable'
 
 export default function Packages() {
 
+ 
+  const [startDate, setStartDate] = useState("");
+const [endDate, setEndDate] = useState("");
+ const getNextDay = (date) => {
+  if (!date) return "";
+  const d = new Date(date);
+  d.setDate(d.getDate() + 1);
+  return d.toISOString().split("T")[0];
+};
   // ✅ INLINE STYLES (NO CSS FILE NEEDED)
   const styles = {
     grid2: {
@@ -56,6 +65,7 @@ const removeCatering = (index) => {
 const handleDelete = async (id) => {
   try {
     await axios.delete(`http://localhost:5000/api/packages/${id}`);
+    alert("Package deleted");
     fetchPackages(); // refresh data
   } catch (error) {
     console.error(error);
@@ -163,7 +173,7 @@ const handleEdit = (pkg) => {
         form
       );
     }
-
+      alert(`Package ${editId ? "updated" : "added"}`);
     fetchPackages();
 
     // reset form
@@ -248,7 +258,7 @@ const handleEdit = (pkg) => {
   type="date"
   name="endDate"
   value={formData.endDate}
-  min={new Date().toISOString().split("T")[0]}
+  min={getNextDay(formData.startDate)}
   onChange={handleChange}
 />
           </div>
