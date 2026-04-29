@@ -5,6 +5,8 @@ import "./Booking.css"; // ✅ import CSS for styling
 
 export default function Booking() {
   const { id } = useParams();
+  const [bookedDates, setBookedDates] = useState([]);
+  // const disabledDates = getDisabledDates();
   const navigate = useNavigate();
    const getNextDay = (date) => {
     if (!date) return "";
@@ -12,6 +14,29 @@ export default function Booking() {
     d.setDate(d.getDate() + 1);
     return d.toISOString().split("T")[0];
   };
+  
+  useEffect(() => {
+  const fetchDates = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:5000/api/booking/package/${id}`
+      );
+      setBookedDates(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  fetchDates();
+}, [id]);
+const isDateBlocked = (start, end) => {
+  return bookedDates.some((b) => {
+    return (
+      new Date(start) <= new Date(b.endingDate) &&
+      new Date(end) >= new Date(b.startingDate)
+    );
+  });
+};
 
   const [formData, setFormData] = useState({
     userName: "",
@@ -82,8 +107,12 @@ export default function Booking() {
       navigate("/");
 
     } catch (err) {
-      alert("Booking failed");
+      alert(err.response?.data?.message || "Booking failed");
     }
+    if (isDateBlocked(formData.startDate, formData.endDate)) {
+  alert("This package is already booked for selected dates");
+  return;
+}
   };
 
   return (

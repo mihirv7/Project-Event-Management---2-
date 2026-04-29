@@ -73,6 +73,21 @@ router.post("/add", authMiddleware, async (req, res) => {
       guestCount,
       specialRequest
     });
+    const existing = await Booking.findOne({
+  packageId,
+  $or: [
+    {
+      startingDate: { $lte: endingDate },
+      endingDate: { $gte: startingDate }
+    }
+  ]
+});
+
+if (existing) {
+  return res.status(400).json({
+    message: "This package is already booked for selected dates"
+  });
+}
 
     await newBooking.save();
 
@@ -96,6 +111,17 @@ router.get("/admin", async (req, res) => {
 
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+});
+router.get("/package/:id", async (req, res) => {
+  try {
+    const data = await Booking.find({
+      packageId: req.params.id
+    }).select("startingDate endingDate");
+
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 

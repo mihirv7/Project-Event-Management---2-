@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function MyBookings() {
+  const navigate = useNavigate();
   const [bookings, setBookings] = useState([]);
+  const packageBookings = bookings.filter(b => b.type === "package");
+  const productBookings = bookings.filter(b => b.type === "product");
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -46,74 +50,118 @@ export default function MyBookings() {
   }, []);
 
   return (
-    <div style={{ padding: "30px" }}>
-      <h2>My Bookings</h2>
+  <div style={{ padding: "30px", background: "#ffffff", minHeight: "100vh" }}>
+    <h2 style={{ color: "#010101", marginBottom: "20px" }}>
+      My Bookings
+    </h2>
 
-      {bookings.length === 0 ? (
-        <p>No bookings found</p>
-      ) : (
-        bookings.map((b, i) => (
-          <div key={i} style={cardStyle}>
+    {bookings.length === 0 ? (
+      <p style={{ color: "#aaa" }}>No bookings found</p>
+    ) : (
+      <>
+        {/* ================= PACKAGE SECTION ================= */}
+        <h3 style={sectionTitle}>📦 Package Bookings</h3>
 
-            <h3>
-              {b.type === "package"
-                ? "📦 Package Booking"
-                : "🎉 Product Booking"}
+        {packageBookings.map((b, i) => (
+          <div
+  key={i}
+  style={{ ...cardStyle, cursor: "pointer" }}
+  onClick={() => navigate(`/packages/${b.packageId?._id || b.packageId}`)}
+>
+
+            <h3 style={titleStyle}>
+              {b.packageId?.name || b.packageId}
             </h3>
 
-            <p><b>Name:</b> {b.userName?.name || b.userName}</p>
-            <p><b>Email:</b> {b.email}</p>
-            <p><b>Phone:</b> {b.phoneNumber}</p>
+            <p style={dateStyle}>
+              📅 {new Date(b.startingDate).toLocaleDateString()} →{" "}
+              {new Date(b.endingDate).toLocaleDateString()}
+            </p>
 
-            {b.type === "package" ? (
-              <>
-                <p><b>Package:</b> {b.packageId?.name || b.packageId}</p>
-
-                <p>
-                  <b>Start:</b>{" "}
-                  {new Date(b.startingDate).toLocaleDateString()}
-                </p>
-
-                <p>
-                  <b>End:</b>{" "}
-                  {new Date(b.endingDate).toLocaleDateString()}
-                </p>
-              </>
-            ) : (
-              <>
-                <p><b>Product:</b> {b.productName?.name || b.productName}</p>
-
-                <p>
-                  <b>Date:</b>{" "}
-                  {new Date(b.date).toLocaleDateString()}
-                </p>
-
-                <div>
-                  <b>Customization:</b>
-                  {b.customizations &&
-                    Object.keys(b.customizations).map((key) => (
-                      <p key={key}>
-                        {key}: {b.customizations[key]}
-                      </p>
-                    ))}
-                </div>
-              </>
-            )}
-
-            <p><b>Location:</b> {b.location}</p>
-            <p><b>Guests:</b> {b.guestCount}</p>
+            <div style={infoGrid}>
+              <p>👤 {b.userName?.name || b.userName}</p>
+              <p>📧 {b.email}</p>
+              <p>📞 {b.phoneNumber}</p>
+              <p>📍 {b.location}</p>
+              <p>👥 {b.guestCount} Guests</p>
+            </div>
 
           </div>
-        ))
-      )}
-    </div>
-  );
+        ))}
+
+        {/* ================= PRODUCT SECTION ================= */}
+        <h3 style={sectionTitle}>🎉 Event Bookings</h3>
+
+        {productBookings.map((b, i) => (
+          <div
+  key={i}
+  style={{ ...cardStyle, cursor: "pointer" }}
+  onClick={() => navigate(`/product/${b.productId}`)}
+>
+
+            <h3 style={titleStyle}>
+              {b.productName?.name || b.productName}
+            </h3>
+
+            <p style={dateStyle}>
+              📅 {new Date(b.date).toLocaleDateString()}
+            </p>
+
+            <div style={infoGrid}>
+              <p>👤 {b.userName?.name || b.userName}</p>
+              <p>📧 {b.email}</p>
+              <p>📞 {b.phoneNumber}</p>
+              <p>📍 {b.location}</p>
+              <p>👥 {b.guestCount} Guests</p>
+            </div>
+
+            {b.customizations && (
+              <div style={{ marginTop: "10px" }}>
+                <b style={{ color: "#38bdf8" }}>Customization:</b>
+                {Object.keys(b.customizations).map((key) => (
+                  <p key={key} style={{ margin: "2px 0" }}>
+                    {key}: {b.customizations[key]}
+                  </p>
+                ))}
+              </div>
+            )}
+
+          </div>
+        ))}
+      </>
+    )}
+  </div>
+);
 }
 
+const sectionTitle = {
+  color: "#000000",
+  marginTop: "25px",
+  marginBottom: "10px",
+  borderBottom: "1px solid #1e293b",
+  paddingBottom: "5px"
+};
+
 const cardStyle = {
-  border: "1px solid #ccc",
+  background: "white",
+  borderRadius: "12px",
   padding: "15px",
-  margin: "15px 0",
-  borderRadius: "10px",
-  background: "#fff"
+  marginBottom: "15px",
+  boxShadow: "0 6px 15px rgba(0,0,0,0.3)",
+  color: "#000000"
+};
+
+const titleStyle = {
+  margin: "0 0 5px 0"
+};
+
+const dateStyle = {
+  color: "#080808",
+  marginBottom: "10px"
+};
+
+const infoGrid = {
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+  gap: "5px"
 };

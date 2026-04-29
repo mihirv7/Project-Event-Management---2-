@@ -2,15 +2,35 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./Booking.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 
 export default function ProductBooking() {
   const navigate = useNavigate();
   const { state } = useLocation();
-
+  const [bookedDates, setBookedDates] = useState([]);
   const productId = state?.productId;
   const productName = state?.productName;
+  
   const price = state?.price;
   const selectedOptions = state?.selectedOptions;
+
+  useEffect(() => {
+  const fetchDates = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:5000/api/product-bookings/product/${productId}`
+      );
+
+      setBookedDates(res.data.map(b => b.date));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  fetchDates();
+}, [productId]);
 
   const [formData, setFormData] = useState({
     userName: "",
@@ -86,8 +106,12 @@ export default function ProductBooking() {
       navigate("/");
 
     } catch (err) {
-      alert("Booking failed");
+      alert(err.response?.data?.message || "Booking failed");
     }
+    if (bookedDates.includes(formData.date)) {
+  alert("This event is already booked on selected date");
+  return;
+}
   };
 
   if (!productId) return <h2>No product selected</h2>;

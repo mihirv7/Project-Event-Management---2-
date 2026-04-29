@@ -36,6 +36,16 @@ router.post("/add", auth, async (req, res) => {
 
       customizations
     });
+    const existing = await ProductBooking.findOne({
+  productId,
+  date: req.body.date   // single date
+});
+
+if (existing) {
+  return res.status(400).json({
+    message: "This event is already booked on this date"
+  });
+}
 
     await newBooking.save();
 
@@ -70,5 +80,15 @@ router.get("/admin", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+router.get("/product/:id", async (req, res) => {
+  try {
+    const data = await ProductBooking.find({
+      productId: req.params.id
+    }).select("date");
 
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 module.exports = router;
