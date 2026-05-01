@@ -2,26 +2,40 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import "./Booking.css"; // ✅ import CSS for styling
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function Booking() {
   const { id } = useParams();
   const [bookedDates, setBookedDates] = useState([]);
-  // const disabledDates = getDisabledDates();
-  const navigate = useNavigate();
-   const getNextDay = (date) => {
-    if (!date) return "";
-    const d = new Date(date);
-    d.setDate(d.getDate() + 1);
-    return d.toISOString().split("T")[0];
-  };
+  const [startDate, setStartDate] = useState(null);
+const [endDate, setEndDate] = useState(null);
+const [disabledDates, setDisabledDates] = useState([]);
   
-  useEffect(() => {
+  const navigate = useNavigate();
+  
+  
+ useEffect(() => {
   const fetchDates = async () => {
     try {
       const res = await axios.get(
         `http://localhost:5000/api/booking/package/${id}`
       );
-      setBookedDates(res.data);
+
+      const dates = [];
+
+      res.data.forEach((b) => {
+        let start = new Date(b.startingDate);
+        let end = new Date(b.endingDate);
+
+        while (start <= end) {
+          dates.push(new Date(start));
+          start.setDate(start.getDate() + 1);
+        }
+      });
+
+      setDisabledDates(dates);
+
     } catch (err) {
       console.log(err);
     }
@@ -88,32 +102,43 @@ const isDateBlocked = (start, end) => {
 
   // ===============================
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      const token = localStorage.getItem("token");
+  if (!startDate || !endDate) {
+    alert("Please select dates");
+    return;
+  }
 
-      await axios.post(
-        "http://localhost:5000/api/booking/add",
-        { ...formData, packageId: id },
-        {
-          headers: {
-            authorization: `Bearer ${token}`
-          }
+  if (startDate >= endDate) {
+    alert("End date must be greater than start date");
+    return;
+  }
+
+  try {
+    const token = localStorage.getItem("token");
+
+    await axios.post(
+      "http://localhost:5000/api/booking/add",
+      {
+        ...formData,
+        packageId: id,
+        startingDate: startDate.toISOString(),
+        endingDate: endDate.toISOString()
+      },
+      {
+        headers: {
+          authorization: `Bearer ${token}`
         }
-      );
+      }
+    );
 
-      alert("Booking successful");
-      navigate("/");
+    alert("Booking successful");
+    navigate("/");
 
-    } catch (err) {
-      alert(err.response?.data?.message || "Booking failed");
-    }
-    if (isDateBlocked(formData.startDate, formData.endDate)) {
-  alert("This package is already booked for selected dates");
-  return;
-}
-  };
+  } catch (err) {
+    alert(err.response?.data?.message || "Booking failed");
+  }
+};
 
   return (
     <div className="booking-page">
@@ -136,21 +161,31 @@ const isDateBlocked = (start, end) => {
           readOnly
         />
 
-        <input
-          type="date"
-          name="startingDate"
-          onChange={handleChange}
-          min={new Date().toISOString().split("T")[0]}
-          required
-        />
+       <DatePicker
+  selected={startDate}
+  onChange={(date) => setStartDate(date)}
+  excludeDates={disabledDates}
+  minDate={new Date()}
+  dateFormat="dd-MM-yyyy"
+  placeholderText="Select start date"
+  className="booking-input"
 
-        <input
-          type="date"
-          name="endingDate"
-          onChange={handleChange}
-          min={getNextDay(formData.startingDate)}
-          required
-        />
+/>
+
+<DatePicker
+  selected={endDate}
+  onChange={(date) => setEndDate(date)}
+  excludeDates={disabledDates}
+  minDate={
+    startDate
+      ? new Date(startDate.getTime() + 86400000)
+      : new Date()
+  }
+  dateFormat="dd-MM-yyyy"
+  placeholderText="Select end date"
+  className="booking-input"
+ 
+/>
 
         <input
           type="text"

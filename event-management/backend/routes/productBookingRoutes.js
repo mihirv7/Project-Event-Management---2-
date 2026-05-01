@@ -91,4 +91,6 @@ router.get("/product/:id", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+// console.log("KEY:", process.env.RAZORPAY_KEY_ID);
+// console.log("SECRET:", process.env.RAZORPAY_SECRET);
 module.exports = router;

@@ -75,6 +75,21 @@
 .booking-form button:hover {
   background: #333;
 }
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+.react-datepicker__input-container {
+  width: 100%;
+}
+
+.react-datepicker__input-container input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
 
 /* ===== MOBILE ===== */
 @media (max-width: 500px) {

@@ -12,6 +12,8 @@ export default function ProductBooking() {
   const [bookedDates, setBookedDates] = useState([]);
   const productId = state?.productId;
   const productName = state?.productName;
+  const [date, setDate] = useState(null);
+  const [disabledDates, setDisabledDates] = useState([]);
   
   const price = state?.price;
   const selectedOptions = state?.selectedOptions;
@@ -23,7 +25,10 @@ export default function ProductBooking() {
         `http://localhost:5000/api/product-bookings/product/${productId}`
       );
 
-      setBookedDates(res.data.map(b => b.date));
+      const dates = res.data.map((b) => new Date(b.date));
+
+      setDisabledDates(dates);
+
     } catch (err) {
       console.log(err);
     }
@@ -81,38 +86,40 @@ export default function ProductBooking() {
 
   // ===============================
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      const token = localStorage.getItem("token");
+  if (!date) {
+    alert("Please select date");
+    return;
+  }
 
-      await axios.post(
-        "http://localhost:5000/api/product-bookings/add", // ✅ different API
-        {
-          ...formData,
-          productId: productId,
-          productName: productName,
-          price: price,
-          customizations: selectedOptions
-        },
-        {
-          headers: {
-            authorization: `Bearer ${token}`
-          }
+  try {
+    const token = localStorage.getItem("token");
+
+    await axios.post(
+      "http://localhost:5000/api/product-bookings/add",
+      {
+        ...formData,
+        productId: productId,
+        productName: productName,
+        price: price,
+        customizations: selectedOptions,
+        date: date.toISOString() // ✅ IMPORTANT
+      },
+      {
+        headers: {
+          authorization: `Bearer ${token}`
         }
-      );
+      }
+    );
 
-      alert("Booking successful");
-      navigate("/");
+    alert("Booking successful");
+    navigate("/");
 
-    } catch (err) {
-      alert(err.response?.data?.message || "Booking failed");
-    }
-    if (bookedDates.includes(formData.date)) {
-  alert("This event is already booked on selected date");
-  return;
-}
-  };
+  } catch (err) {
+    alert(err.response?.data?.message || "Booking failed");
+  }
+};
 
   if (!productId) return <h2>No product selected</h2>;
 
@@ -154,13 +161,15 @@ export default function ProductBooking() {
           />
 
           {/* ✅ SINGLE DATE */}
-          <input
-            type="date"
-            name="date"
-            min={new Date().toISOString().split("T")[0]}
-            onChange={handleChange}
-            required
-          />
+          <DatePicker
+  selected={date}
+  onChange={(d) => setDate(d)}
+  excludeDates={disabledDates}
+  minDate={new Date()}
+  dateFormat="dd-MM-yyyy"
+  placeholderText="Select event date"
+  className="booking-input"
+/>
 
           <input
             type="text"

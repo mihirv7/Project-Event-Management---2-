@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
@@ -10,6 +11,8 @@ const categoryRoutes = require("./routes/categoryRoutes");
 const productRoutes = require("./routes/productRoutes");  
 const productBookingRoutes = require("./routes/productBookingRoutes");
 const userRoutes = require("./routes/userRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
+
 
 
 
@@ -34,6 +37,7 @@ app.use("/api/users", userRoutes);
 app.use("/uploads", express.static("uploads"));
 app.use("/api/bookings", require("./routes/bookingRoutes"));
 app.use("/api/categories", require("./routes/categoryRoutes"));
+app.use("/api/payment", paymentRoutes);
 
 
 
