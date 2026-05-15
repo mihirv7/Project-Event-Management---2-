@@ -11,13 +11,17 @@ export default function Booking() {
   const [startDate, setStartDate] = useState(null);
 const [endDate, setEndDate] = useState(null);
 const [disabledDates, setDisabledDates] = useState([]);
+const [pkg, setPkg] = useState(null);
   
   const navigate = useNavigate();
   
   
- useEffect(() => {
+useEffect(() => {
+
   const fetchDates = async () => {
+
     try {
+
       const res = await axios.get(
         `http://localhost:5000/api/booking/package/${id}`
       );
@@ -25,11 +29,15 @@ const [disabledDates, setDisabledDates] = useState([]);
       const dates = [];
 
       res.data.forEach((b) => {
+
         let start = new Date(b.startingDate);
+
         let end = new Date(b.endingDate);
 
         while (start <= end) {
+
           dates.push(new Date(start));
+
           start.setDate(start.getDate() + 1);
         }
       });
@@ -37,11 +45,35 @@ const [disabledDates, setDisabledDates] = useState([]);
       setDisabledDates(dates);
 
     } catch (err) {
+
       console.log(err);
     }
   };
 
   fetchDates();
+
+}, [id]);
+useEffect(() => {
+
+  const fetchPackage = async () => {
+
+    try {
+
+      const res = await axios.get(
+        `http://localhost:5000/api/packages/${id}`
+      );
+
+      console.log("PACKAGE DATA:", JSON.stringify(res.data, null, 2));
+      setPkg(res.data);
+
+    } catch (err) {
+
+      console.log(err);
+    }
+  };
+
+  fetchPackage();
+
 }, [id]);
 const isDateBlocked = (start, end) => {
   return bookedDates.some((b) => {
@@ -52,79 +84,171 @@ const isDateBlocked = (start, end) => {
   });
 };
 
-  const [formData, setFormData] = useState({
-    userName: "",
-    email: "",
-    startingDate: "",
-    endingDate: "",
-    location: "",
-    phoneNumber: "",
-    guestCount: "",
-    specialRequest: ""
-  });
+ const [formData, setFormData] = useState({
+  userId: "",
+  userName: "",
+  email: "",
+  startingDate: "",
+  endingDate: "",
+  location: "",
+  phoneNumber: "",
+  guestCount: "",
+  specialRequest: "",
+  paymentId: "",
+  orderId: "",
+  paymentStatus: "Pending",
+});
 
-  // ===============================
-  // AUTO FETCH LOGGED USER
-  // ===============================
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const token = localStorage.getItem("token");
+// ===============================
+// AUTO FETCH LOGGED USER
+// ===============================
+useEffect(() => {
 
-        const res = await axios.get(
-          "http://localhost:5000/api/auth/me",
-          {
-            headers: {
-              authorization: `Bearer ${token}`
-            }
+  const fetchUser = async () => {
+
+    try {
+
+      const token = localStorage.getItem("token");
+
+      const res = await axios.get(
+        "http://localhost:5000/api/auth/me",
+        {
+          headers: {
+            authorization: `Bearer ${token}`
           }
-        );
+        }
+      );
 
-        setFormData((prev) => ({
-          ...prev,
-          userName: res.data.fullName,
-          email: res.data.email,
-          phoneNumber: res.data.phone
-        }));
+      setFormData((prev) => ({
+        ...prev,
 
-      } catch (err) {
-        console.log(err);
-      }
-    };
+        userId: res.data._id,
 
-    fetchUser();
-  }, []);
+        userName: res.data.fullName,
 
-  // ===============================
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+        email: res.data.email,
+
+        phoneNumber: res.data.phone
+      }));
+
+    } catch (err) {
+
+      console.log(err);
+    }
   };
 
-  // ===============================
-  const handleSubmit = async (e) => {
+  fetchUser();
+
+}, []);
+
+const handleChange = (e) => {
+
+  setFormData({
+    ...formData,
+    [e.target.name]: e.target.value
+  });
+};
+// ===============================
+// ===============================
+// HANDLE SUBMIT
+// ===============================
+const handleSubmit = async (e) => {
+
   e.preventDefault();
 
-  if (!startDate || !endDate) {
-    alert("Please select dates");
+  // CHECK PACKAGE
+  if (!pkg) {
+
+    alert("Package not loaded");
+
     return;
   }
 
-  if (startDate >= endDate) {
-    alert("End date must be greater than start date");
+  // CHECK DATES
+  if (!startDate || !endDate) {
+
+    alert("Please select dates");
+
     return;
   }
 
   try {
+
+    // CREATE RAZORPAY ORDER
+    const orderRes = await axios.post(
+      "http://localhost:5000/api/payment/create-order",
+      {
+        amount: pkg.price,
+      }
+    );
+
+    console.log("ORDER RESPONSE:", orderRes.data);
+
+    const options = {
+
+      key: "rzp_test_SokwTq2nrohRwW",
+
+      amount: orderRes.data.amount,
+
+      currency: "INR",
+
+      name: "Momento Event",
+
+      description: "Event Booking Payment",
+
+      order_id: orderRes.data.id,
+
+      method: {
+        upi: false
+      },
+
+      // ===============================
+      // PAYMENT SUCCESS
+      // ===============================
+      // ===============================
+// PAYMENT SUCCESS
+// ===============================
+handler: async function (response) {
+
+  try {
+
     const token = localStorage.getItem("token");
 
-    await axios.post(
+    const bookingData = {
+
+      userId: formData.userId,
+
+      userName: formData.userName,
+
+      email: formData.email,
+
+      packageId: id,
+
+      startingDate: startDate,
+
+      endingDate: endDate,
+
+      location: formData.location,
+
+      phoneNumber: formData.phoneNumber,
+
+      guestCount: Number(formData.guestCount),
+
+      specialRequest: formData.specialRequest,
+      amount: Number(pkg.price),
+
+      paymentId: response.razorpay_payment_id,
+
+      orderId: response.razorpay_order_id,
+
+      paymentStatus: "Success"
+    };
+
+    console.log("BOOKING DATA:", bookingData);
+
+    const saveBooking = await axios.post(
       "http://localhost:5000/api/booking/add",
-      {
-        ...formData,
-        packageId: id,
-        startingDate: startDate.toISOString(),
-        endingDate: endDate.toISOString()
-      },
+      bookingData,
       {
         headers: {
           authorization: `Bearer ${token}`
@@ -132,14 +256,117 @@ const isDateBlocked = (start, end) => {
       }
     );
 
-    alert("Booking successful");
-    navigate("/");
+    console.log(saveBooking.data);
+
+    alert("Payment & Booking Successful");
+
+    navigate("/my-bookings");
 
   } catch (err) {
-    alert(err.response?.data?.message || "Booking failed");
+
+    console.log("BOOKING ERROR:", err.response?.data || err);
+
+    alert("Booking save failed");
+  }
+},
+// ===============================
+// TEST MODE
+// ===============================
+modal: {
+
+  ondismiss: async function () {
+
+    const ok = window.confirm(
+      "Simulate successful payment for testing?"
+    );
+
+    if (ok) {
+
+      try {
+
+        const token = localStorage.getItem("token");
+
+        const bookingData = {
+
+          userId: formData.userId,
+
+          userName: formData.userName,
+
+          email: formData.email,
+
+          packageId: id,
+
+          startingDate: startDate,
+
+          endingDate: endDate,
+
+          location: formData.location,
+
+          phoneNumber: formData.phoneNumber,
+
+          guestCount: Number(formData.guestCount),
+
+          specialRequest: formData.specialRequest,
+
+          amount: Number(pkg.price),
+
+          paymentId: "TEST_PAYMENT_ID",
+
+          orderId: orderRes.data.id,
+
+          paymentStatus: "Success"
+        };
+
+        console.log("TEST BOOKING:", bookingData);
+
+        const saveBooking = await axios.post(
+          "http://localhost:5000/api/booking/add",
+          bookingData,
+          {
+            headers: {
+              authorization: `Bearer ${token}`
+            }
+          }
+        );
+
+        console.log(saveBooking.data);
+
+        alert("Test Payment & Booking Successful");
+
+        navigate("/my-bookings");
+
+      } catch (err) {
+
+        console.log("TEST BOOKING ERROR:", err.response?.data || err);
+
+        alert("Booking save failed");
+      }
+    }
+  }
+},
+      theme: {
+        color: "#3399cc"
+      }
+    };
+
+    const razor = new window.Razorpay(options);
+
+    razor.on("payment.failed", function (response) {
+
+      console.log(response);
+
+      alert(response.error.description);
+    });
+
+    razor.open();
+
+  } catch (err) {
+
+    console.log("PAYMENT ERROR:", err.response?.data || err);
+
+    alert("Payment Failed");
   }
 };
-
   return (
     <div className="booking-page">
       <div className="booking-container">

@@ -94,33 +94,156 @@ export default function ProductBooking() {
   }
 
   try {
-    const token = localStorage.getItem("token");
+   const token = localStorage.getItem("token");
 
-    await axios.post(
-      "http://localhost:5000/api/product-bookings/add",
-      {
-        ...formData,
-        productId: productId,
-        productName: productName,
-        price: price,
-        customizations: selectedOptions,
-        date: date.toISOString() // ✅ IMPORTANT
-      },
-      {
-        headers: {
-          authorization: `Bearer ${token}`
+// ===============================
+// CREATE RAZORPAY ORDER
+// ===============================
+const orderRes = await axios.post(
+  "http://localhost:5000/api/payment/create-order",
+  {
+    amount: Number(price)
+  }
+);
+
+console.log(orderRes.data);
+
+// ===============================
+// RAZORPAY OPTIONS
+// ===============================
+const options = {
+
+  key: "rzp_test_SokwTq2nrohRwW",
+
+  amount: orderRes.data.amount,
+
+  currency: "INR",
+
+  name: "Momento Event",
+
+  description: "Product Booking Payment",
+
+  order_id: orderRes.data.id,
+
+  handler: async function (response) {
+
+    try {
+
+      await axios.post(
+        "http://localhost:5000/api/product-bookings/add",
+        {
+
+          ...formData,
+
+          productId,
+
+          productName,
+
+          price,
+
+          amount: Number(price),
+
+          customizations: selectedOptions,
+
+          date: date.toISOString(),
+
+          paymentId: response.razorpay_payment_id,
+
+          orderId: response.razorpay_order_id,
+
+          paymentStatus: "Success"
+
+        },
+        {
+          headers: {
+            authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      alert("Payment & Booking Successful");
+
+      navigate("/");
+
+    } catch (err) {
+
+      console.log(err);
+
+      alert("Booking save failed");
+    }
+  },
+
+  modal: {
+
+    ondismiss: async function () {
+
+      const ok = window.confirm(
+        "Simulate successful payment for testing?"
+      );
+
+      if (ok) {
+
+        try {
+
+          await axios.post(
+            "http://localhost:5000/api/product-bookings/add",
+            {
+
+              ...formData,
+
+              productId,
+
+              productName,
+
+              price,
+
+              amount: Number(price),
+
+              customizations: selectedOptions,
+
+              date: date.toISOString(),
+
+              paymentId: "TEST_PAYMENT_ID",
+
+              orderId: orderRes.data.id,
+
+              paymentStatus: "Success"
+
+            },
+            {
+              headers: {
+                authorization: `Bearer ${token}`
+              }
+            }
+          );
+
+          alert("Test Payment & Booking Successful");
+
+          navigate("/");
+
+        } catch (err) {
+
+          console.log(err);
+
+          alert("Booking save failed");
         }
       }
-    );
+    }
+  },
 
-    alert("Booking successful");
-    navigate("/");
-
-  } catch (err) {
-    alert(err.response?.data?.message || "Booking failed");
+  theme: {
+    color: "#3399cc"
   }
 };
 
+const razor = new window.Razorpay(options);
+
+razor.open();
+  } catch (err) {
+
+    console.log(err);
+};
+  };
   if (!productId) return <h2>No product selected</h2>;
 
   return (

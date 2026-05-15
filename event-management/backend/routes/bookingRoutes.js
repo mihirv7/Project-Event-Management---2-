@@ -36,43 +36,67 @@ router.get("/", authMiddleware, async (req, res) => {
 // ============================
 router.post("/add", authMiddleware, async (req, res) => {
   try {
-    const {
-      userName,
-      email,
-      packageId,
-      startingDate,
-      endingDate,
-      location,
-      phoneNumber,
-      guestCount,
-      specialRequest
-    } = req.body;
+   const {
+  userName,
+  email,
+  packageId,
+  startingDate,
+  endingDate,
+  location,
+  phoneNumber,
+  guestCount,
+  specialRequest,
+  paymentId,
+  orderId,
+  paymentStatus,
+  amount
+} = req.body;
 
     if (
-      !userName ||
-      !email ||
-      !packageId ||
-      !startingDate ||
-      !endingDate ||
-      !location ||
-      !phoneNumber ||
-      !guestCount
-    ) {
+  !userName ||
+  !email ||
+  !packageId ||
+  !startingDate ||
+  !endingDate ||
+  !location ||
+  !phoneNumber ||
+  !guestCount ||
+  !amount
+){
       return res.status(400).json({ message: "All fields required" });
     }
 
     const newBooking = new Booking({
-      userId: req.user.id,   // 🔥 FIXED
-      userName,
-      email,
-      packageId,
-      startingDate,
-      endingDate,
-      location,
-      phoneNumber,
-      guestCount,
-      specialRequest
-    });
+
+  userId: req.user.id,
+
+  userName,
+
+  email,
+
+  packageId,
+
+  startingDate: new Date(startingDate),
+
+  endingDate: new Date(endingDate),
+
+  location,
+
+  phoneNumber,
+
+  guestCount: Number(guestCount),
+
+  specialRequest,
+
+  paymentId,
+
+  orderId,
+
+  paymentStatus,
+
+  amount: Number(amount)
+
+});
     const existing = await Booking.findOne({
   packageId,
   $or: [
@@ -88,7 +112,7 @@ if (existing) {
     message: "This package is already booked for selected dates"
   });
 }
-
+  console.log(newBooking);
     await newBooking.save();
 
     res.status(201).json({ message: "Booking successful" });

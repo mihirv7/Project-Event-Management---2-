@@ -9,33 +9,58 @@ const auth = require("../middleware/authMiddleware"); // ✅ import auth
 router.post("/add", auth, async (req, res) => {
   try {
     const {
-      userName,
-      email,
-      phoneNumber,
-      productId,
-      productName,
-      date,
-      location,
-      guestCount,
-      specialRequest,
-      customizations
-    } = req.body;
+  userName,
+  email,
+  phoneNumber,
+  productId,
+  productName,
+  price,
+  amount,
+  paymentId,
+  orderId,
+  paymentStatus,
+  date,
+  location,
+  guestCount,
+  specialRequest,
+  customizations
+} = req.body;
 
-    const newBooking = new ProductBooking({
-      userId: req.user.id, // ✅ IMPORTANT (logged-in user)
+   const newBooking = new ProductBooking({
 
-      userName,
-      email,
-      phoneNumber,
-      productId,
-      productName,
-      date,
-      location,
-      guestCount,
-      specialRequest,
+  userId: req.user.id,
 
-      customizations
-    });
+  userName,
+
+  email,
+
+  phoneNumber,
+
+  productId,
+
+  productName,
+
+  price: Number(price),
+
+  amount: Number(amount),
+
+  paymentId,
+
+  orderId,
+
+  paymentStatus,
+
+  date: new Date(date),
+
+  location,
+
+  guestCount: Number(guestCount),
+
+  specialRequest,
+
+  customizations
+
+});
     const existing = await ProductBooking.findOne({
   productId,
   date: req.body.date   // single date
@@ -46,7 +71,7 @@ if (existing) {
     message: "This event is already booked on this date"
   });
 }
-
+    console.log(newBooking);
     await newBooking.save();
 
     res.json({ message: "Product booking successful", data: newBooking });

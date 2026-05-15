@@ -48,7 +48,22 @@ const bookingSchema = new mongoose.Schema(
       type: Number,
       required: true
     },
+    paymentId: {
+  type: String
+},
 
+orderId: {
+  type: String
+},
+
+paymentStatus: {
+  type: String,
+  default: "Pending"
+},
+amount: {
+  type: Number,
+  required: true
+},
     specialRequest: String
   },
   { timestamps: true }

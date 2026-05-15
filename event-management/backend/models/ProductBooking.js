@@ -12,7 +12,22 @@ const productBookingSchema = new mongoose.Schema({
   productId: String,
   productName: String,
   price: Number,
+paymentId: {
+  type: String
+},
 
+orderId: {
+  type: String
+},
+
+paymentStatus: {
+  type: String,
+  default: "Pending"
+},
+
+amount: {
+  type: Number
+},
   customizations: Object,
 
   date: String,
