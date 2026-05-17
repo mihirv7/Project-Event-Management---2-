@@ -102,4 +102,19 @@ router.get("/:categoryId", async (req, res) => {
 
   res.json(data);
 });
+router.get("/", async (req, res) => {
+
+  try {
+
+    const data = await Product.find();
+
+    res.json(data);
+
+  } catch (err) {
+
+    res.status(500).json({
+      message: err.message
+    });
+  }
+});
 module.exports = router;

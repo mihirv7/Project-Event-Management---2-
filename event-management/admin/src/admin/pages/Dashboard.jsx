@@ -1,127 +1,224 @@
-import React, { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import axios from "axios";
 
-import StatCard from '../components/StatCard'
-import { chartData, recentActivities, users } from '../data/mockData'
-import SimpleTable from '../components/SimpleTable'
+import StatCard from "../components/StatCard";
+import SimpleTable from "../components/SimpleTable";
 
 export default function Dashboard() {
 
-  // ✅ Now stats is ARRAY (important for UI)
+  // =========================
+  // STATES
+  // =========================
   const [stats, setStats] = useState([]);
 
+  const [upcomingBookings, setUpcomingBookings] = useState([]);
+
+  // =========================
+  // FETCH DATA
+  // =========================
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const usersRes = await axios.get("http://localhost:5000/api/users");
-        const eventsRes = await axios.get("http://localhost:5000/api/events");
-        const bookingsRes = await axios.get("http://localhost:5000/api/bookings");
 
-        const totalUsers = usersRes.data.length;
-        const totalEvents = eventsRes.data.length;
-        const totalBookings = bookingsRes.data.length;
-        const totalRevenue = bookingsRes.data.reduce(
-          (sum, b) => sum + (b.amount || 0),
-          0
-        );
+    fetchDashboardData();
 
-        // ✅ Convert into array for UI (StatCard uses map)
-        setStats([
-          {
-            label: "Total Users",
-            value: totalUsers,
-          },
-          {
-            label: "Active Events",
-            value: totalEvents,
-          },
-          {
-            label: "Bookings",
-            value: totalBookings,
-          },
-          {
-            label: "Revenue",
-            value: `₹${totalRevenue}`,
-          },
-        ]);
-
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
   }, []);
 
+  // =========================
+  // MAIN FUNCTION
+  // =========================
+  const fetchDashboardData = async () => {
+
+    try {
+
+      // =========================
+      // API CALLS
+      // =========================
+      const usersRes = await axios.get(
+        "http://localhost:5000/api/users"
+      );
+
+      const productsRes = await axios.get(
+  "http://localhost:5000/api/products"
+);
+
+      const packagesRes = await axios.get(
+        "http://localhost:5000/api/packages"
+      );
+
+      const bookingsRes = await axios.get(
+        "http://localhost:5000/api/booking/admin"
+      );
+
+      const productBookingsRes = await axios.get(
+        "http://localhost:5000/api/product-bookings/admin"
+      );
+
+      // =========================
+      // TOTAL COUNTS
+      // =========================
+      const totalUsers = usersRes.data.length;
+
+      const totalCustomEvents = productsRes.data.length;
+
+      const totalPackages = packagesRes.data.length;
+
+      const totalOrders =
+        bookingsRes.data.length +
+        productBookingsRes.data.length;
+
+      // =========================
+      // REVENUE
+      // =========================
+      const packageRevenue = bookingsRes.data.reduce(
+        (sum, item) => sum + (item.amount || 0),
+        0
+      );
+
+      const productRevenue = productBookingsRes.data.reduce(
+        (sum, item) => sum + (item.amount || 0),
+        0
+      );
+
+      const totalRevenue =
+        packageRevenue + productRevenue;
+
+      // =========================
+      // 6 CARDS
+      // =========================
+      setStats([
+        {
+          label: "Total Users",
+          value: totalUsers,
+        },
+        {
+          label: "Custom Events",
+          value: totalCustomEvents,
+        },
+        {
+          label: "Total Packages",
+          value: totalPackages,
+        },
+        {
+          label: "Total Orders",
+          value: totalOrders,
+        },
+        {
+          label: "Revenue",
+          value: `₹${totalRevenue}`,
+        },
+        {
+          label: "Upcoming Bookings",
+          value: bookingsRes.data.length,
+        },
+      ]);
+
+      // =========================
+      // UPCOMING BOOKINGS
+      // =========================
+      const today = new Date();
+
+      const upcoming = bookingsRes.data
+        .filter(
+          (item) =>
+            new Date(item.startingDate) >= today
+        )
+        .sort(
+          (a, b) =>
+            new Date(a.startingDate) -
+            new Date(b.startingDate)
+        )
+        .slice(0, 5);
+
+      setUpcomingBookings(upcoming);
+
+    } catch (error) {
+
+      console.log(error);
+    }
+  };
+
   return (
+
     <div>
-      {/* ✅ Stats Cards */}
-      <div className="grid-4">
+
+      {/* ========================= */}
+      {/* 6 STAT CARDS */}
+      {/* ========================= */}
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: "20px",
+          marginBottom: "30px"
+        }}
+      >
+
         {stats.map((item, index) => (
-          <StatCard key={item.label} item={item} index={index} />
+
+          <StatCard
+            key={item.label}
+            item={item}
+            index={index}
+          />
         ))}
+
       </div>
 
-      <div className="two-col">
-        <motion.div
-          className="card"
-          initial={{ y: 18, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-        >
-          <div className="section-title">
-            <div>
-              <h3>Revenue & Booking Trend</h3>
-              <p>Monthly platform performance overview</p>
-            </div>
-          </div>
+      {/* ========================= */}
+      {/* UPCOMING BOOKINGS TABLE */}
+      {/* ========================= */}
 
-          <div className="chart-bars">
-            {chartData.map((item) => (
-              <div className="bar-col" key={item.month}>
-                <div className="bar" style={{ height: `${item.value * 2.2}px` }} />
-                <div className="bar-label">{item.month}</div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        <motion.div
-          className="card"
-          initial={{ y: 18, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.08 }}
-        >
-          <div className="section-title">
-            <div>
-              <h3>Recent Activities</h3>
-              <p>Live admin-side actions</p>
-            </div>
-          </div>
-
-          <div className="activity-list">
-            {recentActivities.map((item) => (
-              <div key={item.title} className="activity-item">
-                <strong>{item.title}</strong>
-                <span>{item.time}</span>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
-
-      {/* ✅ Table (still using mock for now) */}
       <SimpleTable
-        title="Latest Registered Users"
-        subtitle="Quick access to newly onboarded users"
+
+        title="Upcoming Package Bookings"
+
+        subtitle="Next 5 upcoming package bookings"
+
         columns={[
-          { key: 'name', label: 'Name' },
-          { key: 'email', label: 'Email' },
-          { key: 'role', label: 'Role' },
-          { key: 'status', label: 'Status' },
+
+          {
+            key: "userName",
+            label: "Customer"
+          },
+
+          {
+            key: "packageName",
+            label: "Package"
+          },
+
+          {
+            key: "startingDate",
+            label: "Start Date"
+          },
+
+          {
+            key: "guestCount",
+            label: "Guests"
+          },
+
+          {
+            key: "location",
+            label: "Location"
+          },
         ]}
-        data={users}
+
+        data={upcomingBookings.map((item) => ({
+
+          ...item,
+
+          packageName:
+            item.packageId?.name || "Package",
+
+          startingDate:
+            new Date(
+              item.startingDate
+            ).toLocaleDateString()
+
+        }))}
+
       />
+
     </div>
-  )
+  );
 }

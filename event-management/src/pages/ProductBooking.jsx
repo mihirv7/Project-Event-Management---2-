@@ -84,6 +84,12 @@ export default function ProductBooking() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const customizationCount = selectedOptions
+  ? Object.keys(selectedOptions).length
+  : 0;
+
+  const totalPrice =
+  Number(price) + (customizationCount * 2000);
   // ===============================
   const handleSubmit = async (e) => {
   e.preventDefault();
@@ -102,7 +108,7 @@ export default function ProductBooking() {
 const orderRes = await axios.post(
   "http://localhost:5000/api/payment/create-order",
   {
-    amount: Number(price)
+    amount: Number(totalPrice)
   }
 );
 
@@ -139,9 +145,9 @@ const options = {
 
           productName,
 
-          price,
+          price : totalPrice,
 
-          amount: Number(price),
+          amount: Number(totalPrice),
 
           customizations: selectedOptions,
 
@@ -195,9 +201,9 @@ const options = {
 
               productName,
 
-              price,
+              price:totalPrice,
 
-              amount: Number(price),
+              amount: Number(totalPrice),
 
               customizations: selectedOptions,
 
@@ -219,7 +225,7 @@ const options = {
 
           alert("Test Payment & Booking Successful");
 
-          navigate("/");
+          navigate("/my-bookings");
 
         } catch (err) {
 
@@ -254,7 +260,17 @@ razor.open();
 
         {/* PRODUCT INFO */}
         <p><b>Product:</b> {productName}</p>
-        <p><b>Price:</b> ₹ {price}</p>
+        <p><b>Base Price:</b> ₹ {price}</p>
+
+<p>
+  <b>Customization Charge:</b>
+  ₹ {customizationCount * 2000}
+</p>
+
+<p>
+  <b>Total Price:</b>
+  ₹ {totalPrice}
+</p>
 
         {/* CUSTOMIZATION */}
         <div style={{ marginBottom: "10px" }}>
