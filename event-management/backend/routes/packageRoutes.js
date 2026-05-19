@@ -107,17 +107,28 @@ router.put("/:id", upload.array("images", 2), async (req, res) => {
       coordinatorNumber
     } = req.body;
 
-    let updateData = {
-      name,
-      description,
-      price,
-      startDate,
-      endDate,
-      venue,
-      guestCount,
-      coordinatorName,
-      coordinatorNumber
-    };
+    let catering = [];
+
+if (req.body.catering) {
+  try {
+    catering = JSON.parse(req.body.catering);
+  } catch (err) {
+    catering = [];
+  }
+}
+
+let updateData = {
+  name,
+  description,
+  price,
+  startDate,
+  endDate,
+  venue,
+  guestCount,
+  coordinatorName,
+  coordinatorNumber,
+  catering
+};
 
     // ✅ handle images
     if (req.files && req.files.length > 0) {

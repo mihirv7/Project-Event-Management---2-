@@ -20,7 +20,6 @@ export default function Navbar() {
       {/* Menu */}
       <ul className="nav-links">
         <li><Link to="/">Home</Link></li>
-        <li><Link to="/packages">Packages</Link></li>
         <li><Link to="/custom">Custom</Link></li>
         <li><Link to="/my-bookings">My Bookings</Link></li>
         <li><Link to="/contact">Contact us</Link></li>

@@ -258,31 +258,90 @@ razor.open();
 
         <h2>Book Event</h2>
 
-        {/* PRODUCT INFO */}
-        <p><b>Product:</b> {productName}</p>
-        <p><b>Base Price:</b> ₹ {price}</p>
+       <div
+  style={{
+    background: "#dedddd",
+    borderRadius: "14px",
+    padding: "18px",
+    marginBottom: "20px",
+    border: "1px solid #e5e5e5"
+  }}
+>
+  <h3
+    style={{
+      marginBottom: "15px",
+      fontSize: "22px",
+      color: "#222"
+    }}
+  >
+    Booking Summary
+  </h3>
 
-<p>
-  <b>Customization Charge:</b>
-  ₹ {customizationCount * 2000}
-</p>
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      marginBottom: "10px"
+    }}
+  >
+    <span>Base Price</span>
+    <strong>₹ {price}</strong>
+  </div>
 
-<p>
-  <b>Total Price:</b>
-  ₹ {totalPrice}
-</p>
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      marginBottom: "10px"
+    }}
+  >
+    <span>Customization Charge</span>
+    <strong>
+      ₹ {customizationCount * 2000}
+    </strong>
+  </div>
 
-        {/* CUSTOMIZATION */}
-        <div style={{ marginBottom: "10px" }}>
-          <b>Selected Customization:</b>
-          {selectedOptions &&
-            Object.keys(selectedOptions).map((key) => (
-              <p key={key}>
-                {key}: {selectedOptions[key]}
-              </p>
-            ))}
-        </div>
+  <hr style={{ margin: "12px 0" }} />
 
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      fontSize: "20px",
+      fontWeight: "bold",
+      color: "#000"
+    }}
+  >
+    <span>Total Amount</span>
+    <span>₹ {totalPrice}</span>
+  </div>
+
+  {selectedOptions &&
+    Object.keys(selectedOptions).length > 0 && (
+      <div style={{ marginTop: "18px" }}>
+        <h4 style={{ marginBottom: "10px" }}>
+          Selected Customizations
+        </h4>
+
+        {Object.entries(selectedOptions).map(
+          ([key, value]) => (
+            <div
+              key={key}
+              style={{
+                background: "#ffffff",
+                padding: "10px",
+                borderRadius: "8px",
+                marginBottom: "8px",
+                border: "1px solid #ddd"
+              }}
+            >
+              <strong>{key}</strong> : {value}
+            </div>
+          )
+        )}
+      </div>
+    )}
+</div>
         <form onSubmit={handleSubmit} className="booking-form">
 
           <input

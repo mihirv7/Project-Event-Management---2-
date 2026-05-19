@@ -86,23 +86,15 @@ const handleEdit = (pkg) => {
     coordinatorName: pkg.coordinatorName || "",
     coordinatorNumber: pkg.coordinatorNumber || ""
   });
-   if (pkg.catering) {
-    try {
-      const parsed = typeof pkg.catering === "string"
-        ? JSON.parse(pkg.catering)
-        : pkg.catering;
-
-      setCatering(
-        parsed.length ? parsed : [{ thaliName: "", description: "", price: "" }]
-      );
-    } catch (err) {
-      setCatering([{ thaliName: "", description: "", price: "" }]);
-    }
-  }
+   setCatering(
+  pkg.catering && pkg.catering.length > 0
+    ? pkg.catering
+    : [{ thaliName: "", description: "", price: "" }]
+);
 
   // optional (clear old images)
   
-  setImages([]);
+  setImages([null]);
 };
 
   const fileInputRef = useRef();
@@ -134,7 +126,7 @@ const handleEdit = (pkg) => {
     coordinatorNumber: ""
   });
 
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState([null]);
 
   const handleChange = (e) => {
     setFormData({
@@ -155,48 +147,57 @@ const handleEdit = (pkg) => {
   });
   form.append("catering", JSON.stringify(catering));
 
+  if (images) {
   for (let i = 0; i < images.length; i++) {
     form.append("images", images[i]);
   }
+}
 
   try {
-    if (editId) {
-      // ✏️ UPDATE
-      await axios.put(
-        `http://localhost:5000/api/packages/${editId}`,
-        form
-      );
-    } else {
-      // ➕ ADD
-      await axios.post(
-        "http://localhost:5000/api/packages",
-        form
-      );
-    }
-      alert(`Package ${editId ? "updated" : "added"}`);
-    fetchPackages();
 
-    // reset form
-    setEditId(null);
-    setFormData({
-      name: "",
-      description: "",
-      price: "",
-      venue: "",
-      startDate: "",
-      endDate: "",
-      guestCount: "",
-      coordinatorName: "",
-      coordinatorNumber: ""
-    });
-    if (pkg.catering && pkg.catering.length > 0) {
-    setCatering(pkg.catering);
-  }
-    setImages([]);
+  if (editId) {
 
-  } catch (error) {
-    console.error(error);
+    await axios.put(
+      `http://localhost:5000/api/packages/${editId}`,
+      form
+    );
+
+  } else {
+
+    await axios.post(
+      "http://localhost:5000/api/packages",
+      form
+    );
   }
+
+  await fetchPackages();
+
+  alert(`Package ${editId ? "updated" : "added"}`);
+
+  setEditId(null);
+
+  setFormData({
+    name: "",
+    description: "",
+    price: "",
+    venue: "",
+    startDate: "",
+    endDate: "",
+    guestCount: "",
+    coordinatorName: "",
+    coordinatorNumber: ""
+  });
+
+  setCatering([
+    { thaliName: "", description: "", price: "" }
+  ]);
+
+  setImages([]);
+
+} catch (error) {
+
+  console.error(error);
+}
 };
   return (
     <div style={{ display: 'grid', gap: '18px' }}>

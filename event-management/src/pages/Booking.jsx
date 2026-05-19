@@ -228,11 +228,11 @@ handler: async function (response) {
 
       endingDate: endDate,
 
-      location: formData.location,
+      location: pkg.venue,
 
       phoneNumber: formData.phoneNumber,
 
-      guestCount: Number(formData.guestCount),
+      guestCount: Number(pkg.guestCount),
 
       specialRequest: formData.specialRequest,
       amount: Number(pkg.price),
@@ -300,11 +300,11 @@ modal: {
 
           endingDate: endDate,
 
-          location: formData.location,
+          location: pkg.venue,
 
           phoneNumber: formData.phoneNumber,
 
-          guestCount: Number(formData.guestCount),
+          guestCount: Number(pkg.guestCount),
 
           specialRequest: formData.specialRequest,
 
@@ -372,6 +372,65 @@ modal: {
       <div className="booking-container">
       <h2>Book Event</h2>
 
+      <div
+  style={{
+    background: "#e9e6e6",
+    padding: "20px",
+    borderRadius: "15px",
+    marginBottom: "25px"
+  }}
+>
+  <h2
+    style={{
+      textAlign: "center",
+      marginBottom: "20px",
+      fontWeight: "bold"
+    }}
+  >
+    Booking Summary
+  </h2>
+
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      marginBottom: "12px",
+      fontSize: "18px"
+    }}
+  >
+    <span>Package Price</span>
+
+    <strong>₹ {pkg?.price}</strong>
+  </div>
+
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      marginBottom: "12px",
+      fontSize: "18px"
+    }}
+  >
+    
+  </div>
+
+  <hr />
+
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      marginTop: "18px",
+      fontSize: "20px",
+      fontWeight: "bold"
+    }}
+  >
+    <span>Total Amount</span>
+
+    <span>₹ {pkg?.price}</span>
+  </div>
+</div>
+
       <form onSubmit={handleSubmit} className="booking-form">
 
         <input
@@ -414,13 +473,13 @@ modal: {
  
 />
 
-        <input
+        {/* <input
           type="text"
           name="location"
           placeholder="Event Location"
           onChange={handleChange}
           required
-        />
+        /> */}
 
         <input
           type="text"
@@ -429,13 +488,13 @@ modal: {
           readOnly
         />
 
-        <input
+        {/* <input
           type="number"
           name="guestCount"
           placeholder="Guest Count"
           onChange={handleChange}
           required
-        />
+        /> */}
 
         <textarea
           name="specialRequest"
