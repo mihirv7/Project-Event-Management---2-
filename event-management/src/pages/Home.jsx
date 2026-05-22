@@ -49,7 +49,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section style={{ padding: "60px 100px" }}>
+      <section id="packages" style={{ padding: "60px 100px" }}>
         <h2 className="section-title">Our Packages</h2>
 
         <div className="package-grid">

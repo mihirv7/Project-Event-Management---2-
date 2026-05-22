@@ -12,6 +12,8 @@ export default function Booking() {
 const [endDate, setEndDate] = useState(null);
 const [disabledDates, setDisabledDates] = useState([]);
 const [pkg, setPkg] = useState(null);
+const [showTerms, setShowTerms] = useState(false);
+const [agreed, setAgreed] = useState(false);
   
   const navigate = useNavigate();
   
@@ -501,9 +503,208 @@ modal: {
           placeholder="Special Request"
           onChange={handleChange}
         />
+        <button
+  type="button"
+  onClick={() => setShowTerms(true)}
+  style={{
+    width: "100%",
+    padding: "12px",
+    borderRadius: "10px",
+    border: "1px solid #000",
+    background: "#000000",
+    fontWeight: "600",
+    cursor: "pointer",
+    marginTop: "10px",
+    color: "#ffffff",
+      display: "flex",  
+    justifyContent: "center",
+  }}
+>
+  View Terms & Conditions
+</button>
 
-        <button type="submit">Confirm Booking</button>
+<p
+  style={{
+    fontSize: "12px",
+    color: "#777",
+    textAlign: "center",
+    marginTop: "8px"
+  }}
+>
+  By continuing, you agree to our Terms & Conditions.
+</p>
+
+        <button
+
+      onClick={() => {
+         const token = localStorage.getItem("token");
+
+    if (!token) {
+
+      alert("Please login first");
+      setTimeout (() => {
+
+      navigate("/login");
+      }, 300);
+
+      return;
+    }
+
+    navigate(`/booking/${item._id}`);
+  }}
+      
+
+  disabled={!agreed}
+  style={{
+    width: "100%",
+    padding: "14px",
+    border: "none",
+    borderRadius: "10px",
+    background: agreed ? "#000" : "#999",
+    color: "#fff",
+    fontSize: "18px",
+    cursor: agreed ? "pointer" : "not-allowed",
+    marginTop: "15px",
+    justifyContent: "center",
+    display: "flex",
+    alignItems: "center",
+    gap: "8px"
+  }}
+>
+  Confirm Booking
+</button>
       </form>
+      {showTerms && (
+  <div
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      background: "rgba(0,0,0,0.6)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 999
+    }}
+  >
+    <div
+      style={{
+        width: "90%",
+        maxWidth: "500px",
+        background: "#fff",
+        borderRadius: "14px",
+        padding: "25px",
+        maxHeight: "80vh",
+        overflowY: "auto"
+      }}
+    >
+      <h2
+        style={{
+          marginBottom: "20px",
+          textAlign: "center"
+        }}
+      >
+        Terms & Conditions
+      </h2>
+
+      <ul
+        style={{
+          // paddingLeft: "20px",
+          lineHeight: "1.8",
+          color: "#444",
+          listStyleType: "none"
+        
+          
+        }}
+      >
+        <li>Advance payment is mandatory for booking confirmation.</li>
+
+        <li>Booking amount is non-refundable after confirmation.</li>
+
+        <li>Extra customization charges will apply separately.</li>
+
+        <li>
+          If guest count exceeds package limit, additional charges may apply.
+        </li>
+
+        <li>
+          Venue size and space availability affect final decoration setup.
+        </li>
+
+        <li>
+          Final event setup may slightly differ from website images.
+        </li>
+
+        <li>
+          Client is responsible for venue permissions and approvals.
+        </li>
+
+        <li>
+          Date changes are subject to availability of team and resources.
+        </li>
+      </ul>
+
+      <div
+        style={{
+          marginTop: "20px",
+          display: "flex",
+          alignItems: "center",
+          gap: "10px"
+        }}
+      >
+        <input
+          type="checkbox"
+          checked={agreed}
+          onChange={(e) => setAgreed(e.target.checked)}
+        />
+
+        <span>I agree to the Terms & Conditions</span>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          marginTop: "25px"
+        }}
+      >
+        <button
+          onClick={() => setShowTerms(false)}
+          style={{
+            flex: 1,
+            padding: "12px",
+            border: "none",
+            borderRadius: "8px",
+            background: "#000",
+            color: "#fff",
+            cursor: "pointer"
+          }}
+        >
+          Continue
+        </button>
+
+        <button
+          onClick={() => {
+            setAgreed(false);
+            setShowTerms(false);
+          }}
+          style={{
+            flex: 1,
+            padding: "12px",
+            border: "1px solid #000",
+            borderRadius: "8px",
+            background: "#fff",
+            cursor: "pointer"
+          }}
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
     </div>
   );
