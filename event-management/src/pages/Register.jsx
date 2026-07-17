@@ -21,6 +21,10 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!/^\d{10}$/.test(formData.phone)) {
+  alert("Mobile number must contain exactly 10 digits.");
+  return;
+}
     try {
       const res = await axios.post(
         "http://localhost:5000/api/auth/register",
@@ -77,7 +81,7 @@ export default function Register() {
 
           <label>Mobile Number</label>
           <input
-            type="text"
+            type="number"
             name="phone"
             onChange={handleChange}
             required
