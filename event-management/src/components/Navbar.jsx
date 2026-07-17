@@ -43,7 +43,7 @@ export default function Navbar() {
 
         <li><a href="/#packages">Packages</a></li>
 
-        <li><Link to="/custom">Custommmmmmmmmmm</Link></li>
+        <li><Link to="/custom">Custom</Link></li>
 
         <li><Link to="/my-bookings">My Bookings</Link></li>
 
