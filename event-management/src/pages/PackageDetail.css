@@ -1,153 +1,376 @@
-.package-detail-container {
-  max-width: 1100px;
-  margin: 40px auto;
-  padding: 30px;
-  background: #ffffff;
-  border-radius: 14px;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+/* ===========================
+   PAGE
+=========================== */
+
+.package-detail-page {
+  max-width: 1300px;
+  margin: 50px auto;
+  padding: 0 30px;
+  font-family: "Poppins", sans-serif;
 }
 
-.package-title {
+/* ===========================
+   HEADER
+=========================== */
+
+.package-header {
   text-align: center;
-  font-size: 32px;
-  margin-bottom: 25px;
-  color: #3b2f2f;
+  margin-bottom: 40px;
 }
 
-/* Image Gallery */
-.image-gallery {
+.package-header h1 {
+  font-size: 42px;
+  color: #222;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.package-header p {
+  color: #666;
+  font-size: 17px;
+  max-width: 700px;
+  margin: auto;
+  line-height: 1.8;
+}
+
+/* ===========================
+   IMAGE GALLERY
+=========================== */
+
+.gallery-section {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(2,1fr);
+  gap: 25px;
+  margin-bottom: 40px;
 }
 
-.image-gallery img {
+.gallery-card {
+  overflow: hidden;
+  border-radius: 18px;
+  box-shadow: 0 15px 35px rgba(0,0,0,.08);
+}
+
+.gallery-card img {
   width: 100%;
-  height: 260px;
+  height: 360px;
   object-fit: cover;
-  border-radius: 12px;
+  transition: .5s;
 }
 
-/* Info */
-.package-info {
-  margin-top: 25px;
+.gallery-card:hover img {
+  transform: scale(1.08);
+}
+
+/* ===========================
+   INFO CARD
+=========================== */
+
+.detail-card {
+  background: white;
+  border-radius: 20px;
+  padding: 35px;
+  box-shadow: 0 15px 35px rgba(0,0,0,.08);
+  margin-bottom: 30px;
+  margin-left: 200px;
+}
+
+.detail-left h2 {
+  margin-bottom: 25px;
+  color: #222;
+  font-size: 28px;
+  text-align: center;
+}
+
+.info-row {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.label {
+  color: #555;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.value {
+  color: #222;
+  font-weight: 600;
 }
 
 .price {
+  color: #FB8500;
   font-size: 26px;
-  font-weight: bold;
-  color: #c0392b;
+  font-weight: 700;
 }
 
-.date {
-  margin: 10px 0;
-  color: #555;
-}
+/* ===========================
+   DESCRIPTION
+=========================== */
 
-.description {
-  
-  
-  /* margin-right: 300px; */
-  margin-top: 4px;
-}
-
-/* Catering */
-.catering {
+.description-card {
   margin-top: 35px;
-  padding: 20px;
-  background: #eae8e7;
-  border-radius: 12px;
-}
-.package-info p{
-  font-size:16px;
-  margin:8px 0;
+  background: #fff;
+  padding: 35px;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0,0,0,.08);
 }
 
+.description-card h2 {
+  margin-bottom: 20px;
+  color: #222;
+}
 
+.description-card p {
+  color: #666;
+  line-height: 1.9;
+  font-size: 16px;
+}
 
+/* ===========================
+   CATERING
+=========================== */
 
-.catering h2 {
+.catering-card {
+  margin-top: 35px;
+  background: linear-gradient(135deg,#fffdf6,#fff7ea);
+  border-radius: 20px;
+  padding: 35px;
+  box-shadow: 0 15px 35px rgba(0,0,0,.08);
+}
+
+.catering-card h2 {
+  margin-bottom: 25px;
+  color: #222;
+}
+
+.thali-box {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 20px;
+  border-left: 5px solid #FB8500;
+  transition: .35s;
+}
+
+.thali-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0,0,0,.08);
+}
+
+.thali-box h3 {
   margin-bottom: 10px;
-  color: #5a2d0c;
+  color: #222;
+}
+
+.thali-box p {
+  color: #666;
+  line-height: 1.7;
 }
 
 .thali-price {
-  margin-top: 8px;
-  font-weight: bold;
-  color: #e67e22;
-}
-
-/* Button */
-.book-btn {
-  margin-top: 30px;
-  width: 100%;
-  padding: 14px;
-  font-size: 18px;
-  border: none;
-  border-radius: 10px;
-  background-color: black;
-  color: rgb(252, 252, 252);
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.book-btn:hover {
-  transform: scale(1.03);
-}
-
-.loading {
-  text-align: center;
-  margin-top: 100px;
+  margin-top: 15px;
   font-size: 20px;
+  font-weight: 700;
+  color: #FB8500;
 }
+
+/* ===========================
+   BOOK BUTTON
+=========================== */
+
+.book-btn-back {
+  width: 100%;
+  margin-top: 40px;
+  border: none;
+  padding: 18px;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  color: rgb(255, 254, 254);
+  transition: .35s;
+    cursor: pointer;
+    background: #FFD166;
+/*    ;
+    color: #111;
+    border: none;
+    padding: 16px 38px;
+    border-radius: 50px;
+    font-size: 17px;
+    font-weight: 600;
+    transition: .35s;
+    cursor: pointer;*/
+  background: linear-gradient(
+      135deg,
+      #FFB703,
+      #fd8904
+  );
+
+}
+
+.book-btn-back:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 35px rgba(251,133,0,.35);
+}
+
+/* ===========================
+   OTHER PACKAGES
+=========================== */
+
 .other-packages {
-  margin-top: 60px;
+  margin-top: 70px;
 }
 
 .other-packages h2 {
-  margin-bottom: 20px;
+  text-align: center;
+  margin-bottom: 35px;
+  font-size: 34px;
+  color: #222;
 }
 
 .package-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(260px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
+  gap: 30px;
 }
 
-.package-card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 15px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+/* Card */
+
+.other-package-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0,0,0,.08);
+  transition: .35s;
 }
 
-.package-card img {
+.other-package-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 45px rgba(0,0,0,.15);
+}
+
+.other-image {
+  overflow: hidden;
+}
+
+.other-image img {
   width: 100%;
-  height: 180px;
+  height: 220px;
   object-fit: cover;
-  border-radius: 10px;
+  transition: .5s;
 }
 
-.card-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
-  font-weight: bold;
+.other-package-card:hover img {
+  transform: scale(1.08);
 }
 
-.card-footer button {
-  background: #090909;
-  color: #fff;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
+.other-content {
+  padding: 22px;
+}
+
+.other-content h3 {
+  margin-bottom: 15px;
+  color: #222;
+  font-size: 23px;
+}
+
+.other-price {
+  color: #FB8500;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.details-btn {
   width: 100%;
-  height: 40px;
+  border: none;
+  padding: 14px;
+  border-radius: 40px;
+  cursor: pointer;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+
+  background: linear-gradient(
+      135deg,
+      #FFB703,
+      #FB8500
+  );
+
+  transition: .35s;
 }
 
+.details-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(251,133,0,.35);
+}
+
+/* ===========================
+   LOADING
+=========================== */
+
+.loading {
+  text-align: center;
+  margin-top: 120px;
+  font-size: 22px;
+  color: #666;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media(max-width:900px){
+
+.gallery-section{
+    grid-template-columns:1fr;
+}
+
+.gallery-card img{
+    height:280px;
+}
+
+.info-row{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:8px;
+}
+
+.package-header h1{
+    font-size:34px;
+}
+
+}
+
+@media(max-width:600px){
+
+.package-detail-page{
+    padding:0 18px;
+}
+
+.package-header h1{
+    font-size:30px;
+}
+
+.detail-card,
+.description-card,
+.catering-card{
+    padding:22px;
+}
+
+.other-packages h2{
+    font-size:28px;
+}
+
+.gallery-card img{
+    height:220px;
+}
+
+}
