@@ -596,7 +596,7 @@ modal: {
         background: "#fff",
         borderRadius: "14px",
         padding: "25px",
-        maxHeight: "80vh",
+        maxHeight: "100vh",
         overflowY: "auto"
       }}
     >

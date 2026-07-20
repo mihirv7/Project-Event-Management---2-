@@ -1,80 +1,123 @@
-/* ===== PAGE BACKGROUND ===== */
+/* =====================================================
+   BOOKING PAGE
+===================================================== */
+
 .booking-page {
   min-height: 100vh;
-  background: url("/assets/bg.jpg") center/cover no-repeat;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 50px 20px;
+  background: linear-gradient(135deg, #fff8f0 0%, #ffffff 100%);
 }
 
-/* ===== BOOKING CARD ===== */
+/* =====================================================
+   BOOKING CARD
+===================================================== */
+
 .booking-container {
-  width: 420px;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 35px;
-  border-radius: 14px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  text-align: center;
+  width: 100%;
+  max-width: 500px;
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 24px;
+  border: 1px solid rgba(251, 133, 0, 0.15);
+  box-shadow:
+    0 12px 40px rgba(0,0,0,0.08),
+    0 5px 18px rgba(251,133,0,0.08);
+  transition: 0.35s ease;
 }
 
-/* ===== TITLE ===== */
+.booking-container:hover {
+  transform: translateY(-5px);
+  box-shadow:
+    0 18px 45px rgba(0,0,0,0.12),
+    0 10px 25px rgba(251,133,0,0.15);
+}
+
+/* =====================================================
+   TITLE
+===================================================== */
+
 .booking-container h2 {
-  margin-bottom: 20px;
-  font-weight: 600;
-  color: #333;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #1f2937;
+  font-size: 30px;
+  font-weight: 700;
+  position: relative;
 }
 
-/* ===== FORM ===== */
+.booking-container h2::after {
+  content: "";
+  display: block;
+  width: 70px;
+  height: 4px;
+  margin: 12px auto 0;
+  border-radius: 20px;
+  background: linear-gradient(to right, #ffb703, #fb8500);
+}
+
+/* =====================================================
+   FORM
+===================================================== */
+
 .booking-form {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 18px;
 }
 
-/* ===== INPUTS ===== */
+/* =====================================================
+   INPUTS
+===================================================== */
+
 .booking-form input,
-.booking-form textarea {
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  outline: none;
-  font-size: 14px;
-  transition: 0.2s;
+.booking-form textarea,
+.react-datepicker__input-container input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid #dcdcdc;
+  background: #fafafa;
+  font-size: 15px;
+  color: #333;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
 }
 
 .booking-form input:focus,
-.booking-form textarea:focus {
-  border-color: black;
+.booking-form textarea:focus,
+.react-datepicker__input-container input:focus {
+  outline: none;
+  border-color: #fb8500;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(251,133,0,0.15);
 }
 
-/* readonly inputs */
+/* =====================================================
+   READONLY INPUT
+===================================================== */
+
 .booking-form input[readonly] {
-  background: #f3f3f3;
+  background: #f5f5f5;
+  color: #666;
   cursor: not-allowed;
 }
 
-/* ===== TEXTAREA ===== */
+/* =====================================================
+   TEXTAREA
+===================================================== */
+
 .booking-form textarea {
-  resize: none;
-  height: 80px;
+  min-height: 110px;
+  resize: vertical;
 }
 
-/* ===== BUTTON ===== */
-.booking-form button {
-  margin-top: 10px;
-  padding: 14px;
-  border-radius: 30px;
-  border: none;
-  background: black;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  transition: 0.3s;
-}
+/* =====================================================
+   DATE PICKER
+===================================================== */
 
-.booking-form button:hover {
-  background: #333;
-}
 .react-datepicker-wrapper {
   width: 100%;
 }
@@ -83,18 +126,147 @@
   width: 100%;
 }
 
-.react-datepicker__input-container input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+.react-datepicker {
+  border-radius: 15px !important;
+  overflow: hidden;
+  border: none !important;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
 }
 
-/* ===== MOBILE ===== */
-@media (max-width: 500px) {
-  .booking-container {
-    width: 90%;
-    padding: 25px;
+.react-datepicker__header {
+  background: linear-gradient(135deg,#ffb703,#fb8500);
+  border-bottom: none;
+}
+
+.react-datepicker__current-month,
+.react-datepicker-time__header,
+.react-datepicker-year-header {
+  color: white !important;
+  font-weight: 600;
+}
+
+.react-datepicker__day-name {
+  color: white !important;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background: #fb8500 !important;
+  border-radius: 50%;
+}
+
+.react-datepicker__day:hover {
+  background: #ffd28c !important;
+  border-radius: 50%;
+}
+
+/* =====================================================
+   BUTTON
+===================================================== */
+
+.booking-form button {
+  margin-top: 12px;
+  padding: 15px;
+  border: none;
+  border-radius: 50px;
+  background: linear-gradient(135deg,#ffb703,#fb8500);
+  color: white;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .35s ease;
+  box-shadow: 0 10px 20px rgba(251,133,0,0.25);
+}
+
+.booking-form button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(251,133,0,0.35);
+}
+
+.booking-form button:active {
+  transform: scale(.98);
+}
+
+/* =====================================================
+   PLACEHOLDER
+===================================================== */
+
+.booking-form input::placeholder,
+.booking-form textarea::placeholder {
+  color: #999;
+}
+
+/* =====================================================
+   SCROLLBAR
+===================================================== */
+
+.booking-form textarea::-webkit-scrollbar {
+  width: 8px;
+}
+
+.booking-form textarea::-webkit-scrollbar-thumb {
+  background: #fb8500;
+  border-radius: 20px;
+}
+
+/* =====================================================
+   ANIMATION
+===================================================== */
+
+.booking-container {
+  animation: bookingFade .6s ease;
+}
+
+@keyframes bookingFade {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
   }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width:768px) {
+
+  .booking-page {
+    padding: 30px 15px;
+  }
+
+  .booking-container {
+    padding: 30px 22px;
+    border-radius: 20px;
+  }
+
+  .booking-container h2 {
+    font-size: 26px;
+  }
+
+  .booking-form input,
+  .booking-form textarea {
+    font-size: 14px;
+  }
+
+  .booking-form button {
+    font-size: 16px;
+  }
+
+}
+
+@media (max-width:480px) {
+
+  .booking-container {
+    padding: 22px 18px;
+  }
+
+  .booking-container h2 {
+    font-size: 23px;
+  }
+
 }
