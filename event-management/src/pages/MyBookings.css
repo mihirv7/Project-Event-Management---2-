@@ -1,0 +1,259 @@
+/* =====================================================
+   MY BOOKINGS PAGE
+===================================================== */
+
+.mybookings-page {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #fffdf8, #ffffff);
+  padding: 70px 20px;
+}
+
+.mybookings-container {
+  max-width: 1300px;
+  margin: auto;
+}
+
+/* =====================================================
+   PAGE TITLE
+===================================================== */
+
+.page-title {
+  text-align: center;
+  font-size: 42px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 50px;
+  position: relative;
+}
+
+.page-title::after {
+  content: "";
+  width: 90px;
+  height: 4px;
+  background: linear-gradient(to right, #ffb703, #fb8500);
+  display: block;
+  margin: 14px auto;
+  border-radius: 30px;
+}
+
+/* =====================================================
+   SECTION
+===================================================== */
+
+.booking-section {
+  margin-bottom: 60px;
+}
+
+.section-title {
+  font-size: 28px;
+  color: #222;
+  margin-bottom: 25px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgba(251, 133, 0, .25);
+}
+
+/* =====================================================
+   BOOKING CARD
+===================================================== */
+
+.booking-card {
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 28px;
+  margin-bottom: 22px;
+  border: 1px solid rgba(251, 133, 0, .15);
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+  cursor: pointer;
+  transition: .35s ease;
+}
+
+.booking-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(251,133,0,.18);
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.booking-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.booking-header h3 {
+  margin: 0;
+  color: #222;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.booking-type {
+  background: linear-gradient(135deg,#ffb703,#fb8500);
+  color: white;
+  padding: 8px 18px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* =====================================================
+   DATE
+===================================================== */
+
+.booking-date {
+  font-size: 17px;
+  color: #666;
+  margin-bottom: 22px;
+}
+
+/* =====================================================
+   INFO GRID
+===================================================== */
+
+.booking-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+  gap: 18px;
+}
+
+.booking-grid div {
+  background: #fafafa;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 15px;
+  color: #333;
+  border-left: 4px solid #fb8500;
+}
+
+/* =====================================================
+   CUSTOMIZATION
+===================================================== */
+
+.customization-box {
+  margin-top: 25px;
+  padding: 20px;
+  background: #fff8ef;
+  border-radius: 16px;
+  border: 1px solid rgba(251,133,0,.15);
+}
+
+.customization-box h4 {
+  margin-bottom: 15px;
+  color: #fb8500;
+  font-size: 18px;
+}
+
+.customization-box p {
+  margin: 8px 0;
+  color: #444;
+}
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.empty-booking {
+  text-align: center;
+  padding: 80px 20px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+}
+
+.empty-booking h3 {
+  color: #222;
+  margin-bottom: 12px;
+  font-size: 28px;
+}
+
+.empty-booking p {
+  color: #777;
+  font-size: 17px;
+}
+
+/* =====================================================
+   ANIMATION
+===================================================== */
+
+.booking-card {
+  animation: fadeUp .7s ease;
+}
+
+@keyframes fadeUp {
+
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width:992px){
+
+  .page-title{
+    font-size:36px;
+  }
+
+  .booking-header{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:12px;
+  }
+
+}
+
+@media (max-width:768px){
+
+  .mybookings-page{
+    padding:45px 18px;
+  }
+
+  .page-title{
+    font-size:30px;
+  }
+
+  .section-title{
+    font-size:24px;
+  }
+
+  .booking-card{
+    padding:20px;
+  }
+
+  .booking-header h3{
+    font-size:22px;
+  }
+
+  .booking-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+@media (max-width:480px){
+
+  .page-title{
+    font-size:26px;
+  }
+
+  .booking-header h3{
+    font-size:20px;
+  }
+
+  .booking-date{
+    font-size:15px;
+  }
+
+}

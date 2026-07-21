@@ -24,8 +24,13 @@ export default function CategoryProducts() {
   }, [id]);
 
   // Loading state
-  if (loading) return <h2>Loading...</h2>;
-
+if (loading) {
+  return (
+    <div className="loading">
+      Loading Designs...
+    </div>
+  );
+}
   return (
     <div className="product-container">
       <h2 className="heading">Available Designs</h2>

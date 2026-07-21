@@ -39,7 +39,7 @@ export default function ProductDetail() {
         <h2 className="title">{product.name}</h2>
 
         {/* IMAGE */}
-        <div className="image-box">
+        <div className="image-box premium-image">
           <img src={`http://localhost:5000/uploads/${product.image}`} alt={product.name} />
         </div>
 
@@ -57,7 +57,7 @@ export default function ProductDetail() {
         {/* CUSTOMIZE BUTTON */}
         {product.customizations?.length > 0 && (
           <button
-            className="custom-btn"
+            className="custom-btn premium-btn"
             onClick={() => setShowCustomize(!showCustomize)}
           >
             Customize
@@ -97,7 +97,7 @@ export default function ProductDetail() {
 
         {/* BOOK BUTTON */}
         <button
-          className="book-btn full-btn"
+          className="book-btn premium-btn full-btn"
           onClick={() =>
             navigate("/product-booking", {
               state: {
@@ -114,61 +114,54 @@ export default function ProductDetail() {
 
       </div>
 
-      {/* RELATED */}
-      
+      {/* ================= RELATED PRODUCTS ================= */}
 
 <div className="related-section">
-  <h3>More Designs</h3>
 
-  <div
-    className="product-grid"
-    style={{
-      display: "grid",
-      gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-      gap: "20px",
-      marginTop: "15px"
-    }}
-  >
+  <div className="related-header">
+    <h3>More Designs</h3>
+    <p>Explore more beautiful designs from this category.</p>
+  </div>
+
+  <div className="related-grid">
+
     {related.map((item) => (
+
       <div
         key={item._id}
+        className="related-card"
         onClick={() => navigate(`/product/${item._id}`)}
-        style={{
-          background: "#fff",
-          borderRadius: "12px",
-          overflow: "hidden",
-          boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-          cursor: "pointer",
-          transition: "0.3s",
-        }}
-        onMouseEnter={(e) =>
-          (e.currentTarget.style.transform = "translateY(-5px)")
-        }
-        onMouseLeave={(e) =>
-          (e.currentTarget.style.transform = "translateY(0)")
-        }
       >
-        {/* IMAGE */}
-        <img
-          src={`http://localhost:5000/uploads/${item.image}`}
-          alt={item.name}
-          style={{
-            width: "100%",
-            height: "200px",
-            objectFit: "cover"
-          }}
-        />
 
-        {/* CONTENT */}
-        <div style={{ padding: "10px" }}>
-          <h4 style={{ margin: "5px 0" }}>{item.name}</h4>
-          <p style={{ margin: 0, fontWeight: "bold" }}>
-            ₹ {item.price}
-          </p>
+        <div className="related-image">
+
+          <img
+            src={`http://localhost:5000/uploads/${item.image}`}
+            alt={item.name}
+          />
+
         </div>
+
+        <div className="related-content">
+
+          <h4>{item.name}</h4>
+
+          <span className="related-price">
+            ₹ {item.price}
+          </span>
+
+          <button className="related-btn">
+            View Details
+          </button>
+
+        </div>
+
       </div>
+
     ))}
+
   </div>
+
 </div>
 
     </div>

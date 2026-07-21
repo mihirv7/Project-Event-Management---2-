@@ -1,87 +1,218 @@
-/* Container */
+/* ==========================================
+   PAGE
+========================================== */
+
 .product-container {
-  padding: 20px;
+  max-width: 1350px;
+  margin: auto;
+  padding: 70px 25px;
+  background: linear-gradient(to bottom, #fffdf8, #ffffff);
 }
 
-/* Heading */
+/* ==========================================
+   HEADING
+========================================== */
+
 .heading {
-  margin-bottom: 20px;
+  text-align: center;
+  font-size: 42px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 55px;
+  position: relative;
 }
 
-/* Grid layout */
+.heading::after {
+  content: "";
+  width: 90px;
+  height: 4px;
+  background: linear-gradient(to right, #ffb703, #fb8500);
+  display: block;
+  margin: 14px auto;
+  border-radius: 30px;
+}
+
+/* ==========================================
+   GRID
+========================================== */
+
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  gap: 35px;
 }
 
-/* Card */
+/* ==========================================
+   CARD
+========================================== */
+
 .product-card {
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  background: white;
+  border-radius: 22px;
   overflow: hidden;
-  transition: 0.3s;
+  cursor: pointer;
+  border: 1px solid rgba(251, 133, 0, .15);
+  box-shadow: 0 10px 35px rgba(0,0,0,.08);
+  transition: .4s;
 }
 
 .product-card:hover {
-  transform: scale(1.03);
+  transform: translateY(-10px);
+  box-shadow: 0 18px 45px rgba(251,133,0,.20);
 }
 
-/* Image fix */
+/* ==========================================
+   IMAGE
+========================================== */
+
 .product-img {
   width: 100%;
-  height: 200px;
+  height: 260px;
   object-fit: cover;
+  transition: .5s;
 }
 
-/* Details */
+.product-card:hover .product-img {
+  transform: scale(1.08);
+}
+
+/* ==========================================
+   DETAILS
+========================================== */
+
 .product-details {
-  padding: 15px;
+  padding: 25px;
   text-align: center;
 }
 
 .product-title {
-  margin: 10px 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 15px;
 }
 
 .price {
-  color: rgb(3, 3, 3);
-  font-weight: bold;
+  font-size: 36px;
+  font-weight: 700;
+  color: #fb8500;
+  margin-bottom: 22px;
 }
 
-/* Button */
-.book-btn {
-  margin-top: 10px;
-  padding: 8px 15px;
-  border: none;
-  background: black;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-}
+/* ==========================================
+   BUTTON
+========================================== */
 
-.book-btn:hover {
-  background: #333;
-}
-/* Button */
 .view-btn {
-  margin-top: 10px;
-  padding: 8px 15px;
   border: none;
-  background: black;
+  outline: none;
+  padding: 13px 30px;
+  border-radius: 35px;
+  background: linear-gradient(135deg,#ffb703,#fb8500);
   color: white;
-  border-radius: 5px;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
+  transition: .35s;
 }
 
 .view-btn:hover {
-  background: #333;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(251,133,0,.35);
 }
 
-/* Empty message */
+/* ==========================================
+   EMPTY
+========================================== */
+
 .no-data {
   text-align: center;
-  font-size: 18px;
-  color: gray;
+  font-size: 22px;
+  color: #777;
+  margin-top: 60px;
+}
+
+/* ==========================================
+   LOADING
+========================================== */
+
+.loading {
+  text-align: center;
+  padding: 120px;
+  font-size: 26px;
+  font-weight: 600;
+}
+
+/* ==========================================
+   CARD ANIMATION
+========================================== */
+
+.product-card {
+  animation: fadeUp .7s ease;
+}
+
+@keyframes fadeUp {
+
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media(max-width:992px){
+
+.product-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+.heading{
+font-size:36px;
+}
+
+}
+
+@media(max-width:768px){
+
+.product-container{
+padding:45px 20px;
+}
+
+.product-grid{
+grid-template-columns:1fr;
+}
+
+.product-img{
+height:230px;
+}
+
+.product-title{
+font-size:24px;
+}
+
+.price{
+font-size:30px;
+}
+
+}
+
+@media(max-width:480px){
+
+.heading{
+font-size:30px;
+}
+
+.view-btn{
+width:100%;
+}
+
 }
