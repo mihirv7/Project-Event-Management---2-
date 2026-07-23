@@ -402,18 +402,36 @@ razor.open();
 <button
   type="button"
   onClick={() => setShowTerms(true)}
+  onMouseEnter={(e) => {
+    e.target.style.background =
+      "linear-gradient(135deg,#FFC233,#FF9800)";
+    e.target.style.transform = "translateY(-3px)";
+    e.target.style.boxShadow =
+      "0 12px 30px rgba(251,133,0,.45)";
+  }}
+  onMouseLeave={(e) => {
+    e.target.style.background =
+      "linear-gradient(135deg,#FFB703,#FB8500)";
+    e.target.style.transform = "translateY(0)";
+    e.target.style.boxShadow =
+      "0 8px 20px rgba(251,133,0,.35)";
+  }}
   style={{
     width: "100%",
-    padding: "12px",
-    borderRadius: "10px",
-    border: "1px solid #000",
-    background: "#000000",
+    padding: "14px",
+    border: "none",
+    borderRadius: "50px",
+    background: "linear-gradient(135deg,#FFB703,#FB8500)",
+    color: "#fff",
+    fontSize: "16px",
     fontWeight: "600",
     cursor: "pointer",
     marginTop: "10px",
-    color: "#ffffff",
-      display: "flex",  
+    display: "flex",
     justifyContent: "center",
+    alignItems: "center",
+    transition: "all .3s ease",
+    boxShadow: "0 8px 20px rgba(251,133,0,.35)"
   }}
 >
   View Terms & Conditions
@@ -430,25 +448,47 @@ razor.open();
   By continuing, you agree to our Terms & Conditions.
 </p>
 
-        <button
-
-      
-
+       <button
   disabled={!agreed}
+  onMouseEnter={(e) => {
+    if (agreed) {
+      e.target.style.background =
+        "linear-gradient(135deg,#FFC233,#FF9800)";
+      e.target.style.transform = "translateY(-3px)";
+      e.target.style.boxShadow =
+        "0 15px 35px rgba(251,133,0,.45)";
+    }
+  }}
+  onMouseLeave={(e) => {
+    if (agreed) {
+      e.target.style.background =
+        "linear-gradient(135deg,#FFB703,#FB8500)";
+      e.target.style.transform = "translateY(0)";
+      e.target.style.boxShadow =
+        "0 10px 25px rgba(251,133,0,.35)";
+    }
+  }}
   style={{
     width: "100%",
     padding: "14px",
     border: "none",
-    borderRadius: "10px",
-    background: agreed ? "#000" : "#999",
+    borderRadius: "50px",
+    background: agreed
+      ? "linear-gradient(135deg,#FFB703,#FB8500)"
+      : "#999",
     color: "#fff",
     fontSize: "18px",
+    fontWeight: "600",
     cursor: agreed ? "pointer" : "not-allowed",
     marginTop: "15px",
     justifyContent: "center",
     display: "flex",
     alignItems: "center",
-    gap: "8px"
+    gap: "8px",
+    boxShadow: agreed
+      ? "0 10px 25px rgba(251,133,0,.35)"
+      : "none",
+    transition: "all .3s ease"
   }}
 >
   Confirm Booking
@@ -478,7 +518,7 @@ razor.open();
         background: "#fff",
         borderRadius: "14px",
         padding: "25px",
-        maxHeight: "80vh",
+        maxHeight: "100vh",
         overflowY: "auto"
       }}
     >
@@ -553,36 +593,63 @@ razor.open();
         }}
       >
         <button
-          onClick={() => setShowTerms(false)}
-          style={{
-            flex: 1,
-            padding: "12px",
-            border: "none",
-            borderRadius: "8px",
-            background: "#000",
-            color: "#fff",
-            cursor: "pointer"
-          }}
-        >
-          Continue
-        </button>
+  onClick={() => setShowTerms(false)}
+  onMouseEnter={(e) => {
+    e.target.style.background =
+      "linear-gradient(135deg,#FFC233,#FF9800)";
+    e.target.style.transform = "translateY(-3px)";
+  }}
+  onMouseLeave={(e) => {
+    e.target.style.background =
+      "linear-gradient(135deg,#FFB703,#FB8500)";
+    e.target.style.transform = "translateY(0)";
+  }}
+  style={{
+    flex: 1,
+    padding: "12px",
+    border: "none",
+    borderRadius: "50px",
+    background: "linear-gradient(135deg,#FFB703,#FB8500)",
+    color: "#fff",
+    fontWeight: "600",
+    cursor: "pointer",
+    transition: "all .3s ease",
+    boxShadow: "0 10px 20px rgba(251,133,0,.35)"
+  }}
+>
+  Continue
+</button>
 
         <button
-          onClick={() => {
-            setAgreed(false);
-            setShowTerms(false);
-          }}
-          style={{
-            flex: 1,
-            padding: "12px",
-            border: "1px solid #000",
-            borderRadius: "8px",
-            background: "#fff",
-            cursor: "pointer"
-          }}
-        >
-          Cancel
-        </button>
+  onClick={() => {
+    setAgreed(false);
+    setShowTerms(false);
+  }}
+  onMouseEnter={(e) => {
+    e.target.style.background =
+      "linear-gradient(135deg,#FFB703,#FB8500)";
+    e.target.style.color = "#fff";
+    e.target.style.transform = "translateY(-3px)";
+  }}
+  onMouseLeave={(e) => {
+    e.target.style.background = "#fff";
+    e.target.style.color = "#FFB703";
+    e.target.style.transform = "translateY(0)";
+  }}
+  style={{
+    flex: 1,
+    padding: "12px",
+    border: "2px solid #FFB703",
+    borderRadius: "50px",
+    background: "#fff",
+    color: "#FFB703",
+    fontWeight: "600",
+    cursor: "pointer",
+    transition: "all .3s ease"
+  }}
+>
+  Cancel
+</button>
       </div>
     </div>
   </div>
