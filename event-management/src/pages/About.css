@@ -1,188 +1,489 @@
+/* =====================================================
+   ABOUT PAGE
+===================================================== */
+
 .about-wrapper {
   min-height: 100vh;
-  background: linear-gradient(
-      rgba(255, 255, 255, 0.57),
-      rgba(255, 255, 255, 0.57)
-    ),
-    url("../assets/hero-bg.jpg");
-  background-size: cover;
-  background-position: center;
-  font-family: "Segoe UI", sans-serif;
-  padding: 40px 20px;
+  background: linear-gradient(to bottom, #fffdf8, #ffffff);
+  font-family: "Poppins", "Segoe UI", sans-serif;
+  padding-bottom: 80px;
 }
 
-/* Hero Section */
+/* =====================================================
+   HERO SECTION
+===================================================== */
+
 .about-hero {
+  height: 320px;
+  background: linear-gradient(
+      rgba(0, 0, 0, 0.55),
+      rgba(0, 0, 0, 0.55)
+    ),
+    url("../assets/hero-bg.jpg") center/cover no-repeat;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   text-align: center;
-  margin-bottom: 50px;
-  animation: fadeDown 1s ease;
+
+  animation: fadeDown .8s ease;
 }
+
+/* =====================================================
+   TITLE
+===================================================== */
 
 .about-title {
-  font-size: 42px;
-  color: rgb(98, 172, 217);
-  text-shadow: 2px 2px 4px rgb(7, 0, 0);
+
+  color: white;
+
+  font-size: 58px;
+
+  font-weight: 700;
+
+  margin-bottom: 15px;
+
 }
+
+.about-title::after {
+
+  content: "";
+
+  display: block;
+
+  width: 90px;
+
+  height: 4px;
+
+  margin: 18px auto;
+
+  border-radius: 30px;
+
+  background: linear-gradient(to right,#ffb703,#fb8500);
+
+}
+
+/* =====================================================
+   SUBTITLE
+===================================================== */
 
 .about-subtitle {
-  color: #0d0d0d;
-  font-size: 16px;
-  margin-top: 8px;
-  border-color: black;
+
+  color: rgba(255,255,255,.92);
+
+  font-size: 21px;
+
+  max-width: 700px;
+
+  line-height: 1.7;
+
 }
 
-/* Content Cards */
+/* =====================================================
+   CONTENT
+===================================================== */
+
 .about-content {
-  max-width: 900px;
+
+  max-width: 1300px;
+
   margin: auto;
-  display: grid;
-  gap: 25px;
+
+  padding: 70px 25px 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 40px;
+
 }
+
+/* =====================================================
+   CARD
+===================================================== */
 
 .about-card {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(12px);
-  padding: 25px 30px;
-  border-radius: 16px;
-  color: #f1f1f1;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+
+  background: white;
+
+  border-radius: 24px;
+
+  padding: 35px;
+
+  border: 1px solid rgba(251,133,0,.15);
+
+  box-shadow: 0 12px 35px rgba(0,0,0,.08);
+
+  transition: .35s;
+
 }
 
-.about-card h2 {
-  color: rgb(98, 172, 217);
-  text-shadow: 2px 2px 4px rgb(4, 4, 4);
-  margin-bottom: 10px;
-}
-
-.about-card p {
-  font-size: 15px;
-  line-height: 1.7;
-}
-
-/* Hover Effect */
 .about-card:hover {
-  transform: translateY(-6px) scale(1.01);
-  box-shadow: 0 20px 50px rgba(21, 125, 181, 0.4);
+
+  transform: translateY(-8px);
+
+  box-shadow: 0 18px 45px rgba(251,133,0,.18);
+
 }
 
-/* Animations */
-.slide-left {
-  animation: slideLeft 1s ease;
-}
-
-.slide-right {
-  animation: slideRight 1s ease;
-}
-
-.fade-up {
-  animation: fadeUp 1s ease;
-}
-
-/* Keyframes */
-@keyframes fadeDown {
-  from {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideRight {
-  from {
-    opacity: 0;
-    transform: translateX(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-  .about-title {
-    font-size: 34px;
-  }
-
-  .about-card {
-    padding: 20px;
-  }
-}
-.about-card img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 12px;
-  margin-bottom: 12px;
-}
+/* =====================================================
+   HORIZONTAL LAYOUT
+===================================================== */
 
 .about-card.horizontal {
+
   display: flex;
+
   align-items: center;
-  gap: 25px;
+
+  justify-content: space-between;
+
+  gap: 35px;
+
 }
 
 .about-card.horizontal.reverse {
+
   flex-direction: row-reverse;
+
 }
+
+/* =====================================================
+   IMAGE
+===================================================== */
 
 .about-card img {
-  width: 45%;
-  height: 220px;
+
+  width: 44%;
+
+  height: 280px;
+
   object-fit: cover;
-  border-radius: 14px;
+
+  border-radius: 20px;
+
+  transition: .45s;
+
 }
+
+.about-card:hover img {
+
+  transform: scale(1.05);
+
+}
+
+/* =====================================================
+   TEXT AREA
+===================================================== */
 
 .about-text {
-  width: 55%;
+
+  width: 56%;
+
 }
+/* =====================================================
+   TEXT
+===================================================== */
 
 .about-text h1 {
-  color: rgb(57, 144, 166);
-  margin-bottom: 8px;
+
+  font-size: 42px;
+
+  color: #222;
+
+  margin-bottom: 20px;
+
+  font-weight: 700;
+
+  position: relative;
+
+}
+
+.about-text h1::after {
+
+  content: "";
+
+  display: block;
+
+  width: 80px;
+
+  height: 4px;
+
+  margin-top: 12px;
+
+  border-radius: 30px;
+
+  background: linear-gradient(to right,#ffb703,#fb8500);
+
 }
 
 .about-text p {
-  font-size: 20px;
-  line-height: 1.7;
-  color: black;
+
+  font-size: 19px;
+
+  color: #555;
+
+  line-height: 1.9;
+
 }
 
-/* Mobile */
-@media (max-width: 768px) {
-  .about-card.horizontal,
-  .about-card.horizontal.reverse {
-    flex-direction: column;
+/* =====================================================
+   ANIMATIONS
+===================================================== */
+
+.slide-left {
+
+  animation: slideLeft .8s ease;
+
+}
+
+.slide-right {
+
+  animation: slideRight .8s ease;
+
+}
+
+.fade-up {
+
+  animation: fadeUp .8s ease;
+
+}
+
+@keyframes fadeDown {
+
+  from{
+
+    opacity:0;
+
+    transform:translateY(-35px);
+
   }
 
-  .about-card img,
-  .about-text {
-    width: 100%;
+  to{
+
+    opacity:1;
+
+    transform:translateY(0);
+
   }
+
+}
+
+@keyframes slideLeft {
+
+  from{
+
+    opacity:0;
+
+    transform:translateX(-60px);
+
+  }
+
+  to{
+
+    opacity:1;
+
+    transform:translateX(0);
+
+  }
+
+}
+
+@keyframes slideRight {
+
+  from{
+
+    opacity:0;
+
+    transform:translateX(60px);
+
+  }
+
+  to{
+
+    opacity:1;
+
+    transform:translateX(0);
+
+  }
+
+}
+
+@keyframes fadeUp {
+
+  from{
+
+    opacity:0;
+
+    transform:translateY(45px);
+
+  }
+
+  to{
+
+    opacity:1;
+
+    transform:translateY(0);
+
+  }
+
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:1100px){
+
+.about-card.horizontal{
+
+flex-direction:column;
+
+}
+
+.about-card.horizontal.reverse{
+
+flex-direction:column;
+
+}
+
+.about-card img{
+
+width:100%;
+
+height:320px;
+
+}
+
+.about-text{
+
+width:100%;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.about-hero{
+
+height:260px;
+
+padding:20px;
+
+}
+
+.about-title{
+
+font-size:40px;
+
+}
+
+.about-subtitle{
+
+font-size:18px;
+
+}
+
+.about-content{
+
+padding:45px 20px 0;
+
+gap:30px;
+
+}
+
+.about-card{
+
+padding:25px;
+
+border-radius:20px;
+
+}
+
+.about-card img{
+
+height:240px;
+
+}
+
+.about-text h1{
+
+font-size:32px;
+
+}
+
+.about-text p{
+
+font-size:17px;
+
+}
+
+}
+
+@media(max-width:480px){
+
+.about-title{
+
+font-size:32px;
+
+}
+
+.about-subtitle{
+
+font-size:16px;
+
+}
+
+.about-card{
+
+padding:20px;
+
+}
+
+.about-card img{
+
+height:200px;
+
+}
+
+.about-text h1{
+
+font-size:26px;
+
+}
+
+.about-text p{
+
+font-size:15px;
+
+line-height:1.8;
+
+}
+
+}
+
+/* =====================================================
+   SMOOTH SCROLL
+===================================================== */
+
+html{
+
+scroll-behavior:smooth;
+
+}
+
+/* =====================================================
+   SELECTION
+===================================================== */
+
+::selection{
+
+background:#fb8500;
+
+color:white;
+
 }

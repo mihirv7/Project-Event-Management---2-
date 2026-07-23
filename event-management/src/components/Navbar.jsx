@@ -1,18 +1,12 @@
-import { Link } from "react-router-dom";
-import "./Navbar.css";
+import { NavLink, Link } from "react-router-dom";
 import { useState } from "react";
+import "./Navbar.css";
 
 export default function Navbar() {
-  // =========================
-  // STATES
-  // =========================
   const [showProfile, setShowProfile] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-  // =========================
-  // LOGOUT
-  // =========================
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
@@ -22,41 +16,54 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      {/* LOGO */}
+      {/* ================= LOGO ================= */}
       <div className="logo">
-        <Link to="/" className="logo-text">
+        <NavLink to="/" end className="logo-text">
           Momento
-        </Link>
+        </NavLink>
       </div>
 
-      {/* MENU */}
+      {/* ================= MENU ================= */}
       <ul className="nav-links">
         <li>
-          <Link to="/">Home</Link>
+          <NavLink to="/" end className="nav-link">
+            Home
+          </NavLink>
+        </li>
+
+        {/* Scroll to Packages section on Home */}
+        <li>
+          <a href="/#packages" className="nav-link">
+            Packages
+          </a>
         </li>
 
         <li>
-          <a href="/#packages">Packages</a>
+          <NavLink to="/custom" className="nav-link">
+            Custom
+          </NavLink>
         </li>
 
         <li>
-          <Link to="/custom">Custom</Link>
+          <NavLink to="/my-bookings" className="nav-link">
+            My Bookings
+          </NavLink>
         </li>
 
         <li>
-          <Link to="/my-bookings">My Bookings</Link>
+          <NavLink to="/contact" className="nav-link">
+            Contact Us
+          </NavLink>
         </li>
 
         <li>
-          <Link to="/contact">Contact Us</Link>
-        </li>
-
-        <li>
-          <Link to="/about">About Us</Link>
+          <NavLink to="/about" className="nav-link">
+            About Us
+          </NavLink>
         </li>
       </ul>
 
-      {/* PROFILE */}
+      {/* ================= PROFILE ================= */}
       <div style={{ position: "relative" }}>
         <button
           className="profile-btn"
@@ -85,6 +92,7 @@ export default function Navbar() {
                 <Link
                   to="/login"
                   className="profile-item"
+                  onClick={() => setShowProfile(false)}
                 >
                   🔑 Login
                 </Link>
@@ -92,6 +100,7 @@ export default function Navbar() {
                 <Link
                   to="/register"
                   className="profile-item"
+                  onClick={() => setShowProfile(false)}
                 >
                   📝 Register
                 </Link>

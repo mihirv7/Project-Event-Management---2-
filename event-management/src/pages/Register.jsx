@@ -1,30 +1,46 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import {
+  FiUser,
+  FiMail,
+  FiLock,
+  FiPhone,
+  FiEye,
+  FiEyeOff,
+} from "react-icons/fi";
+
 import "./Register.css";
 
 export default function Register() {
   const navigate = useNavigate();
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     password: "",
     confirmPassword: "",
-    phone: ""
+    phone: "",
   });
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!/^\d{10}$/.test(formData.phone)) {
-  alert("Mobile number must contain exactly 10 digits.");
-  return;
-}
+      alert("Mobile number must contain exactly 10 digits.");
+      return;
+    }
+
     try {
       const res = await axios.post(
         "http://localhost:5000/api/auth/register",
@@ -32,7 +48,7 @@ export default function Register() {
       );
 
       alert(res.data.message);
-      navigate("/login"); // redirect after register
+      navigate("/login");
     } catch (err) {
       alert(err.response?.data?.message || "Registration failed");
     }
@@ -40,64 +56,201 @@ export default function Register() {
 
   return (
     <div className="register-page">
+
+      <div className="register-overlay"></div>
+
+      <div className="floating circle1"></div>
+      <div className="floating circle2"></div>
+      <div className="floating circle3"></div>
+      <div className="floating circle4"></div>
+
       <div className="register-card">
 
-        <h2>Create Account</h2>
-        <p className="subtitle">Register to manage and book events</p>
+        <div className="sparkle"></div>
+
+
+        <div className="register-header">
+          <h2>Create Account</h2>
+
+          <p>
+            Join us and start planning unforgettable events
+          </p>
+        </div>
 
         <form onSubmit={handleSubmit}>
 
-          <label>Full Name</label>
-          <input
-            type="text"
-            name="fullName"
-            onChange={handleChange}
-            required
-          />
+          {/* Full Name */}
 
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            onChange={handleChange}
-            required
-          />
+          <div className="register-input-group">
 
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            onChange={handleChange}
-            required
-          />
+            <label>Full Name</label>
 
-          <label>Confirm Password</label>
-          <input
-            type="password"
-            name="confirmPassword"
-            onChange={handleChange}
-            required
-          />
+            <div className="register-input-box">
 
-          <label>Mobile Number</label>
-          <input
-            type="number"
-            name="phone"
-            onChange={handleChange}
-            required
-          />
+              <span className="register-input-icon">
+                <FiUser />
+              </span>
 
-          <button type="submit" className="register-btn">
-            Register
+              <input
+                type="text"
+                name="fullName"
+                placeholder="Enter your full name"
+                value={formData.fullName}
+                onChange={handleChange}
+                required
+              />
+
+            </div>
+
+          </div>
+
+          {/* Email */}
+
+          <div className="register-input-group">
+
+            <label>Email Address</label>
+
+            <div className="register-input-box">
+
+              <span className="register-input-icon">
+                <FiMail />
+              </span>
+
+              <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+
+            </div>
+
+          </div>
+
+          {/* Password */}
+
+          <div className="register-input-group">
+
+            <label>Password</label>
+
+            <div className="register-input-box">
+
+              <span className="register-input-icon">
+                <FiLock />
+              </span>
+
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Create password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+
+              <span
+                className="register-toggle-password"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FiEyeOff /> : <FiEye />}
+              </span>
+
+            </div>
+
+          </div>
+
+          {/* Confirm Password */}
+
+          <div className="register-input-group">
+
+            <label>Confirm Password</label>
+
+            <div className="register-input-box">
+
+              <span className="register-input-icon">
+                <FiLock />
+              </span>
+
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                placeholder="Confirm password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
+
+              <span
+                className="register-toggle-password"
+                onClick={() =>
+                  setShowConfirmPassword(!showConfirmPassword)
+                }
+              >
+                {showConfirmPassword ? (
+                  <FiEyeOff />
+                ) : (
+                  <FiEye />
+                )}
+              </span>
+
+            </div>
+
+          </div>
+
+          {/* Phone */}
+
+          <div className="register-input-group">
+
+            <label>Mobile Number</label>
+
+            <div className="register-input-box">
+
+              <span className="register-input-icon">
+                <FiPhone />
+              </span>
+
+              <input
+                type="tel"
+                name="phone"
+                placeholder="Enter mobile number"
+                value={formData.phone}
+                onChange={handleChange}
+                required
+              />
+
+            </div>
+
+          </div>
+
+          <button
+            type="submit"
+            className="register-btn"
+          >
+            Create Account →
           </button>
 
         </form>
 
-        <p className="login-link">
-          If you already have an account <Link to="/login">Click Me !</Link>
-        </p>
+        <div className="register-bottom-links">
+
+          <p>
+
+            Already have an account?
+
+            <Link to="/login">
+
+              Login
+
+            </Link>
+
+          </p>
+
+        </div>
 
       </div>
+
     </div>
   );
 }

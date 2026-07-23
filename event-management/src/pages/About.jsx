@@ -15,7 +15,7 @@ const About = () => {
         
         {/* Card 1 - Image Left */}
         <div className="about-card horizontal slide-left">
-          <img src="/assets/aboutus1.jpeg" alt="Mission" />
+          <img src="/assets/About1.jpg" alt="Mission" />
           <div className="about-text">
             <h1>01. Our Mission</h1>
             <p>
@@ -28,7 +28,7 @@ const About = () => {
 
         {/* Card 2 - Image Right */}
         <div className="about-card horizontal reverse slide-right">
-          <img src="/assets/aboutus2.jpeg" alt="Technology" />
+          <img src="/assets/About2.jpg" alt="Technology" />
           <div className="about-text">
             <h1>02. Technologies Used</h1>
             <p>
@@ -41,7 +41,7 @@ const About = () => {
 
         {/* Card 3 - Image Left */}
         <div className="about-card horizontal fade-up">
-          <img src="/assets/aboutus3.jpeg" alt="Features" />
+          <img src="/assets/About3.jfif" alt="Features" />
           <div className="about-text">
             <h1>03. Key Features</h1>
             <p>
@@ -53,7 +53,7 @@ const About = () => {
 
         {/* Card 4 - Image Right */}
         <div className="about-card horizontal reverse slide-left">
-          <img src="/assets/aboutus4.jpeg" alt="Why Choose Us" />
+          <img src="/assets/About4.jpg" alt="Why Choose Us" />
           <div className="about-text">
             <h1>04. Why Choose This System?</h1>
             <p>
@@ -65,7 +65,7 @@ const About = () => {
 
         {/* Card 5 - Image Left */}
         <div className="about-card horizontal slide-right">
-          <img src="/assets/aboutus5.jpeg" alt="Academic" />
+          <img src="/assets/About5.jpg" alt="Academic" />
           <div className="about-text">
             <h1>05. Academic Relevance</h1>
             <p>
