@@ -1,3 +1,9 @@
+import {
+  FiUser,
+  FiLogOut,
+  FiLogIn,
+  FiUserPlus
+} from "react-icons/fi";
 import { NavLink, Link } from "react-router-dom";
 import { useState } from "react";
 import "./Navbar.css";
@@ -64,51 +70,49 @@ export default function Navbar() {
       </ul>
 
       {/* ================= PROFILE ================= */}
-      <div style={{ position: "relative" }}>
+<div style={{ position: "relative" }}>
+  <button
+    className="profile-btn"
+    onClick={() => setShowProfile(!showProfile)}
+  >
+    <FiUser style={{ marginRight: "8px" }} />
+    Profile
+  </button>
+
+  {showProfile && (
+  <div className="profile-dropdown">
+
+    {user ? (
+      <>
+        <div className="profile-header">
+  <FiUser style={{ marginRight: "8px" }} />
+  {user?.fullName || user?.email?.split("@")[0] || "User"}
+</div>
+
         <button
-          className="profile-btn"
-          onClick={() => setShowProfile(!showProfile)}
+          className="profile-item"
+          onClick={handleLogout}
         >
-          👤 Profile
+          <FiLogOut size={18} style={{ marginRight: "10px" }} />
+          Logout
         </button>
+      </>
+    ) : (
+      <button
+        className="profile-item"
+        onClick={() => {
+          setShowProfile(false);
+          window.location.href = "/login";
+        }}
+      >
+        <FiLogIn size={18} style={{ marginRight: "10px" }} />
+        Login
+      </button>
+    )}
 
-        {showProfile && (
-          <div className="profile-dropdown">
-            {user ? (
-              <>
-                <div className="profile-header">
-                  👋 {user.fullName || "User"}
-                </div>
-
-                <button
-                  className="profile-item"
-                  onClick={handleLogout}
-                >
-                  🚪 Logout
-                </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  to="/login"
-                  className="profile-item"
-                  onClick={() => setShowProfile(false)}
-                >
-                  🔑 Login
-                </Link>
-
-                <Link
-                  to="/register"
-                  className="profile-item"
-                  onClick={() => setShowProfile(false)}
-                >
-                  📝 Register
-                </Link>
-              </>
-            )}
-          </div>
-        )}
-      </div>
+  </div>
+)}
+</div>
     </nav>
   );
 }
