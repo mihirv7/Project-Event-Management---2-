@@ -49,6 +49,11 @@ export default function Navbar() {
             Custom
           </NavLink>
         </li>
+        <li className="nav-item">
+    <Link className="nav-link" to="/catering">
+        Catering
+    </Link>
+</li>
 
         <li>
           <NavLink to="/my-bookings" className="nav-link">

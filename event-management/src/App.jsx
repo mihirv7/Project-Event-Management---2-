@@ -15,6 +15,8 @@ import CategoryProducts from "./pages/CategoryProducts";
 import ProductDetail from "./pages/ProductDetail";
 import ProductBooking from "./pages/ProductBooking";
 import MyBookings from "./pages/MyBookings";
+import Catering from "./components/Catering/Catering";
+import CateringMenu from "./components/CateringMenu/CateringMenu";
 
 
 function App() {
@@ -35,6 +37,8 @@ function App() {
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/product-booking" element={<ProductBooking />} />
         <Route path="/my-bookings" element={<MyBookings />} />
+        <Route path="/catering" element={<Catering />} />
+        <Route path="/catering/:id" element={<CateringMenu />} />
 
         {/* ✅ KEEP THIS INSIDE ROUTES */}
         <Route

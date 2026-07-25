@@ -12,6 +12,7 @@ import Reviews from './admin/pages/Reviews'
 import Reports from './admin/pages/Reports'
 import Settings from './admin/pages/Settings'
 import Categories from './admin/pages/Categories'
+import Catering from './admin/pages/Catering/Catering'
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="packages" element={<Packages />} />
         <Route path="bookings" element={<Bookings />} />
         <Route path="vendors" element={<Vendors />} />
+        <Route path="/admin/catering" element={<Catering />} />
         <Route path="payments" element={<Payments />} />
         <Route path="reviews" element={<Reviews />} />
         <Route path="reports" element={<Reports />} />

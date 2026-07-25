@@ -11,6 +11,7 @@ const items = [
   { to: '/admin/bookings', label: 'Bookings', icon: BookOpenCheck },
   { to: '/admin/categories', label: 'Categories', icon: Package },
   { to: '/admin/vendors', label: 'Custom Events', icon: Truck },
+  { to: '/admin/catering', label: 'Catering Categories', icon: Package },
   { to: '/admin/payments', label: 'Payments', icon: Wallet },
   { to: '/admin/reviews', label: 'Reviews', icon: Star },
   { to: '/admin/reports', label: 'Reports', icon: BarChart3 },
