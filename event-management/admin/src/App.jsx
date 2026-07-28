@@ -13,6 +13,7 @@ import Reports from './admin/pages/Reports'
 import Settings from './admin/pages/Settings'
 import Categories from './admin/pages/Categories'
 import Catering from './admin/pages/Catering/Catering'
+import CateringMenu from "./admin/pages/CateringMenu";
 
 export default function App() {
   return (
@@ -31,6 +32,7 @@ export default function App() {
         <Route path="reports" element={<Reports />} />
         <Route path="settings" element={<Settings />} />
         <Route path="/admin/categories" element={<Categories />} />
+        <Route path="/admin/catering-menu" element={<CateringMenu />} />
       </Route>
     </Routes>
   )
