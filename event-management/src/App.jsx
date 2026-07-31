@@ -17,6 +17,7 @@ import ProductBooking from "./pages/ProductBooking";
 import MyBookings from "./pages/MyBookings";
 import Catering from "./components/Catering/Catering";
 import CateringMenu from "./components/CateringMenu/CateringMenu";
+import CateringBooking from "./pages/CateringBooking";
 
 
 function App() {
@@ -39,6 +40,10 @@ function App() {
         <Route path="/my-bookings" element={<MyBookings />} />
         <Route path="/catering" element={<Catering />} />
         <Route path="/catering/:id" element={<CateringMenu />} />
+        <Route
+  path="/catering-booking/:menuId"
+  element={<CateringBooking />}
+/>
 
         {/* ✅ KEEP THIS INSIDE ROUTES */}
         <Route

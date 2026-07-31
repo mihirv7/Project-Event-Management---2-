@@ -1,0 +1,47 @@
+.booking-summary{
+    background:#fff;
+    border-radius:12px;
+    padding:25px;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+    margin-bottom:30px;
+}
+
+.booking-summary h2{
+    text-align:center;
+    margin-bottom:20px;
+    color:#000000;
+}
+
+.summary-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 0;
+    border-bottom:1px solid #eee;
+}
+
+.summary-row:last-child{
+    border-bottom:none;
+}
+
+.summary-row span{
+    color:#666;
+    font-size:16px;
+}
+
+.summary-row strong{
+    color:#222;
+    font-size:16px;
+    font-weight:600;
+}
+
+.total-row{
+    margin-top:10px;
+}
+
+.total-row span,
+.total-row strong{
+    color:#000000;
+    font-size:20px;
+    font-weight:bold;
+}

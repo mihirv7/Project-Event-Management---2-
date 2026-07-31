@@ -102,12 +102,19 @@ export default function CateringMenu() {
         <h3>{menu.thaliName}</h3>
 
         <p className="menu-description">
-            {menu.description}
+          {menu.description}
         </p>
 
         <div className="menu-price">
           ₹{menu.price} / Plate
         </div>
+
+        <button
+          className="book-btn"
+          onClick={() => navigate(`/catering-booking/${menu._id}`)}
+        >
+          Book Catering
+        </button>
 
       </div>
     ))
@@ -117,7 +124,7 @@ export default function CateringMenu() {
     </div>
   )}
 </div>
-
+  
     </div>
   );
 }
