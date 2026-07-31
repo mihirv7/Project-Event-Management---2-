@@ -537,3 +537,60 @@ td {
     align-items: stretch;
   }
 }
+/* ===========================
+   LOGOUT BUTTON
+=========================== */
+
+.logout-btn{
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+gap:8px;
+
+padding:12px 18px;
+
+border:none;
+
+border-radius:16px;
+
+background:rgba(255,255,255,.05);
+
+border:1px solid rgba(255,255,255,.10);
+
+color:#fff;
+
+cursor:pointer;
+
+transition:.3s;
+
+font-weight:600;
+
+}
+
+.logout-btn:hover{
+
+background:#ef4444;
+
+border-color:#ef4444;
+
+transform:translateY(-2px);
+
+box-shadow:0 12px 30px rgba(239,68,68,.35);
+
+}
+
+.logout-btn svg{
+
+transition:.3s;
+
+}
+
+.logout-btn:hover svg{
+
+transform:translateX(2px);
+
+}

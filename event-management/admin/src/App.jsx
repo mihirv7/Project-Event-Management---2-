@@ -14,12 +14,22 @@ import Settings from './admin/pages/Settings'
 import Categories from './admin/pages/Categories'
 import Catering from './admin/pages/Catering/Catering'
 import CateringMenu from "./admin/pages/CateringMenu";
+import AdminLogin from "./admin/pages/AdminLogin";
+import ProtectedRoute from "./admin/components/ProtectedRoute";
 
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
-      <Route path="/admin" element={<AdminLayout />}>
+      <Route path="/" element={<Navigate to="/admin/login" replace />} />
+      <Route path="/admin/login" element={<AdminLogin />} />
+      <Route
+  path="/admin"
+  element={
+    <ProtectedRoute>
+      <AdminLayout />
+    </ProtectedRoute>
+  }
+>
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="users" element={<Users />} />
         <Route path="events" element={<Events />} />

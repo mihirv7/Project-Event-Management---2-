@@ -1,6 +1,6 @@
 import React from 'react'
-import { Search, Bell } from 'lucide-react'
-import { useLocation } from 'react-router-dom'
+import { Search, LogOut } from 'lucide-react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
 const titles = {
@@ -18,7 +18,16 @@ const titles = {
 
 export default function Topbar() {
   const location = useLocation()
+  const navigate = useNavigate();
   const title = titles[location.pathname] || 'Admin Panel'
+  const handleLogout = () => {
+
+  localStorage.removeItem("adminToken");
+  localStorage.removeItem("adminUser");
+
+  navigate("/admin/login");
+
+};
 
   return (
     <motion.div
@@ -37,9 +46,13 @@ export default function Topbar() {
           <Search size={18} />
           <input placeholder="Search anything..." />
         </div>
-        <button className="btn btn-secondary" style={{ display: 'grid', placeItems: 'center', padding: '12px 14px' }}>
-          <Bell size={18} />
-        </button>
+        <button
+  className="logout-btn"
+  onClick={handleLogout}
+>
+  <LogOut size={18} />
+  <span>Logout</span>
+</button>
       </div>
     </motion.div>
   )
