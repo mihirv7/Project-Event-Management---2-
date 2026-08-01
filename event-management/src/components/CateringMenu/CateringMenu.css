@@ -10,15 +10,40 @@
 
 }
 .catering-header h1{
+    position: relative;
+    display: inline-block;
 
-    font-size:52px;
+    font-size: 52px;
+    font-weight: 700;
+    color: #222;
 
-    font-weight:700;
+    padding-bottom: 18px;
+    margin-bottom: 25px;
+}
 
-    color:#222;
+/* Gold underline */
+.catering-header h1::after{
+    content: "";
 
-    margin-bottom:15px;
+    position: absolute;
 
+    left: 50%;
+    bottom: 0;
+
+    transform: translateX(-50%);
+
+    width: 95px;
+    height: 4px;
+
+    border-radius: 50px;
+
+    background: linear-gradient(
+        90deg,
+        #FFB703,
+        #FB8500
+    );
+
+    box-shadow: 0 3px 12px rgba(251,133,0,.35);
 }
 .catering-header p{
 
@@ -206,40 +231,48 @@
     margin-bottom:20px;
 
 }
-.book-btn{
-
+.book-btnn{
     width:100%;
+    margin-top:25px;
+    padding:15px 22px;
 
     border:none;
-
-    padding:14px;
-
     border-radius:50px;
-
-    background:linear-gradient(45deg,#ff9800,#ff6f00);
-
-    color:#fff;
-
-    font-size:17px;
-
-    font-weight:600;
 
     cursor:pointer;
 
-    transition:.3s;
+    font-size:17px;
+    font-weight:600;
 
+    color:#fff;
+
+    background:linear-gradient(
+        135deg,
+        #FFB703,
+        #FB8500
+    );
+
+    transition:.35s ease;
+
+    box-shadow:0 10px 25px rgba(251,133,0,.35);
 }
 
-.book-btn:hover{
+.book-btnn:hover{
 
-    transform:translateY(-2px);
+    transform:translateY(-4px);
 
-    box-shadow:0 10px 25px rgba(255,152,0,.45);
+    box-shadow:0 18px 35px rgba(251,133,0,.50);
 
+    background:linear-gradient(
+        135deg,
+        #FFC533,
+        #FF9800
+    );
 }
-.includes{
 
-    margin:18px 0;
+.book-btn:active{
+
+    transform:scale(.98);
 
 }
 

@@ -110,7 +110,7 @@ export default function CateringMenu() {
         </div>
 
         <button
-          className="book-btn"
+          className="book-btnn"
           onClick={() => navigate(`/catering-booking/${menu._id}`)}
         >
           Book Catering
