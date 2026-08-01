@@ -14,6 +14,7 @@ const userRoutes = require("./routes/userRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const cateringCategoryRoutes = require("./routes/cateringCategoryRoutes");
 const cateringMenuRoutes = require("./routes/cateringMenuRoutes");
+const cateringBookingRoutes = require("./routes/cateringBookingRoutes");
 
 
 
@@ -42,6 +43,7 @@ app.use("/api/categories", require("./routes/categoryRoutes"));
 app.use("/api/payment", paymentRoutes);
 app.use("/api/catering/categories", cateringCategoryRoutes);
 app.use("/api/catering/menu", cateringMenuRoutes);
+app.use("/api/catering-booking",cateringBookingRoutes);
 
 
 

@@ -7,7 +7,7 @@ export default function ProductPayments() {
   // STATES
   // =========================
   const [packagePayments, setPackagePayments] = useState([]);
-
+  const [cateringPayments, setCateringPayments] = useState([]);
   const [productPayments, setProductPayments] = useState([]);
 
   // =========================
@@ -16,7 +16,7 @@ export default function ProductPayments() {
   useEffect(() => {
 
     fetchPackagePayments();
-
+    fetchCateringPayments();
     fetchProductPayments();
 
   }, []);
@@ -58,6 +58,25 @@ export default function ProductPayments() {
       console.log(err);
     }
   };
+  // =========================
+// CATERING BOOKINGS
+// =========================
+const fetchCateringPayments = async () => {
+
+  try {
+
+    const res = await axios.get(
+      "http://localhost:5000/api/catering-booking"
+    );
+
+    setCateringPayments(res.data);
+
+  } catch (err) {
+
+    console.log(err);
+
+  }
+};
 
   // =========================
   // TOTAL REVENUE
@@ -72,6 +91,12 @@ export default function ProductPayments() {
     +
 
     productPayments.reduce(
+      (sum, item) => sum + (item.amount || 0),
+      0
+    )
+
+    +
+    cateringPayments.reduce(
       (sum, item) => sum + (item.amount || 0),
       0
     );
@@ -243,6 +268,79 @@ export default function ProductPayments() {
         </table>
 
       </div>
+      <h2 className="payment-title" style={{ marginTop: "60px" }}>
+    Catering Payments
+</h2>
+
+<table className="payment-table"  border="1"
+          cellPadding="10"
+          style={{
+            width: "100%",
+            borderCollapse: "collapse",
+            marginTop: "20px"
+          }}>
+
+<thead>
+
+<tr>
+
+<th>User</th>
+
+<th>Email</th>
+
+<th>Menu</th>
+
+<th>Amount</th>
+
+<th>Status</th>
+
+<th>Payment ID</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{cateringPayments.map((payment)=>(
+
+<tr key={payment._id}>
+
+<td>{payment.userName}</td>
+
+<td>{payment.email}</td>
+
+<td>{payment.menuId?.thaliName}</td>
+
+<td>₹ {payment.amount}</td>
+
+<td>
+
+<span
+style={{
+                      color:
+                        payment.paymentStatus === "Success"
+                          ? "green"
+                          : "red",
+                      fontWeight: "bold"
+                    }}
+>
+
+{payment.paymentStatus}
+
+</span>
+
+</td>
+
+<td>{payment.paymentId}</td>
+
+</tr>
+
+))}
+
+</tbody>
+
+</table>
 
     </div>
   );

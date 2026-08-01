@@ -8,12 +8,28 @@ export default function MyBookings() {
   const navigate = useNavigate();
   const [bookings, setBookings] = useState([]);
   const packageBookings = bookings.filter(b => b.type === "package");
+  const [cateringBookings, setCateringBookings] = useState([]);
   const productBookings = bookings.filter(b => b.type === "product");
 
   useEffect(() => {
     const fetchBookings = async () => {
       try {
         const token = localStorage.getItem("token");
+            const userRes = await axios.get(
+            "http://localhost:5000/api/auth/me",
+            {
+              headers: {
+                authorization: `Bearer ${token}`
+              }
+            }
+);
+  const user = userRes.data;
+
+        const cateringRes = await axios.get(
+          `http://localhost:5000/api/catering-booking/user/${user._id}`
+        );
+
+        setCateringBookings(cateringRes.data);
 
         // ✅ PRODUCT BOOKINGS
         const prodRes = await axios.get(
@@ -227,6 +243,88 @@ export default function MyBookings() {
             ))}
 
           </div>
+          {/* ====================== */}
+{/* Catering Bookings */}
+{/* ====================== */}
+
+
+
+<div className="booking-section">
+
+  <h2 className="section-title">
+    🍽️ Catering Bookings
+  </h2>
+
+  {cateringBookings.length === 0 ? (
+
+    <p className="text-center">No Catering Bookings</p>
+
+  ) : (
+
+    cateringBookings.map((b, i) => (
+
+      <div
+        key={i}
+        className="booking-card"
+      >
+
+        <div className="booking-header">
+
+          <h3>{b.menuId?.thaliName}</h3>
+
+          <span className="booking-type">
+            Catering
+          </span>
+
+        </div>
+
+        <p className="booking-date">
+          📅 {new Date(b.eventDate).toLocaleDateString()}
+        </p>
+
+        <div className="booking-grid">
+
+          <div>
+            👤 {b.userName}
+          </div>
+
+          <div>
+            📧 {b.email}
+          </div>
+
+          <div>
+            📞 {b.phoneNumber}
+          </div>
+
+          <div>
+            📍 {b.venue}
+          </div>
+
+          <div>
+            👥 {b.guestCount} Guests
+          </div>
+
+          <div>
+            🥗 {b.menuId?.foodType}
+          </div>
+
+          <div>
+            💰 ₹{b.amount}
+          </div>
+
+          <div>
+            🟢 {b.paymentStatus}
+          </div>
+
+        </div>
+
+      </div>
+
+    ))
+
+  )}
+
+</div>
 
         </>
 

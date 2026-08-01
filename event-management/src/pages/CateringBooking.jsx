@@ -103,6 +103,7 @@ useEffect(() => {
             );
 
             setMenu(res.data);
+            console.log(res.data);
 
         }
 
@@ -196,7 +197,7 @@ const handleSubmit = async (e) => {
             phoneNumber: formData.phoneNumber,
 
             menuId: menu._id,
-            categoryId: menu.categoryId._id,
+            categoryId: menu.categoryId,
 
             eventDate: formData.eventDate,
             eventTime: formData.eventTime,
@@ -254,7 +255,7 @@ const handleSubmit = async (e) => {
                 phoneNumber: formData.phoneNumber,
 
                 menuId: menu._id,
-                categoryId: menu.categoryId._id,
+                categoryId: menu.categoryId,
 
                 eventDate: formData.eventDate,
                 eventTime: formData.eventTime,
@@ -272,7 +273,7 @@ const handleSubmit = async (e) => {
 
                 paymentStatus: "Success",
               };
-
+              console.log("BOOKING DATA:", bookingData);
               await axios.post(
                 "http://localhost:5000/api/catering-booking/add",
                 bookingData,
@@ -449,7 +450,7 @@ return (
 
         <button
 type="submit"
-disabled={!agreed}
+// disabled={!agreed}
 >
 Proceed To Payment
 </button>
