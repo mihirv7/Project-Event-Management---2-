@@ -1,29 +1,56 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+
+import {
+  FiPackage,
+  FiBox,
+  FiCoffee,
+  FiUser,
+  FiMail,
+  FiPhone,
+  FiMapPin,
+  FiCalendar,
+  FiUsers,
+  FiCheckCircle,
+  FiDollarSign
+} from "react-icons/fi";
+
 import "./MyBookings.css";
 
-
 export default function MyBookings() {
+
   const navigate = useNavigate();
+
   const [bookings, setBookings] = useState([]);
-  const packageBookings = bookings.filter(b => b.type === "package");
   const [cateringBookings, setCateringBookings] = useState([]);
-  const productBookings = bookings.filter(b => b.type === "product");
+
+  const packageBookings = bookings.filter(
+    (b) => b.type === "package"
+  );
+
+  const productBookings = bookings.filter(
+    (b) => b.type === "product"
+  );
 
   useEffect(() => {
+
     const fetchBookings = async () => {
+
       try {
+
         const token = localStorage.getItem("token");
-            const userRes = await axios.get(
-            "http://localhost:5000/api/auth/me",
-            {
-              headers: {
-                authorization: `Bearer ${token}`
-              }
+
+        const userRes = await axios.get(
+          "http://localhost:5000/api/auth/me",
+          {
+            headers: {
+              authorization: `Bearer ${token}`
             }
-);
-  const user = userRes.data;
+          }
+        );
+
+        const user = userRes.data;
 
         const cateringRes = await axios.get(
           `http://localhost:5000/api/catering-booking/user/${user._id}`
@@ -31,7 +58,6 @@ export default function MyBookings() {
 
         setCateringBookings(cateringRes.data);
 
-        // ✅ PRODUCT BOOKINGS
         const prodRes = await axios.get(
           "http://localhost:5000/api/product-bookings",
           {
@@ -41,7 +67,6 @@ export default function MyBookings() {
           }
         );
 
-        // ✅ PACKAGE BOOKINGS
         const pkgRes = await axios.get(
           "http://localhost:5000/api/booking",
           {
@@ -51,288 +76,817 @@ export default function MyBookings() {
           }
         );
 
-        // ✅ SAFE MERGE
         const merged = [
-          ...(pkgRes.data || []).map((b) => ({ ...b, type: "package" })),
-          ...(prodRes.data || []).map((b) => ({ ...b, type: "product" }))
+
+          ...(pkgRes.data || []).map((b) => ({
+            ...b,
+            type: "package"
+          })),
+
+          ...(prodRes.data || []).map((b) => ({
+            ...b,
+            type: "product"
+          }))
+
         ];
 
         setBookings(merged);
 
       } catch (err) {
+
         console.log("Error fetching bookings:", err);
+
       }
+
     };
 
     fetchBookings();
+
   }, []);
 
   return (
-  <div className="mybookings-page">
 
-    <div className="mybookings-container">
+    <div className="mybookings-page">
 
-      <h1 className="page-title">
-        My Bookings
-      </h1>
+      {/* ================= HERO ================= */}
 
-      {bookings.length === 0 ? (
+      <section className="booking-hero">
 
-        <div className="empty-booking">
+        <div className="hero-content">
 
-          <h3>No Bookings Found</h3>
+          <span className="hero-badge">
+
+            <FiPackage />
+
+            Event Dashboard
+
+          </span>
+
+          <h1>
+
+            My <span>Bookings</span>
+
+          </h1>
 
           <p>
-            You haven't booked any package or event yet.
+
+            Manage your Package, Event and Catering bookings in one
+            beautiful dashboard.
+
           </p>
 
         </div>
 
-      ) : (
+      </section>
 
-        <>
+      {/* ================= MAIN CONTAINER ================= */}
 
-          {/* ================= PACKAGE ================= */}
+      <div className="mybookings-container">
 
-          <div className="booking-section">
+        {/* ================= EMPTY ================= */}
 
-            <h2 className="section-title">
-              📦 Package Bookings
-            </h2>
+        {bookings.length === 0 &&
+        cateringBookings.length === 0 ? (
 
-            {packageBookings.map((b, i) => (
+          <div className="empty-booking">
 
-              <div
-                key={i}
-                className="booking-card"
-                onClick={() =>
-                  navigate(`/packages/${b.packageId?._id || b.packageId}`)
-                }
-              >
+            <FiPackage className="empty-icon" />
 
-                <div className="booking-header">
+            <h3>No Bookings Yet</h3>
 
-                  <h3>
-                    {b.packageId?.name || b.packageId}
-                  </h3>
+            <p>
 
-                  <span className="booking-type">
-                    Package
-                  </span>
+              Looks like you haven't booked anything yet.
+              Start exploring amazing event packages.
 
-                </div>
+            </p>
 
-                <p className="booking-date">
-                  📅 {new Date(b.startingDate).toLocaleDateString()} →
-                  {" "}
-                  {new Date(b.endingDate).toLocaleDateString()}
-                </p>
+          </div>
 
-                <div className="booking-grid">
+        ) : (
 
-                  <div>
-                    👤 {b.userName?.name || b.userName}
+          <>
+            {/* ================= PACKAGE BOOKINGS ================= */}
+
+            <section className="booking-section">
+
+              <div className="section-header">
+
+                <div className="section-left">
+
+                  <div className="section-icon package-icon">
+
+                    <FiPackage />
+
                   </div>
 
                   <div>
-                    📧 {b.email}
-                  </div>
 
-                  <div>
-                    📞 {b.phoneNumber}
-                  </div>
+                    <h2>Package Bookings</h2>
 
-                  <div>
-                    📍 {b.location}
-                  </div>
+                    <p>
+                      Your premium event package reservations
+                    </p>
 
-                  <div>
-                    👥 {b.guestCount} Guests
                   </div>
 
                 </div>
+
+                <span className="section-count">
+
+                  {packageBookings.length}
+
+                </span>
 
               </div>
 
-            ))}
+              {packageBookings.length === 0 ? (
 
-          </div>
+                <div className="no-section-data">
 
-          {/* ================= PRODUCT ================= */}
+                  <FiPackage size={45} />
 
-          <div className="booking-section">
+                  <h4>No Package Bookings</h4>
 
-            <h2 className="section-title">
-              🎉 Event Bookings
-            </h2>
-
-            {productBookings.map((b, i) => (
-
-              <div
-                key={i}
-                className="booking-card"
-                onClick={() =>
-                  navigate(`/product/${b.productId}`)
-                }
-              >
-
-                <div className="booking-header">
-
-                  <h3>
-                    {b.productName?.name || b.productName}
-                  </h3>
-
-                  <span className="booking-type">
-                    Event
-                  </span>
+                  <p>
+                    You haven't booked any packages yet.
+                  </p>
 
                 </div>
 
-                <p className="booking-date">
-                  📅 {new Date(b.date).toLocaleDateString()}
-                </p>
+              ) : (
 
-                <div className="booking-grid">
+                packageBookings.map((b, i) => (
 
-                  <div>
-                    👤 {b.userName?.name || b.userName}
+                  <div
+                    key={i}
+                    className="booking-card premium-card"
+                    onClick={() =>
+                      navigate(
+                        `/packages/${b.packageId?._id || b.packageId}`
+                      )
+                    }
+                  >
+
+                    {/* Card Header */}
+
+                    <div className="booking-header">
+
+                      <div>
+
+                        <h3>
+
+                          {b.packageId?.name || b.packageId}
+
+                        </h3>
+
+                        <p className="booking-subtitle">
+
+                          Premium Event Package
+
+                        </p>
+
+                      </div>
+
+                      <span className="booking-badge package">
+
+                        <FiBox />
+
+                        Package
+
+                      </span>
+
+                    </div>
+
+                    {/* Booking Date */}
+
+                    <div className="booking-date">
+
+                      <FiCalendar />
+
+                      <span>
+
+                        {new Date(
+                          b.startingDate
+                        ).toLocaleDateString()}
+
+                        {"  "}—{"  "}
+
+                        {new Date(
+                          b.endingDate
+                        ).toLocaleDateString()}
+
+                      </span>
+
+                    </div>
+
+                    {/* Information */}
+
+                    <div className="booking-grid">
+
+                      <div className="info-box">
+
+                        <FiUser />
+
+                        <div>
+
+                          <label>Customer</label>
+
+                          <span>
+
+                            {b.userName?.name ||
+                              b.userName}
+
+                          </span>
+
+                        </div>
+
+                      </div>
+
+                      <div className="info-box">
+
+                        <FiMail />
+
+                        <div>
+
+                          <label>Email</label>
+
+                          <span>
+
+                            {b.email}
+
+                          </span>
+
+                        </div>
+
+                      </div>
+
+                      <div className="info-box">
+
+                        <FiPhone />
+
+                        <div>
+
+                          <label>Phone</label>
+
+                          <span>
+
+                            {b.phoneNumber}
+
+                          </span>
+
+                        </div>
+
+                      </div>
+
+                      <div className="info-box">
+
+                        <FiMapPin />
+
+                        <div>
+
+                          <label>Venue</label>
+
+                          <span>
+
+                            {b.location}
+
+                          </span>
+
+                        </div>
+
+                      </div>
+
+                      <div className="info-box">
+
+                        <FiUsers />
+
+                        <div>
+
+                          <label>Guests</label>
+
+                          <span>
+
+                            {b.guestCount} Guests
+
+                          </span>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                    {/* Footer */}
+
+                    <div className="booking-footer">
+
+                      <div className="booking-status">
+
+                        <FiCheckCircle />
+
+                        Booking Confirmed
+
+                      </div>
+
+                      <button
+                        className="view-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+
+                          navigate(
+                            `/packages/${b.packageId?._id || b.packageId}`
+                          );
+                        }}
+                      >
+
+                        View Package
+
+                      </button>
+
+                    </div>
+
+                  </div>
+
+                ))
+
+              )}
+
+            </section>
+                        {/* ================= EVENT BOOKINGS ================= */}
+
+            <section className="booking-section">
+
+              <div className="section-header">
+
+                <div className="section-left">
+
+                  <div className="section-icon event-icon">
+
+                    <FiBox />
+
                   </div>
 
                   <div>
-                    📧 {b.email}
-                  </div>
 
-                  <div>
-                    📞 {b.phoneNumber}
-                  </div>
+                    <h2>Event Bookings</h2>
 
-                  <div>
-                    📍 {b.location}
-                  </div>
+                    <p>
+                      Your customized event decorations
+                    </p>
 
-                  <div>
-                    👥 {b.guestCount} Guests
                   </div>
 
                 </div>
 
-                {b.customizations && (
+                <span className="section-count">
 
-                  <div className="customization-box">
+                  {productBookings.length}
 
-                    <h4>
-                      Selected Customizations
-                    </h4>
-
-                    {Object.keys(b.customizations).map((key) => (
-
-                      <p key={key}>
-                        <strong>{key}</strong> :
-                        {" "}
-                        {b.customizations[key]}
-                      </p>
-
-                    ))}
-
-                  </div>
-
-                )}
+                </span>
 
               </div>
 
-            ))}
+              {productBookings.length === 0 ? (
 
-          </div>
-          {/* ====================== */}
-{/* Catering Bookings */}
-{/* ====================== */}
+                <div className="no-section-data">
 
+                  <FiBox size={45} />
 
+                  <h4>No Event Bookings</h4>
 
-<div className="booking-section">
+                  <p>
+                    No customized event bookings found.
+                  </p>
 
-  <h2 className="section-title">
-    🍽️ Catering Bookings
-  </h2>
+                </div>
 
-  {cateringBookings.length === 0 ? (
+              ) : (
 
-    <p className="text-center">No Catering Bookings</p>
+                productBookings.map((b, i) => (
 
-  ) : (
+                  <div
+                    key={i}
+                    className="booking-card premium-card"
+                    onClick={() =>
+                      navigate(`/product/${b.productId}`)
+                    }
+                  >
 
-    cateringBookings.map((b, i) => (
+                    <div className="booking-header">
 
-      <div
-        key={i}
-        className="booking-card"
-      >
+                      <div>
 
-        <div className="booking-header">
+                        <h3>
 
-          <h3>{b.menuId?.thaliName}</h3>
+                          {b.productName?.name || b.productName}
 
-          <span className="booking-type">
-            Catering
-          </span>
+                        </h3>
 
-        </div>
+                        <p className="booking-subtitle">
 
-        <p className="booking-date">
-          📅 {new Date(b.eventDate).toLocaleDateString()}
-        </p>
+                          Customized Event
 
-        <div className="booking-grid">
+                        </p>
 
-          <div>
-            👤 {b.userName}
-          </div>
+                      </div>
 
-          <div>
-            📧 {b.email}
-          </div>
+                      <span className="booking-badge event">
 
-          <div>
-            📞 {b.phoneNumber}
-          </div>
+                        <FiBox />
 
-          <div>
-            📍 {b.venue}
-          </div>
+                        Event
 
-          <div>
-            👥 {b.guestCount} Guests
-          </div>
+                      </span>
 
-          <div>
-            🥗 {b.menuId?.foodType}
-          </div>
+                    </div>
 
-          <div>
-            💰 ₹{b.amount}
-          </div>
+                    <div className="booking-date">
 
-          <div>
-            🟢 {b.paymentStatus}
-          </div>
+                      <FiCalendar />
 
-        </div>
+                      <span>
+
+                        {new Date(
+                          b.date
+                        ).toLocaleDateString()}
+
+                      </span>
+
+                    </div>
+
+                    <div className="booking-grid">
+
+                      <div className="info-box">
+
+                        <FiUser />
+
+                        <div>
+
+                          <label>Customer</label>
+
+                          <span>
+
+                            {b.userName?.name || b.userName}
+
+                          </span>
+
+                        </div>
+
+                      </div>
+
+                      <div className="info-box">
+
+                        <FiMail />
+
+                        <div>
+
+                          <label>Email</label>
+
+                          <span>{b.email}</span>
+
+                        </div>
+
+                      </div>
+
+                      <div className="info-box">
+
+                        <FiPhone />
+
+                        <div>
+
+                          <label>Phone</label>
+
+                          <span>{b.phoneNumber}</span>
+
+                        </div>
+
+                      </div>
+
+                      <div className="info-box">
+
+                        <FiMapPin />
+
+                        <div>
+
+                          <label>Location</label>
+
+                          <span>{b.location}</span>
+
+                        </div>
+
+                      </div>
+
+                      <div className="info-box">
+
+                        <FiUsers />
+
+                        <div>
+
+                          <label>Guests</label>
+
+                          <span>
+
+                            {b.guestCount} Guests
+
+                          </span>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                    {b.customizations && (
+
+                      <div className="customization-box">
+
+                        <h4>
+
+                          Selected Customizations
+
+                        </h4>
+
+                        {Object.keys(b.customizations).map((key) => (
+
+                          <div
+                            className="custom-item"
+                            key={key}
+                          >
+
+                            <strong>{key}</strong>
+
+                            <span>
+
+                              {b.customizations[key]}
+
+                            </span>
+
+                          </div>
+
+                        ))}
+
+                      </div>
+
+                    )}
+
+                  </div>
+
+                ))
+
+              )}
+
+            </section>
+
+            {/* ================= CATERING BOOKINGS ================= */}
+
+            <section className="booking-section">
+
+              <div className="section-header">
+
+                <div className="section-left">
+
+                  <div className="section-icon catering-icon">
+
+                    <FiCoffee />
+
+                  </div>
+
+                  <div>
+
+                    <h2>Catering Bookings</h2>
+
+                    <p>
+                      Delicious catering reservations
+                    </p>
+
+                  </div>
+
+                </div>
+
+                <span className="section-count">
+
+                  {cateringBookings.length}
+
+                </span>
+
+              </div>
+
+              {cateringBookings.length === 0 ? (
+
+                <div className="no-section-data">
+
+                  <FiCoffee size={45} />
+
+                  <h4>No Catering Bookings</h4>
+
+                  <p>
+
+                    No catering bookings available.
+
+                  </p>
+
+                </div>
+
+              ) : (
+
+                cateringBookings.map((b, i) => (
+
+                  <div
+                    key={i}
+                    className="booking-card premium-card"
+                  >
+
+                    <div className="booking-header">
+
+                      <div>
+
+                        <h3>
+
+                          {b.menuId?.thaliName}
+
+                        </h3>
+
+                        <p className="booking-subtitle">
+
+                          Premium Catering Service
+
+                        </p>
+
+                      </div>
+
+                      <span className="booking-badge catering">
+
+                        <FiCoffee />
+
+                        Catering
+
+                      </span>
+
+                    </div>
+
+                    <div className="booking-date">
+
+                      <FiCalendar />
+
+                      <span>
+
+                        {new Date(
+                          b.eventDate
+                        ).toLocaleDateString()}
+
+                      </span>
+
+                    </div>
+
+                    <div className="booking-grid">
+
+                      <div className="info-box">
+
+                        <FiUser />
+
+                        <div>
+
+                          <label>Customer</label>
+
+                          <span>{b.userName}</span>
+
+                        </div>
+
+                      </div>
+
+                      <div className="info-box">
+
+                        <FiMail />
+
+                        <div>
+
+                          <label>Email</label>
+
+                          <span>{b.email}</span>
+
+                        </div>
+
+                      </div>
+
+                      <div className="info-box">
+
+                        <FiPhone />
+
+                        <div>
+
+                          <label>Phone</label>
+
+                          <span>{b.phoneNumber}</span>
+
+                        </div>
+
+                      </div>
+
+                      <div className="info-box">
+
+                        <FiMapPin />
+
+                        <div>
+
+                          <label>Venue</label>
+
+                          <span>{b.venue}</span>
+
+                        </div>
+
+                      </div>
+
+                      <div className="info-box">
+
+                        <FiUsers />
+
+                        <div>
+
+                          <label>Guests</label>
+
+                          <span>
+
+                            {b.guestCount} Guests
+
+                          </span>
+
+                        </div>
+
+                      </div>
+
+                      <div className="info-box">
+
+                        <FiCoffee />
+
+                        <div>
+
+                          <label>Food Type</label>
+
+                          <span>
+
+                            {b.menuId?.foodType}
+
+                          </span>
+
+                        </div>
+
+                      </div>
+
+                      <div className="info-box">
+
+                        <FiDollarSign />
+
+                        <div>
+
+                          <label>Amount</label>
+
+                          <span>
+
+                            ₹{b.amount}
+
+                          </span>
+
+                        </div>
+
+                      </div>
+
+                      <div className="info-box">
+
+                        <FiCheckCircle />
+
+                        <div>
+
+                          <label>Status</label>
+
+                          <span>
+
+                            {b.paymentStatus}
+
+                          </span>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                ))
+
+              )}
+
+            </section>
+
+          </>
+
+        )}
 
       </div>
 
-    ))
-
-  )}
-
-</div>
-
-        </>
-
-      )}
-
     </div>
 
-  </div>
-);
-}
+  );
 
+}
