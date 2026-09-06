@@ -114,13 +114,13 @@ export default function MyBookings() {
 
         <div className="hero-content">
 
-          <span className="hero-badge">
+          {/* <span className="hero-badge">
 
             <FiPackage />
 
-            Event Dashboard
+            {/* Event Dashboard */}
 
-          </span>
+          {/* </span> */} 
 
           <h1>
 

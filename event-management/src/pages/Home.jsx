@@ -7,6 +7,7 @@ import "./Home.css";
 export default function Home() {
   const [events, setEvents] = useState([]);
   const [packages, setPackages] = useState([]);
+  const [packageSearch, setPackageSearch] = useState("");
 
   useEffect(() => {
     fetch("http://localhost:5000/api/packages")
@@ -32,6 +33,11 @@ export default function Home() {
       behavior: "smooth",
     });
   };
+
+  // Search packages by name
+  const filteredPackages = packages.filter((pkg) =>
+    pkg.name.toLowerCase().includes(packageSearch.toLowerCase())
+  );
 
   return (
     <>
@@ -103,10 +109,30 @@ export default function Home() {
       <section id="packages" style={{ padding: "60px 100px" }}>
         <h2 className="section-title">Our Packages</h2>
 
+        {/* Package Search */}
+        <div className="package-search-container">
+          <input
+            type="text"
+            placeholder="🔍 Search Packages..."
+            value={packageSearch}
+            onChange={(e) => setPackageSearch(e.target.value)}
+            className="package-search"
+          />
+        </div>
+
         <div className="package-grid">
-          {packages.map(pkg => (
-            <PackageCard key={pkg._id} pkg={pkg} />
-          ))}
+          {filteredPackages.length > 0 ? (
+            filteredPackages.map(pkg => (
+              <PackageCard
+                key={pkg._id}
+                pkg={pkg}
+              />
+            ))
+          ) : (
+            <p className="no-package-result">
+              No packages found.
+            </p>
+          )}
         </div>
       </section>
     </>

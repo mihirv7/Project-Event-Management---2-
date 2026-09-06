@@ -252,3 +252,35 @@
 }
 
 }
+/* ================= PACKAGE SEARCH ================= */
+
+.package-search-container {
+  display: flex;
+  justify-content: center;
+  margin: 25px 0 40px;
+}
+
+.package-search {
+  width: 100%;
+  max-width: 550px;
+  padding: 14px 20px;
+  border: 1px solid #ddd;
+  border-radius: 30px;
+  font-size: 16px;
+  outline: none;
+  transition: 0.3s;
+  box-sizing: border-box;
+}
+
+.package-search:focus {
+  border-color: #f59e0b;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.2);
+}
+
+.no-package-result {
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
+  color: #777;
+  padding: 30px;
+}
