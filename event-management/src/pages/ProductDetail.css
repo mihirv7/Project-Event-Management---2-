@@ -85,6 +85,9 @@
 .price b {
   color: #222 !important;
 }
+.book-btnn{
+  background: linear-gradient(135deg,#ffb703,#fb8500);
+}
 
 /* ======================================================
    DESCRIPTION

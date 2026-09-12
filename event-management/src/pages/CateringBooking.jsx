@@ -5,460 +5,841 @@ import "./Booking.css";
 import "./CateringBooking.css";
 
 export default function CateringBooking() {
-
   const { menuId } = useParams();
-
   const navigate = useNavigate();
 
   const [menu, setMenu] = useState(null);
 
+  // ==========================
+  // TERMS & CONDITIONS
+  // ==========================
   const [showTerms, setShowTerms] = useState(false);
-
   const [agreed, setAgreed] = useState(false);
 
   const [formData, setFormData] = useState({
-
     userId: "",
-
     userName: "",
-
     email: "",
-
     phoneNumber: "",
-
     eventDate: "",
-
     eventTime: "",
-
     venue: "",
-
     guestCount: "",
-
     specialRequest: "",
-
     paymentId: "",
-
     orderId: "",
-
-    paymentStatus: "Pending"
-
+    paymentStatus: "Pending",
   });
+
+  // ==========================
+  // FETCH LOGGED USER
+  // ==========================
   useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const token = localStorage.getItem("token");
 
-  const fetchUser = async () => {
-
-    try {
-
-      const token = localStorage.getItem("token");
-
-      const res = await axios.get(
-
-        "http://localhost:5000/api/auth/me",
-
-        {
-          headers: {
-            authorization: `Bearer ${token}`
+        const res = await axios.get(
+          "http://localhost:5000/api/auth/me",
+          {
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
           }
-        }
+        );
 
-      );
+        setFormData((prev) => ({
+          ...prev,
+          userId: res.data._id,
+          userName: res.data.fullName,
+          email: res.data.email,
+          phoneNumber: res.data.phone,
+        }));
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
-      setFormData(prev => ({
+    fetchUser();
+  }, []);
 
-        ...prev,
-
-        userId: res.data._id,
-
-        userName: res.data.fullName,
-
-        email: res.data.email,
-
-        phoneNumber: res.data.phone
-
-      }));
-
-    }
-
-    catch(err){
-
-      console.log(err);
-
-    }
-
-  };
-
-  fetchUser();
-
-}, []);
-useEffect(() => {
-
+  // ==========================
+  // FETCH CATERING MENU
+  // ==========================
+  useEffect(() => {
     const fetchMenu = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/api/catering/menu/${menuId}`
+        );
 
-        try{
+        setMenu(res.data);
 
-            const res = await axios.get(
-
-                `http://localhost:5000/api/catering/menu/${menuId}`
-
-            );
-
-            setMenu(res.data);
-            console.log(res.data);
-
-        }
-
-        catch(err){
-
-            console.log(err);
-
-        }
-
+        console.log(res.data);
+      } catch (err) {
+        console.log(err);
+      }
     };
 
     fetchMenu();
+  }, [menuId]);
 
-}, [menuId]);
-const handleChange = (e)=>{
-
+  // ==========================
+  // HANDLE INPUT CHANGE
+  // ==========================
+  const handleChange = (e) => {
     setFormData({
-
-        ...formData,
-
-        [e.target.name]:e.target.value
-
+      ...formData,
+      [e.target.name]: e.target.value,
     });
+  };
 
-};
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  // ==========================
+  // TOTAL AMOUNT
+  // ==========================
+  const totalAmount =
+    (Number(menu?.price) || 0) *
+    (Number(formData.guestCount) || 0);
 
-  if (!menu) {
-    alert("Menu not loaded");
-    return;
-  }
+  // ==========================
+  // HANDLE SUBMIT
+  // ==========================
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  if (!formData.eventDate) {
-    alert("Please select event date");
-    return;
-  }
+    // ==========================
+    // TERMS VALIDATION
+    // ==========================
+    if (!agreed) {
+      alert("Please accept the Terms & Conditions before proceeding.");
+      return;
+    }
 
-  if (!formData.eventTime) {
-    alert("Please select event time");
-    return;
-  }
+    if (!menu) {
+      alert("Menu not loaded");
+      return;
+    }
 
-  if (!formData.venue) {
-    alert("Please enter venue");
-    return;
-  }
+    if (!formData.eventDate) {
+      alert("Please select event date");
+      return;
+    }
 
-  if (!formData.guestCount || Number(formData.guestCount) <= 0) {
-    alert("Enter valid guest count");
-    return;
-  }
+    if (!formData.eventTime) {
+      alert("Please select event time");
+      return;
+    }
 
-  try {
-    // Create Razorpay Order
-    const orderRes = await axios.post(
-      "http://localhost:5000/api/payment/create-order",
-      {
-        amount: totalAmount,
-      }
-    );
+    if (!formData.venue) {
+      alert("Please enter venue");
+      return;
+    }
 
-    const options = {
-      key: "rzp_test_SokwTq2nrohRwW",
+    if (
+      !formData.guestCount ||
+      Number(formData.guestCount) <= 0
+    ) {
+      alert("Enter valid guest count");
+      return;
+    }
 
-      amount: orderRes.data.amount,
-
-      currency: "INR",
-
-      name: "Momento Event",
-
-      description: "Catering Booking Payment",
-
-      order_id: orderRes.data.id,
-
-      method: {
-        upi: false,
-      },
-
+    try {
       // ==========================
-      // PAYMENT SUCCESS
+      // CREATE RAZORPAY ORDER
       // ==========================
-      handler: async function (response) {
-        try {
-          const token = localStorage.getItem("token");
-
-          const bookingData = {
-            userId: formData.userId,
-            userName: formData.userName,
-            email: formData.email,
-            phoneNumber: formData.phoneNumber,
-
-            menuId: menu._id,
-            categoryId: menu.categoryId,
-
-            eventDate: formData.eventDate,
-            eventTime: formData.eventTime,
-            venue: formData.venue,
-
-            guestCount: Number(formData.guestCount),
-
-            specialRequest: formData.specialRequest,
-
-            amount: totalAmount,
-
-            paymentId: response.razorpay_payment_id,
-
-            orderId: response.razorpay_order_id,
-
-            paymentStatus: "Success",
-          };
-
-          await axios.post(
-            "http://localhost:5000/api/catering-booking/add",
-            bookingData,
-            {
-              headers: {
-                authorization: `Bearer ${token}`,
-              },
-            }
-          );
-
-          alert("Payment & Catering Booking Successful");
-
-          navigate("/my-bookings");
-        } catch (err) {
-          console.log(err);
-          alert("Booking save failed");
+      const orderRes = await axios.post(
+        "http://localhost:5000/api/payment/create-order",
+        {
+          amount: totalAmount,
         }
-      },
+      );
 
-      // ==========================
-      // TEST MODE
-      // ==========================
-      modal: {
-        ondismiss: async function () {
-          const ok = window.confirm(
-            "Simulate successful payment for testing?"
-          );
+      const options = {
+        key: "rzp_test_SokwTq2nrohRwW",
 
-          if (ok) {
-            try {
-              const token = localStorage.getItem("token");
+        amount: orderRes.data.amount,
 
-              const bookingData = {
-                userId: formData.userId,
-                userName: formData.userName,
-                email: formData.email,
-                phoneNumber: formData.phoneNumber,
+        currency: "INR",
 
-                menuId: menu._id,
-                categoryId: menu.categoryId,
+        name: "Momento Event",
 
-                eventDate: formData.eventDate,
-                eventTime: formData.eventTime,
-                venue: formData.venue,
+        description: "Catering Booking Payment",
 
-                guestCount: Number(formData.guestCount),
+        order_id: orderRes.data.id,
 
-                specialRequest: formData.specialRequest,
+        method: {
+          upi: false,
+        },
 
-                amount: totalAmount,
+        // ==========================
+        // PAYMENT SUCCESS
+        // ==========================
+        handler: async function (response) {
+          try {
+            const token = localStorage.getItem("token");
 
-                paymentId: "TEST_PAYMENT_ID",
+            const bookingData = {
+              userId: formData.userId,
 
-                orderId: orderRes.data.id,
+              userName: formData.userName,
 
-                paymentStatus: "Success",
-              };
-              console.log("BOOKING DATA:", bookingData);
-              await axios.post(
-                "http://localhost:5000/api/catering-booking/add",
-                bookingData,
-                {
-                  headers: {
-                    authorization: `Bearer ${token}`,
-                  },
-                }
-              );
+              email: formData.email,
 
-              alert("Test Payment & Catering Booking Successful");
+              phoneNumber: formData.phoneNumber,
 
-              navigate("/my-bookings");
-            } catch (err) {
-              console.log(err);
-              alert("Booking save failed");
-            }
+              menuId: menu._id,
+
+              categoryId: menu.categoryId,
+
+              eventDate: formData.eventDate,
+
+              eventTime: formData.eventTime,
+
+              venue: formData.venue,
+
+              guestCount: Number(formData.guestCount),
+
+              specialRequest: formData.specialRequest,
+
+              amount: totalAmount,
+
+              paymentId: response.razorpay_payment_id,
+
+              orderId: response.razorpay_order_id,
+
+              paymentStatus: "Success",
+            };
+
+            await axios.post(
+              "http://localhost:5000/api/catering-booking/add",
+              bookingData,
+              {
+                headers: {
+                  authorization: `Bearer ${token}`,
+                },
+              }
+            );
+
+            alert(
+              "Payment & Catering Booking Successful"
+            );
+
+            navigate("/my-bookings");
+          } catch (err) {
+            console.log(err);
+
+            alert("Booking save failed");
           }
         },
-      },
 
-      theme: {
-        color: "#f59e0b",
-      },
-    };
+        // ==========================
+        // TEST MODE
+        // ==========================
+        modal: {
+          ondismiss: async function () {
+            const ok = window.confirm(
+              "Simulate successful payment for testing?"
+            );
 
-    const razor = new window.Razorpay(options);
+            if (ok) {
+              try {
+                const token =
+                  localStorage.getItem("token");
 
-    razor.on("payment.failed", function (response) {
-      alert(response.error.description);
-    });
+                const bookingData = {
+                  userId: formData.userId,
 
-    razor.open();
-  } catch (err) {
-    console.log(err);
-    alert("Payment Failed");
-  }
-};
-const totalAmount =
-  (Number(menu?.price) || 0) *
-  (Number(formData.guestCount) || 0);
+                  userName: formData.userName,
 
-return (
-  <div className="booking-page">
-    <div className="booking-container">
+                  email: formData.email,
 
-      {/* <h2>Book Catering</h2> */}
+                  phoneNumber:
+                    formData.phoneNumber,
 
-      {/* Booking Summary */}
+                  menuId: menu._id,
 
-      <div className="booking-summary">
+                  categoryId: menu.categoryId,
 
-  <h2>Booking Summary</h2>
+                  eventDate:
+                    formData.eventDate,
 
-  {/* <div className="summary-row">
-    <span>Category</span>
-    <strong>{menu?.categoryId?.name}</strong>
-  </div> */}
+                  eventTime:
+                    formData.eventTime,
 
-  <div className="summary-row">
-    <span>Food Type</span>
-    <strong>{menu?.foodType}</strong>
-  </div>
+                  venue: formData.venue,
 
-  <div className="summary-row">
-    <span>Selected Thali</span>
-    <strong>{menu?.thaliName}</strong>
-  </div>
+                  guestCount: Number(
+                    formData.guestCount
+                  ),
 
-  <div className="summary-row">
-    <span>Price / Plate</span>
-    <strong>₹ {menu?.price}</strong>
-  </div>
+                  specialRequest:
+                    formData.specialRequest,
 
-  <div className="summary-row">
-    <span>Guests</span>
-    <strong>{formData.guestCount || 0}</strong>
-  </div>
+                  amount: totalAmount,
 
-  <hr />
+                  paymentId:
+                    "TEST_PAYMENT_ID",
 
-  <div className="summary-row total-row">
-    <span>Total Amount</span>
-    <strong>₹ {totalAmount}</strong>
-  </div>
+                  orderId:
+                    orderRes.data.id,
 
-</div>
+                  paymentStatus: "Success",
+                };
 
-      {/* Booking Form */}
+                console.log(
+                  "BOOKING DATA:",
+                  bookingData
+                );
 
-      <form className="booking-form" onSubmit={handleSubmit}>
+                await axios.post(
+                  "http://localhost:5000/api/catering-booking/add",
+                  bookingData,
+                  {
+                    headers: {
+                      authorization: `Bearer ${token}`,
+                    },
+                  }
+                );
 
-        <input
-          type="text"
-          name="userName"
-          value={formData.userName}
-          readOnly
-        />
+                alert(
+                  "Test Payment & Catering Booking Successful"
+                );
 
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          readOnly
-        />
+                navigate("/my-bookings");
+              } catch (err) {
+                console.log(err);
 
-        <input
-          type="text"
-          name="phoneNumber"
-          value={formData.phoneNumber}
-          readOnly
-        />
+                alert("Booking save failed");
+              }
+            }
+          },
+        },
 
-        <input
-          type="date"
-          name="eventDate"
-          value={formData.eventDate}
-          onChange={handleChange}
-          required
-        />
+        theme: {
+          color: "#f59e0b",
+        },
+      };
 
-        <input
-          type="time"
-          name="eventTime"
-          value={formData.eventTime}
-          onChange={handleChange}
-          required
-        />
+      const razor =
+        new window.Razorpay(options);
 
-        <input
-          type="text"
-          name="venue"
-          placeholder="Enter Event Venue"
-          value={formData.venue}
-          onChange={handleChange}
-          required
-        />
+      razor.on(
+        "payment.failed",
+        function (response) {
+          alert(
+            response.error.description
+          );
+        }
+      );
 
-        <input
-          type="number"
-          name="guestCount"
-          placeholder="Enter Guest Count"
-          value={formData.guestCount}
-          onChange={handleChange}
-          required
-          min="1"
-        />
+      razor.open();
+    } catch (err) {
+      console.log(err);
 
-        <textarea
-          name="specialRequest"
-          placeholder="Special Request"
-          value={formData.specialRequest}
-          onChange={handleChange}
-          rows={4}
-        />
+      alert("Payment Failed");
+    }
+  };
 
-        <button
-          type="button"
-          onClick={() => setShowTerms(true)}
-        >
-          View Terms & Conditions
-        </button>
-
-        <p
+  // ==========================
+  // TERMS MODAL
+  // ==========================
+  const termsModal = showTerms && (
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "rgba(0,0,0,0.6)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 999,
+      }}
+    >
+      <div
+        style={{
+          width: "90%",
+          maxWidth: "500px",
+          background: "#fff",
+          borderRadius: "14px",
+          padding: "25px",
+          maxHeight: "90vh",
+          overflowY: "auto",
+        }}
+      >
+        {/* ==========================
+            TITLE
+        ========================== */}
+        <h2
           style={{
+            marginBottom: "20px",
             textAlign: "center",
-            marginTop: "10px",
-            color: "#777",
-            fontSize: "13px"
           }}
         >
-          By continuing you agree to our Terms & Conditions.
-        </p>
+          Terms & Conditions
+        </h2>
 
-        <button
-type="submit"
-// disabled={!agreed}
->
-Proceed To Payment
-</button>
+        {/* ==========================
+            TERMS
+        ========================== */}
+        <ul
+          style={{
+            lineHeight: "1.8",
+            color: "#444",
+            listStyleType: "none",
+            padding: 0,
+          }}
+        >
+          <li>
+            Advance payment is mandatory for
+            catering booking confirmation.
+          </li>
 
-      </form>
+          <li>
+            Booking amount is non-refundable
+            after confirmation.
+          </li>
 
+          <li>
+            Final catering charges depend on
+            the selected menu and guest count.
+          </li>
+
+          <li>
+            Guest count must be entered
+            correctly while booking.
+          </li>
+
+          <li>
+            Any additional food or service
+            requirement may attract extra
+            charges.
+          </li>
+
+          <li>
+            Catering service availability
+            depends on the selected event date
+            and time.
+          </li>
+
+          <li>
+            The final menu and food arrangement
+            may vary slightly depending on
+            ingredient availability.
+          </li>
+
+          <li>
+            Date or time changes are subject
+            to catering team availability.
+          </li>
+        </ul>
+
+        {/* ==========================
+            CHECKBOX
+        ========================== */}
+        <div
+          style={{
+            marginTop: "20px",
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+          }}
+        >
+          <input
+            type="checkbox"
+            checked={agreed}
+            onChange={(e) =>
+              setAgreed(e.target.checked)
+            }
+          />
+
+          <span>
+            I agree to the Terms & Conditions
+          </span>
+        </div>
+
+        {/* ==========================
+            BUTTONS
+        ========================== */}
+        <div
+          style={{
+            display: "flex",
+            gap: "10px",
+            marginTop: "25px",
+          }}
+        >
+          {/* CONTINUE */}
+          <button
+            type="button"
+            onClick={() => {
+              if (!agreed) {
+                alert(
+                  "Please agree to the Terms & Conditions."
+                );
+                return;
+              }
+
+              setShowTerms(false);
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.background =
+                "linear-gradient(135deg,#FFC233,#FF9800)";
+              e.target.style.transform =
+                "translateY(-3px)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background =
+                "linear-gradient(135deg,#FFB703,#FB8500)";
+              e.target.style.transform =
+                "translateY(0)";
+            }}
+            style={{
+              flex: 1,
+              padding: "12px",
+              border: "none",
+              borderRadius: "50px",
+              background:
+                "linear-gradient(135deg,#FFB703,#FB8500)",
+              color: "#fff",
+              fontWeight: "600",
+              cursor: "pointer",
+              transition: "all .3s ease",
+              boxShadow:
+                "0 10px 20px rgba(251,133,0,.35)",
+            }}
+          >
+            Continue
+          </button>
+
+          {/* CANCEL */}
+          <button
+            type="button"
+            onClick={() => {
+              setAgreed(false);
+              setShowTerms(false);
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.background =
+                "linear-gradient(135deg,#FFB703,#FB8500)";
+              e.target.style.color = "#fff";
+              e.target.style.transform =
+                "translateY(-3px)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = "#fff";
+              e.target.style.color = "#FFB703";
+              e.target.style.transform =
+                "translateY(0)";
+            }}
+            style={{
+              flex: 1,
+              padding: "12px",
+              border: "2px solid #FFB703",
+              borderRadius: "50px",
+              background: "#fff",
+              color: "#FFB703",
+              fontWeight: "600",
+              cursor: "pointer",
+              transition: "all .3s ease",
+            }}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
 
+  // ==========================
+  // PAGE
+  // ==========================
+  return (
+    <div className="booking-page">
+      <div className="booking-container">
+
+        {/* ==========================
+            BOOKING SUMMARY
+        ========================== */}
+        <div className="booking-summary">
+
+          <h2>Booking Summary</h2>
+
+          <div className="summary-row">
+            <span>Food Type</span>
+
+            <strong>
+              {menu?.foodType}
+            </strong>
+          </div>
+
+          <div className="summary-row">
+            <span>Selected Thali</span>
+
+            <strong>
+              {menu?.thaliName}
+            </strong>
+          </div>
+
+          <div className="summary-row">
+            <span>Price / Plate</span>
+
+            <strong>
+              ₹ {menu?.price}
+            </strong>
+          </div>
+
+          <div className="summary-row">
+            <span>Guests</span>
+
+            <strong>
+              {formData.guestCount || 0}
+            </strong>
+          </div>
+
+          <hr />
+
+          <div className="summary-row total-row">
+            <span>Total Amount</span>
+
+            <strong>
+              ₹ {totalAmount}
+            </strong>
+          </div>
+
+        </div>
+
+        {/* ==========================
+            BOOKING FORM
+        ========================== */}
+        <form
+          className="booking-form"
+          onSubmit={handleSubmit}
+        >
+
+          {/* USER NAME */}
+          <input
+            type="text"
+            name="userName"
+            value={formData.userName}
+            readOnly
+          />
+
+          {/* EMAIL */}
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            readOnly
+          />
+
+          {/* PHONE */}
+          <input
+            type="text"
+            name="phoneNumber"
+            value={formData.phoneNumber}
+            readOnly
+          />
+
+          {/* EVENT DATE */}
+          <input
+  type="date"
+  name="eventDate"
+  value={formData.eventDate}
+  onChange={handleChange}
+  min={new Date(Date.now() + 86400000)
+    .toISOString()
+    .split("T")[0]}
+  required
+/>
+
+          {/* EVENT TIME */}
+          <input
+            type="time"
+            name="eventTime"
+            value={formData.eventTime}
+            onChange={handleChange}
+            required
+          />
+
+          {/* VENUE */}
+          <input
+            type="text"
+            name="venue"
+            placeholder="Enter Event Venue"
+            value={formData.venue}
+            onChange={handleChange}
+            required
+          />
+
+          {/* GUEST COUNT */}
+         <input
+  type="number"
+  name="guestCount"
+  placeholder="Enter Guest Count (Minimum 25)"
+  value={formData.guestCount}
+  onChange={(e) => {
+    const value = e.target.value;
+
+    // Allow only whole positive numbers
+    if (/^\d*$/.test(value)) {
+      setFormData({
+        ...formData,
+        guestCount: value,
+      });
+    }
+  }}
+  required
+  min="25"
+  step="1"
+  onInvalid={(e) =>
+    e.target.setCustomValidity(
+      "Please enter a valid guest count"
+    )
+  }
+  onInput={(e) =>
+    e.target.setCustomValidity("")
+  }
+/>
+
+          {/* SPECIAL REQUEST */}
+          <textarea
+            name="specialRequest"
+            placeholder="Special Request"
+            value={formData.specialRequest}
+            onChange={handleChange}
+            rows={4}
+          />
+
+          {/* ==========================
+              VIEW TERMS BUTTON
+          ========================== */}
+          <button
+            type="button"
+            onClick={() => setShowTerms(true)}
+            onMouseEnter={(e) => {
+              e.target.style.background =
+                "linear-gradient(135deg,#FFC233,#FF9800)";
+
+              e.target.style.transform =
+                "translateY(-3px)";
+
+              e.target.style.boxShadow =
+                "0 12px 30px rgba(251,133,0,.45)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background =
+                "linear-gradient(135deg,#FFB703,#FB8500)";
+
+              e.target.style.transform =
+                "translateY(0)";
+
+              e.target.style.boxShadow =
+                "0 8px 20px rgba(251,133,0,.35)";
+            }}
+            style={{
+              width: "100%",
+              padding: "14px",
+              border: "none",
+              borderRadius: "50px",
+              background:
+                "linear-gradient(135deg,#FFB703,#FB8500)",
+              color: "#fff",
+              fontSize: "16px",
+              fontWeight: "600",
+              cursor: "pointer",
+              marginTop: "10px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              transition: "all .3s ease",
+              boxShadow:
+                "0 8px 20px rgba(251,133,0,.35)",
+            }}
+          >
+            View Terms & Conditions
+          </button>
+
+          {/* INFO */}
+          <p
+            style={{
+              textAlign: "center",
+              marginTop: "10px",
+              color: "#777",
+              fontSize: "13px",
+            }}
+          >
+            By continuing you agree to our
+            Terms & Conditions.
+          </p>
+
+          {/* ==========================
+              PROCEED TO PAYMENT
+          ========================== */}
+          <button
+            type="submit"
+            disabled={!agreed}
+            onMouseEnter={(e) => {
+              if (agreed) {
+                e.target.style.background =
+                  "linear-gradient(135deg,#FFC233,#FF9800)";
+
+                e.target.style.transform =
+                  "translateY(-3px)";
+
+                e.target.style.boxShadow =
+                  "0 15px 35px rgba(251,133,0,.45)";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (agreed) {
+                e.target.style.background =
+                  "linear-gradient(135deg,#FFB703,#FB8500)";
+
+                e.target.style.transform =
+                  "translateY(0)";
+
+                e.target.style.boxShadow =
+                  "0 10px 25px rgba(251,133,0,.35)";
+              }
+            }}
+            style={{
+              width: "100%",
+              padding: "14px",
+              border: "none",
+              borderRadius: "50px",
+              background: agreed
+                ? "linear-gradient(135deg,#FFB703,#FB8500)"
+                : "#999",
+              color: "#fff",
+              fontSize: "18px",
+              fontWeight: "600",
+              cursor: agreed
+                ? "pointer"
+                : "not-allowed",
+              marginTop: "15px",
+              justifyContent: "center",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              boxShadow: agreed
+                ? "0 10px 25px rgba(251,133,0,.35)"
+                : "none",
+              transition: "all .3s ease",
+            }}
+          >
+            Proceed To Payment
+          </button>
+
+        </form>
+
+        {/* ==========================
+            TERMS MODAL
+        ========================== */}
+        {termsModal}
+
+      </div>
+    </div>
+  );
 }

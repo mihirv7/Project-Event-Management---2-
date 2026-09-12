@@ -26,31 +26,154 @@ export default function Register() {
     phone: "",
   });
 
+  // ==========================
+  // HANDLE CHANGE
+  // ==========================
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+    const { name, value } = e.target;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    // ==========================
+    // FULL NAME
+    // ONLY CHARACTERS + SPACE
+    // ==========================
+    if (name === "fullName") {
+      if (/^[A-Za-z ]*$/.test(value)) {
+        setFormData({
+          ...formData,
+          [name]: value,
+        });
+      }
 
-    if (!/^\d{10}$/.test(formData.phone)) {
-      alert("Mobile number must contain exactly 10 digits.");
       return;
     }
 
+    // ==========================
+    // PHONE
+    // ONLY NUMBERS
+    // MAX 10 DIGITS
+    // ==========================
+    if (name === "phone") {
+      if (/^\d*$/.test(value) && value.length <= 10) {
+        setFormData({
+          ...formData,
+          [name]: value,
+        });
+      }
+
+      return;
+    }
+
+    // ==========================
+    // OTHER FIELDS
+    // ==========================
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  // ==========================
+  // HANDLE SUBMIT
+  // ==========================
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // ==========================
+    // FULL NAME VALIDATION
+    // ==========================
+    const name = formData.fullName.trim();
+
+    if (!name) {
+      alert("Please enter your full name.");
+      return;
+    }
+
+    if (!/^[A-Za-z]+(?: [A-Za-z]+)*$/.test(name)) {
+      alert(
+        "Full Name should contain only characters and spaces."
+      );
+      return;
+    }
+
+    // ==========================
+    // EMAIL VALIDATION
+    // ==========================
+    const email = formData.email.trim();
+
+    if (!email) {
+      alert("Please enter your email address.");
+      return;
+    }
+
+    if (
+      !/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(
+        email
+      )
+    ) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    // ==========================
+    // PASSWORD
+    // KEEPING YOUR ORIGINAL
+    // PASSWORD FIELD / BEHAVIOR
+    // ==========================
+
+    if (!formData.password) {
+      alert("Please enter your password.");
+      return;
+    }
+
+    // ==========================
+    // CONFIRM PASSWORD
+    // ==========================
+    if (!formData.confirmPassword) {
+      alert("Please confirm your password.");
+      return;
+    }
+
+    if (
+      formData.password !==
+      formData.confirmPassword
+    ) {
+      alert(
+        "Password and Confirm Password do not match."
+      );
+      return;
+    }
+
+    // ==========================
+    // MOBILE VALIDATION
+    // ==========================
+    if (!/^[0-9]{10}$/.test(formData.phone)) {
+      alert(
+        "Mobile number must contain exactly 10 digits."
+      );
+      return;
+    }
+
+    // ==========================
+    // REGISTER
+    // ==========================
     try {
       const res = await axios.post(
         "http://localhost:5000/api/auth/register",
-        formData
+        {
+          ...formData,
+          fullName: name,
+          email: email,
+        }
       );
 
       alert(res.data.message);
+
       navigate("/login");
     } catch (err) {
-      alert(err.response?.data?.message || "Registration failed");
+      alert(
+        err.response?.data?.message ||
+          "Registration failed"
+      );
     }
   };
 
@@ -68,7 +191,6 @@ export default function Register() {
 
         <div className="sparkle"></div>
 
-
         <div className="register-header">
           <h2>Create Account</h2>
 
@@ -79,8 +201,9 @@ export default function Register() {
 
         <form onSubmit={handleSubmit}>
 
-          {/* Full Name */}
-
+          {/* ==========================
+              FULL NAME
+          ========================== */}
           <div className="register-input-group">
 
             <label>Full Name</label>
@@ -98,14 +221,17 @@ export default function Register() {
                 value={formData.fullName}
                 onChange={handleChange}
                 required
+                pattern="[A-Za-z]+( [A-Za-z]+)*"
+                title="Full Name should contain only characters and spaces."
               />
 
             </div>
 
           </div>
 
-          {/* Email */}
-
+          {/* ==========================
+              EMAIL
+          ========================== */}
           <div className="register-input-group">
 
             <label>Email Address</label>
@@ -129,8 +255,10 @@ export default function Register() {
 
           </div>
 
-          {/* Password */}
-
+          {/* ==========================
+              PASSWORD
+              ORIGINAL FIELD
+          ========================== */}
           <div className="register-input-group">
 
             <label>Password</label>
@@ -152,17 +280,24 @@ export default function Register() {
 
               <span
                 className="register-toggle-password"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={() =>
+                  setShowPassword(!showPassword)
+                }
               >
-                {showPassword ? <FiEyeOff /> : <FiEye />}
+                {showPassword ? (
+                  <FiEyeOff />
+                ) : (
+                  <FiEye />
+                )}
               </span>
 
             </div>
 
           </div>
 
-          {/* Confirm Password */}
-
+          {/* ==========================
+              CONFIRM PASSWORD
+          ========================== */}
           <div className="register-input-group">
 
             <label>Confirm Password</label>
@@ -174,7 +309,11 @@ export default function Register() {
               </span>
 
               <input
-                type={showConfirmPassword ? "text" : "password"}
+                type={
+                  showConfirmPassword
+                    ? "text"
+                    : "password"
+                }
                 name="confirmPassword"
                 placeholder="Confirm password"
                 value={formData.confirmPassword}
@@ -185,7 +324,9 @@ export default function Register() {
               <span
                 className="register-toggle-password"
                 onClick={() =>
-                  setShowConfirmPassword(!showConfirmPassword)
+                  setShowConfirmPassword(
+                    !showConfirmPassword
+                  )
                 }
               >
                 {showConfirmPassword ? (
@@ -199,8 +340,9 @@ export default function Register() {
 
           </div>
 
-          {/* Phone */}
-
+          {/* ==========================
+              PHONE
+          ========================== */}
           <div className="register-input-group">
 
             <label>Mobile Number</label>
@@ -218,12 +360,18 @@ export default function Register() {
                 value={formData.phone}
                 onChange={handleChange}
                 required
+                maxLength="10"
+                pattern="[0-9]{10}"
+                title="Enter a valid 10-digit mobile number."
               />
 
             </div>
 
           </div>
 
+          {/* ==========================
+              REGISTER BUTTON
+          ========================== */}
           <button
             type="submit"
             className="register-btn"
@@ -236,15 +384,11 @@ export default function Register() {
         <div className="register-bottom-links">
 
           <p>
-
             Already have an account?
 
             <Link to="/login">
-
               Login
-
             </Link>
-
           </p>
 
         </div>

@@ -50,14 +50,14 @@ export default function Home() {
           </span>
 
           <h1>
-            Create <span>Unforgettable</span><br />
-            Events With Ease
+            <span style={{ color: "#ffffff" }}>Create</span> <span>Unforgettable</span><br />
+            <span style={{ color: "#ffffff" }}>Events With Ease</span>
           </h1>
 
-          <p>
+          <p><span style={{ color: "#ffffff" }}>
             From weddings and birthdays to corporate conferences,
             discover premium venues, decorators, catering and everything
-            you need to make your event memorable.
+            you need to make your event memorable.</span>
           </p>
 
           <div className="hero-buttons">

@@ -1,11 +1,11 @@
-import { useParams, useNavigate } from "react-router-dom"; // ✅ added useNavigate
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./ProductDetail.css";
 
 export default function ProductDetail() {
   const { id } = useParams();
-  const navigate = useNavigate(); // ✅ important
+  const navigate = useNavigate();
 
   const [product, setProduct] = useState(null);
   const [related, setRelated] = useState([]);
@@ -23,9 +23,9 @@ export default function ProductDetail() {
         );
       })
       .then((res) => {
-  const filtered = res.data.filter(p => p._id !== id);
-  setRelated(filtered);
-})
+        const filtered = res.data.filter((p) => p._id !== id);
+        setRelated(filtered);
+      })
       .catch((err) => console.log(err));
   }, [id]);
 
@@ -34,13 +34,18 @@ export default function ProductDetail() {
   return (
     <div className="detail-wrapper">
 
+      {/* ================= MAIN PRODUCT ================= */}
+
       <div className="detail-card">
 
         <h2 className="title">{product.name}</h2>
 
         {/* IMAGE */}
         <div className="image-box premium-image">
-          <img src={`http://localhost:5000/uploads/${product.image}`} alt={product.name} />
+          <img
+            src={`http://localhost:5000/uploads/${product.image}`}
+            alt={product.name}
+          />
         </div>
 
         {/* PRICE */}
@@ -54,58 +59,79 @@ export default function ProductDetail() {
           {product.description || "No description available"}
         </p>
 
-        {/* CUSTOMIZE BUTTON */}
+        {/* ================= CUSTOMIZE BUTTON ================= */}
+
         {product.customizations?.length > 0 && (
           <button
             className="custom-btn premium-btn"
             onClick={() => setShowCustomize(!showCustomize)}
           >
-            Customize
+            {showCustomize ? "Hide Customization" : "Customize"}
           </button>
         )}
 
-        {/* CUSTOMIZATION */}
+        {/* ================= CUSTOMIZATION ================= */}
+
         {showCustomize && (
           <div className="custom-section">
+
             {product.customizations.map((c, index) => (
               <div key={index} className="custom-box">
+
                 <h4>{c.name}</h4>
 
                 <div className="option-container">
+
                   {c.options.map((opt, i) => (
                     <div
                       key={i}
                       className={`option-box ${
                         selectedOptions[c.name] === opt ? "active" : ""
                       }`}
-                      onClick={() =>
-                        setSelectedOptions({
-                          ...selectedOptions,
-                          [c.name]: opt
-                        })
-                      }
+                      onClick={() => {
+                        setSelectedOptions((prev) => {
+
+                          // If same option is clicked again,
+                          // unselect/cancel it
+                          if (prev[c.name] === opt) {
+                            const updated = { ...prev };
+                            delete updated[c.name];
+
+                            return updated;
+                          }
+
+                          // Select the new option
+                          return {
+                            ...prev,
+                            [c.name]: opt,
+                          };
+                        });
+                      }}
                     >
                       {opt}
                     </div>
                   ))}
+
                 </div>
 
               </div>
             ))}
+
           </div>
         )}
 
-        {/* BOOK BUTTON */}
+        {/* ================= BOOK BUTTON ================= */}
+
         <button
-          className="book-btn premium-btn full-btn"
+          className="book-btnn premium-btn"
           onClick={() =>
             navigate("/product-booking", {
               state: {
-               productId: product._id,
-              productName: product.name,
-              price: product.price,
-                selectedOptions
-              }
+                productId: product._id,
+                productName: product.name,
+                price: product.price,
+                selectedOptions,
+              },
             })
           }
         >
@@ -116,53 +142,57 @@ export default function ProductDetail() {
 
       {/* ================= RELATED PRODUCTS ================= */}
 
-<div className="related-section">
+      <div className="related-section">
 
-  <div className="related-header">
-    <h3>More Designs</h3>
-    <p>Explore more beautiful designs from this category.</p>
-  </div>
-
-  <div className="related-grid">
-
-    {related.map((item) => (
-
-      <div
-        key={item._id}
-        className="related-card"
-        onClick={() => navigate(`/product/${item._id}`)}
-      >
-
-        <div className="related-image">
-
-          <img
-            src={`http://localhost:5000/uploads/${item.image}`}
-            alt={item.name}
-          />
-
+        <div className="related-header">
+          <h3>More Designs</h3>
+          <p>
+            Explore more beautiful designs from this category.
+          </p>
         </div>
 
-        <div className="related-content">
+        <div className="related-grid">
 
-          <h4>{item.name}</h4>
+          {related.map((item) => (
 
-          <span className="related-price">
-            ₹ {item.price}
-          </span>
+            <div
+              key={item._id}
+              className="related-card"
+              onClick={() =>
+                navigate(`/product/${item._id}`)
+              }
+            >
 
-          <button className="related-btn">
-            View Details
-          </button>
+              <div className="related-image">
+
+                <img
+                  src={`http://localhost:5000/uploads/${item.image}`}
+                  alt={item.name}
+                />
+
+              </div>
+
+              <div className="related-content">
+
+                <h4>{item.name}</h4>
+
+                <span className="related-price">
+                  ₹ {item.price}
+                </span>
+
+                <button className="related-btn">
+                  View Details
+                </button>
+
+              </div>
+
+            </div>
+
+          ))}
 
         </div>
 
       </div>
-
-    ))}
-
-  </div>
-
-</div>
 
     </div>
   );
