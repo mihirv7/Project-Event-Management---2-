@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const sendEmail = require("../utils/sendEmail");
+const Package = require("../models/Package");
 const Booking = require("../models/Booking");
 const authMiddleware = require("../middleware/authMiddleware");
 
@@ -113,10 +115,78 @@ if (existing) {
   });
 }
   console.log(newBooking);
-    await newBooking.save();
+   await newBooking.save();
 
-    res.status(201).json({ message: "Booking successful" });
+// ============================
+// SEND BOOKING CONFIRMATION EMAIL
+// ============================
+try {
+  const pkg = await Package.findById(packageId);
 
+  await sendEmail({
+    to: email,
+    subject: "Booking Confirmation - Momento Event Management",
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #ddd; padding: 25px; border-radius: 10px;">
+
+        <h2 style="text-align: center;">
+          🎉 Booking Confirmed!
+        </h2>
+
+        <p>Hello <strong>${userName}</strong>,</p>
+
+        <p>
+          Your package booking has been successfully confirmed with
+          <strong>Momento Event Management</strong>.
+        </p>
+
+        <hr>
+
+        <h3>Booking Details</h3>
+
+        <p><strong>Package:</strong> ${pkg ? pkg.name : "Selected Package"}</p>
+
+        <p><strong>Starting Date:</strong> 
+          ${new Date(startingDate).toLocaleDateString("en-IN")}
+        </p>
+
+        <p><strong>Ending Date:</strong> 
+          ${new Date(endingDate).toLocaleDateString("en-IN")}
+        </p>
+
+        <p><strong>Venue:</strong> ${location}</p>
+
+        <p><strong>Guest Count:</strong> ${guestCount}</p>
+
+        <p><strong>Amount Paid:</strong> ₹${amount}</p>
+
+        <p><strong>Payment Status:</strong> ${paymentStatus || "Success"}</p>
+
+        <hr>
+
+        <p>
+          Thank you for choosing <strong>Momento Event Management</strong>.
+        </p>
+
+        <p>
+          We look forward to making your event memorable! ❤️
+        </p>
+
+        <p style="text-align: center; color: #777;">
+          Momento Event Management
+        </p>
+
+      </div>
+    `,
+  });
+
+} catch (emailError) {
+  console.log("Booking saved, but email could not be sent:", emailError);
+}
+
+res.status(201).json({
+  message: "Booking successful",
+});
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

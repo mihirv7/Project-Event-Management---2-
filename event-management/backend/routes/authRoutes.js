@@ -3,7 +3,7 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-
+const sendEmail = require("../utils/sendEmail");
 
 // =========================
 // REGISTER USER
@@ -12,25 +12,27 @@ router.post("/register", async (req, res) => {
   try {
     const { fullName, email, password, confirmPassword, phone } = req.body;
 
-    // check fields
+    // Check fields
     if (!fullName || !email || !password || !confirmPassword || !phone) {
       return res.status(400).json({ message: "All fields required" });
     }
 
-    // password match check
+    // Password match check
     if (password !== confirmPassword) {
       return res.status(400).json({ message: "Passwords do not match" });
     }
 
-    // check existing user
+    // Check existing user
     const existingUser = await User.findOne({ email });
+
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // hash password
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Create user
     const newUser = new User({
       fullName,
       email,
@@ -38,12 +40,90 @@ router.post("/register", async (req, res) => {
       phone
     });
 
+    // Save user
     await newUser.save();
 
-    res.status(201).json({ message: "User registered successfully" });
+    // =========================
+    // SEND WELCOME EMAIL
+    // =========================
+    try {
+      await sendEmail({
+        to: email,
+        subject: "Welcome to Momento Event Management 🎉",
+        html: `
+          <div style="
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: auto;
+            border: 1px solid #ddd;
+            padding: 30px;
+            border-radius: 12px;
+          ">
+
+            <h2 style="text-align: center;">
+              🎉 Welcome to Momento!
+            </h2>
+
+            <p>
+              Hello <strong>${fullName}</strong>,
+            </p>
+
+            <p>
+              Your account has been successfully created on
+              <strong>Momento Event Management</strong>.
+            </p>
+
+            <hr>
+
+            <h3>Registration Details</h3>
+
+            <p>
+              <strong>Name:</strong> ${fullName}
+            </p>
+
+            <p>
+              <strong>Email:</strong> ${email}
+            </p>
+
+            <p>
+              <strong>Phone:</strong> ${phone}
+            </p>
+
+            <hr>
+
+            <p>
+              You can now explore our event packages, customize your event,
+              book products and services, and choose catering options.
+            </p>
+
+            <p>
+              Thank you for joining <strong>Momento Event Management</strong> ❤️
+            </p>
+
+            <p style="text-align: center; color: #777;">
+              Momento Event Management
+            </p>
+
+          </div>
+        `
+      });
+
+    } catch (emailError) {
+      console.log(
+        "User registered, but welcome email could not be sent:",
+        emailError
+      );
+    }
+
+    // Registration response
+    res.status(201).json({
+      message: "User registered successfully"
+    });
 
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: error.message
+    });
   }
 });
 

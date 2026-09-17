@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const ProductBooking = require("../models/ProductBooking");
-const auth = require("../middleware/authMiddleware"); // ✅ import auth
+const auth = require("../middleware/authMiddleware"); 
+const sendEmail = require("../utils/sendEmail");
 
 // ===============================
 // ADD PRODUCT BOOKING
@@ -72,9 +73,131 @@ if (existing) {
   });
 }
     console.log(newBooking);
-    await newBooking.save();
 
-    res.json({ message: "Product booking successful", data: newBooking });
+await newBooking.save();
+
+// ===============================
+// SEND PRODUCT BOOKING EMAIL
+// ===============================
+try {
+  await sendEmail({
+    to: email,
+    subject: "Product Booking Confirmation - Momento Event Management",
+    html: `
+      <div style="
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: auto;
+        border: 1px solid #ddd;
+        padding: 25px;
+        border-radius: 12px;
+      ">
+
+        <h2 style="text-align: center;">
+          🎉 Product Booking Confirmed!
+        </h2>
+
+        <p>
+          Hello <strong>${userName}</strong>,
+        </p>
+
+        <p>
+          Your event product/design has been successfully booked with
+          <strong>Momento Event Management</strong>.
+        </p>
+
+        <hr>
+
+        <h3>Booking Details</h3>
+
+        <p>
+          <strong>Product:</strong> ${productName}
+        </p>
+
+        <p>
+          <strong>Event Date:</strong>
+          ${new Date(date).toLocaleDateString("en-IN")}
+        </p>
+
+        <p>
+          <strong>Venue:</strong> ${location}
+        </p>
+
+        <p>
+          <strong>Guest Count:</strong> ${guestCount}
+        </p>
+
+        <p>
+          <strong>Product Price:</strong> ₹${price}
+        </p>
+
+        <p>
+          <strong>Total Amount:</strong> ₹${amount}
+        </p>
+
+        <p>
+          <strong>Payment Status:</strong>
+          ${paymentStatus || "Success"}
+        </p>
+
+        ${
+          customizations
+            ? `
+              <hr>
+
+              <h3>Customizations</h3>
+
+              <p>
+                ${typeof customizations === "string"
+                  ? customizations
+                  : JSON.stringify(customizations)}
+              </p>
+            `
+            : ""
+        }
+
+        ${
+          specialRequest
+            ? `
+              <hr>
+
+              <h3>Special Request</h3>
+
+              <p>${specialRequest}</p>
+            `
+            : ""
+        }
+
+        <hr>
+
+        <p>
+          Thank you for choosing
+          <strong>Momento Event Management</strong> ❤️
+        </p>
+
+        <p>
+          We look forward to making your event memorable!
+        </p>
+
+        <p style="text-align: center; color: #777;">
+          Momento Event Management
+        </p>
+
+      </div>
+    `
+  });
+
+} catch (emailError) {
+  console.log(
+    "Product booking saved, but email could not be sent:",
+    emailError
+  );
+}
+
+res.json({
+  message: "Product booking successful",
+  data: newBooking
+});
 
   } catch (err) {
     res.status(500).json({ message: err.message });
