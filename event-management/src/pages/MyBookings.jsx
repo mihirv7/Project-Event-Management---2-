@@ -33,6 +33,10 @@ export default function MyBookings() {
     (b) => b.type === "product"
   );
 
+  const cateringBookingss = bookings.filter(
+    (b) => b.type === "catering"
+  );
+
   useEffect(() => {
 
     const fetchBookings = async () => {
@@ -374,12 +378,47 @@ export default function MyBookings() {
                         </div>
 
                       </div>
+                      <div className="info-box">
+
+                        <FiUsers />
+
+                        <div>
+
+                          <label>Amount</label>
+
+                          <span>
+
+                            ₹{b.amount}
+                          </span>
+
+                        </div>
+
+                      </div>
+                      <div className="info-box">
+
+                        <FiUsers />
+
+                        <div>
+
+                          <label>Payment Status</label>
+
+                          <span>
+
+                            {b.paymentStatus || "Success"}
+
+                          </span>
+
+                        </div>
+
+                      </div>
+
+
 
                     </div>
 
                     {/* Footer */}
 
-                    <div className="booking-footer">
+                    {/* <div className="booking-footer">
 
                       <div className="booking-status">
 
@@ -404,7 +443,7 @@ export default function MyBookings() {
 
                       </button>
 
-                    </div>
+                    </div> */}
 
                   </div>
 
@@ -594,6 +633,42 @@ export default function MyBookings() {
                         </div>
 
                       </div>
+                      <div className="info-box">
+
+                        <FiUsers />
+
+                        <div>
+
+                          <label>Amount</label>
+
+                          <span>
+
+                            ₹{b.amount}
+
+                          </span>
+
+                        </div>
+
+                      </div>
+                      <div className="info-box">
+
+                        <FiUsers />
+
+                        <div>
+
+                          <label>Payment Status</label>
+
+                          <span>
+
+                            {b.paymentStatus || "Success"}
+
+                          </span>
+
+                        </div>
+
+                      </div>
+
+
 
                     </div>
 
@@ -695,7 +770,13 @@ export default function MyBookings() {
                   <div
                     key={i}
                     className="booking-card premium-card"
+                    onClick={() =>
+                      navigate(
+                        `/catering/${b.menuId?._id || b.menuIdId}`
+                      )
+                    }
                   >
+                  
 
                     <div className="booking-header">
 
