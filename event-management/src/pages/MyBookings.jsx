@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { jsPDF } from "jspdf";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -13,7 +14,10 @@ import {
   FiCalendar,
   FiUsers,
   FiCheckCircle,
-  FiDollarSign
+  FiDollarSign,
+  FiFileText,
+  FiX,
+  FiDownload
 } from "react-icons/fi";
 
 import "./MyBookings.css";
@@ -24,6 +28,9 @@ export default function MyBookings() {
 
   const [bookings, setBookings] = useState([]);
   const [cateringBookings, setCateringBookings] = useState([]);
+
+  const [receiptUrl, setReceiptUrl] = useState(null);
+const [receiptFileName, setReceiptFileName] = useState("");
 
   const packageBookings = bookings.filter(
     (b) => b.type === "package"
@@ -107,6 +114,448 @@ export default function MyBookings() {
     fetchBookings();
 
   }, []);
+
+  const generateBookingReceipt = (booking, type) => {
+
+  const doc = new jsPDF();
+
+  const orange = [251, 133, 0];
+  const dark = [35, 35, 35];
+  const gray = [110, 110, 110];
+  const light = [255, 248, 238];
+
+  let y = 20;
+
+  /* =========================
+     HEADER
+  ========================= */
+
+  doc.setFillColor(...orange);
+  doc.rect(0, 0, 210, 12, "F");
+
+  doc.setTextColor(...dark);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(24);
+
+  doc.text("Momento.", 20, 32);
+
+  doc.setFontSize(11);
+  doc.setTextColor(...gray);
+
+  doc.text(
+    "Event Management System",
+    20,
+    40
+  );
+
+  /* =========================
+     RECEIPT TITLE
+  ========================= */
+
+  doc.setTextColor(...dark);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(20);
+
+  doc.text(
+    "BOOKING RECEIPT",
+    20,
+    57
+  );
+
+  doc.setDrawColor(...orange);
+  doc.setLineWidth(1);
+
+  doc.line(
+    20,
+    62,
+    190,
+    62
+  );
+
+  /* =========================
+     BOOKING TYPE
+  ========================= */
+
+  y = 78;
+
+  doc.setFillColor(...light);
+
+  doc.roundedRect(
+    20,
+    y - 8,
+    170,
+    20,
+    4,
+    4,
+    "F"
+  );
+
+  doc.setTextColor(...orange);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(13);
+
+  doc.text(
+    `${type} Booking`,
+    28,
+    y + 5
+  );
+
+  /* =========================
+     HELPER
+  ========================= */
+
+  const addDetail = (label, value) => {
+
+    if (
+      value === undefined ||
+      value === null ||
+      value === ""
+    ) {
+      return;
+    }
+
+    y += 17;
+
+    doc.setTextColor(...gray);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+
+    doc.text(
+      label,
+      25,
+      y
+    );
+
+    doc.setTextColor(...dark);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+
+    const text = String(value);
+
+    const lines = doc.splitTextToSize(
+      text,
+      105
+    );
+
+    doc.text(
+      lines,
+      80,
+      y
+    );
+
+    if (lines.length > 1) {
+      y += (lines.length - 1) * 5;
+    }
+
+    doc.setDrawColor(230, 230, 230);
+
+    doc.line(
+      25,
+      y + 6,
+      185,
+      y + 6
+    );
+  };
+
+  /* =========================
+     PACKAGE BOOKING
+  ========================= */
+
+  if (type === "Package") {
+
+    addDetail(
+      "Package",
+      booking.packageId?.name || booking.packageId
+    );
+
+    addDetail(
+      "Customer",
+      booking.userName?.name || booking.userName
+    );
+
+    addDetail(
+      "Email",
+      booking.email
+    );
+
+    addDetail(
+      "Phone",
+      booking.phoneNumber
+    );
+
+    addDetail(
+      "Starting Date",
+      booking.startingDate
+        ? new Date(booking.startingDate).toLocaleDateString()
+        : ""
+    );
+
+    addDetail(
+      "Ending Date",
+      booking.endingDate
+        ? new Date(booking.endingDate).toLocaleDateString()
+        : ""
+    );
+
+    addDetail(
+      "Venue",
+      booking.location
+    );
+
+    addDetail(
+      "Guests",
+      booking.guestCount
+        ? `${booking.guestCount} Guests`
+        : ""
+    );
+
+    addDetail(
+      "Amount",
+      booking.amount
+        ? `₹${booking.amount}`
+        : ""
+    );
+
+    addDetail(
+      "Payment Status",
+      booking.paymentStatus || "Success"
+    );
+  }
+
+  /* =========================
+     EVENT BOOKING
+  ========================= */
+
+  if (type === "Event") {
+
+    addDetail(
+      "Event",
+      booking.productName?.name || booking.productName
+    );
+
+    addDetail(
+      "Customer",
+      booking.userName?.name || booking.userName
+    );
+
+    addDetail(
+      "Email",
+      booking.email
+    );
+
+    addDetail(
+      "Phone",
+      booking.phoneNumber
+    );
+
+    addDetail(
+      "Event Date",
+      booking.date
+        ? new Date(booking.date).toLocaleDateString()
+        : ""
+    );
+
+    addDetail(
+      "Location",
+      booking.location
+    );
+
+    addDetail(
+      "Guests",
+      booking.guestCount
+        ? `${booking.guestCount} Guests`
+        : ""
+    );
+
+    addDetail(
+      "Amount",
+      booking.amount
+        ? `₹${booking.amount}`
+        : ""
+    );
+
+    addDetail(
+      "Payment Status",
+      booking.paymentStatus || "Success"
+    );
+
+    /* =========================
+       CUSTOMIZATIONS
+    ========================= */
+
+    if (
+      booking.customizations &&
+      Object.keys(booking.customizations).length > 0
+    ) {
+
+      y += 10;
+
+      doc.setTextColor(...orange);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(13);
+
+      doc.text(
+        "Selected Customizations",
+        25,
+        y
+      );
+
+      Object.entries(
+        booking.customizations
+      ).forEach(([key, value]) => {
+
+        y += 15;
+
+        doc.setTextColor(...gray);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(10);
+
+        doc.text(
+          key,
+          30,
+          y
+        );
+
+        doc.setTextColor(...dark);
+        doc.setFont("helvetica", "bold");
+
+        doc.text(
+          String(value),
+          100,
+          y
+        );
+      });
+    }
+  }
+
+  /* =========================
+     CATERING BOOKING
+  ========================= */
+
+  if (type === "Catering") {
+
+    addDetail(
+      "Menu",
+      booking.menuId?.thaliName
+    );
+
+    addDetail(
+      "Customer",
+      booking.userName
+    );
+
+    addDetail(
+      "Email",
+      booking.email
+    );
+
+    addDetail(
+      "Phone",
+      booking.phoneNumber
+    );
+
+    addDetail(
+      "Event Date",
+      booking.eventDate
+        ? new Date(booking.eventDate).toLocaleDateString()
+        : ""
+    );
+
+    addDetail(
+      "Venue",
+      booking.venue
+    );
+
+    addDetail(
+      "Guests",
+      booking.guestCount
+        ? `${booking.guestCount} Guests`
+        : ""
+    );
+
+    addDetail(
+      "Food Type",
+      booking.menuId?.foodType
+    );
+
+    addDetail(
+      "Amount",
+      booking.amount
+        ? `₹${booking.amount}`
+        : ""
+    );
+
+    addDetail(
+      "Payment Status",
+      booking.paymentStatus || "Success"
+    );
+  }
+
+  /* =========================
+     FOOTER
+  ========================= */
+
+  const pageHeight =
+    doc.internal.pageSize.height;
+
+  doc.setTextColor(...gray);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(9);
+
+  doc.text(
+    "Thank you for choosing Momento Event Management.",
+    20,
+    pageHeight - 20
+  );
+
+  doc.text(
+    `Generated on ${new Date().toLocaleDateString()}`,
+    20,
+    pageHeight - 13
+  );
+
+  /* =========================
+     CREATE PDF
+  ========================= */
+
+  const pdfBlob = doc.output("blob");
+
+  const url = URL.createObjectURL(
+    pdfBlob
+  );
+
+  const fileName =
+    `${type}-Booking-Receipt.pdf`;
+
+  setReceiptUrl(url);
+  setReceiptFileName(fileName);
+};
+
+const downloadReceipt = () => {
+
+  if (!receiptUrl) return;
+
+  const link = document.createElement("a");
+
+  link.href = receiptUrl;
+  link.download = receiptFileName;
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  document.body.removeChild(link);
+};
+
+const closeReceipt = () => {
+
+  if (receiptUrl) {
+    URL.revokeObjectURL(receiptUrl);
+  }
+
+  setReceiptUrl(null);
+  setReceiptFileName("");
+};
 
   return (
 
@@ -256,7 +705,7 @@ export default function MyBookings() {
 
                         <FiBox />
 
-                        Package
+                        View Package
 
                       </span>
 
@@ -380,7 +829,7 @@ export default function MyBookings() {
                       </div>
                       <div className="info-box">
 
-                        <FiUsers />
+                        <FiDollarSign />
 
                         <div>
 
@@ -396,7 +845,7 @@ export default function MyBookings() {
                       </div>
                       <div className="info-box">
 
-                        <FiUsers />
+                        <FiCheckCircle />
 
                         <div>
 
@@ -416,34 +865,22 @@ export default function MyBookings() {
 
                     </div>
 
-                    {/* Footer */}
+                   <div className="booking-actions">
 
-                    {/* <div className="booking-footer">
+                    <button
+                      className="receipt-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        generateBookingReceipt(b, "Package");
+                      }}
+                    >
+                      <FiFileText />
+                      Booking Receipt
+                    </button>
 
-                      <div className="booking-status">
+                    
 
-                        <FiCheckCircle />
-
-                        Booking Confirmed
-
-                      </div>
-
-                      <button
-                        className="view-btn"
-                        onClick={(e) => {
-                          e.stopPropagation();
-
-                          navigate(
-                            `/packages/${b.packageId?._id || b.packageId}`
-                          );
-                        }}
-                      >
-
-                        View Package
-
-                      </button>
-
-                    </div> */}
+                  </div>
 
                   </div>
 
@@ -534,7 +971,7 @@ export default function MyBookings() {
 
                         <FiBox />
 
-                        Event
+                        View Event
 
                       </span>
 
@@ -635,7 +1072,7 @@ export default function MyBookings() {
                       </div>
                       <div className="info-box">
 
-                        <FiUsers />
+                        <FiDollarSign />
 
                         <div>
 
@@ -652,7 +1089,7 @@ export default function MyBookings() {
                       </div>
                       <div className="info-box">
 
-                        <FiUsers />
+                        <FiCheckCircle />
 
                         <div>
 
@@ -704,6 +1141,22 @@ export default function MyBookings() {
                       </div>
 
                     )}
+
+                    <div className="booking-actions">
+
+                      <button
+                        className="receipt-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          generateBookingReceipt(b, "Event");
+                        }}
+                      >
+                        <FiFileText />
+                        Booking Receipt
+                      </button>
+
+
+                    </div>
 
                   </div>
 
@@ -800,7 +1253,7 @@ export default function MyBookings() {
 
                         <FiCoffee />
 
-                        Catering
+                        View Catering
 
                       </span>
 
@@ -952,6 +1405,22 @@ export default function MyBookings() {
 
                     </div>
 
+                    <div className="booking-actions">
+
+                        <button
+                          className="receipt-btn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            generateBookingReceipt(b, "Catering");
+                          }}
+                        >
+                          <FiFileText />
+                          Booking Receipt
+                        </button>
+
+
+                      </div>
+
                   </div>
 
                 ))
@@ -965,6 +1434,80 @@ export default function MyBookings() {
         )}
 
       </div>
+
+      {/* ================= PDF RECEIPT MODAL ================= */}
+
+{receiptUrl && (
+
+  <div className="receipt-modal">
+
+    <div className="receipt-modal-content">
+
+      {/* Header */}
+
+      <div className="receipt-modal-header">
+
+        <div>
+
+          <FiFileText />
+
+          <h3>
+            Booking Receipt
+          </h3>
+
+        </div>
+
+        <button
+          className="receipt-close"
+          onClick={closeReceipt}
+        >
+          <FiX />
+        </button>
+
+      </div>
+
+
+      {/* PDF */}
+
+      <div className="receipt-pdf-container">
+
+        <iframe
+          src={receiptUrl}
+          title="Booking Receipt"
+          className="receipt-pdf"
+        />
+
+      </div>
+
+
+      {/* Footer */}
+
+      <div className="receipt-modal-footer">
+
+        <button
+          className="receipt-download-btn"
+          onClick={downloadReceipt}
+        >
+          <FiDownload />
+
+          Download PDF
+
+        </button>
+
+        <button
+          className="receipt-close-btn"
+          onClick={closeReceipt}
+        >
+          Close
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+)}  
 
     </div>
 
