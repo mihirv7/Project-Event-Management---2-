@@ -4,6 +4,8 @@ import Home from "./pages/Home";
 import Events from "./pages/Event";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import Footer from "./components/Footer";
 import PackageDetail from "./pages/PackageDetail";
 import Contact from "./pages/Contact";
@@ -19,33 +21,89 @@ import Catering from "./components/Catering/Catering";
 import CateringMenu from "./components/CateringMenu/CateringMenu";
 import CateringBooking from "./pages/CateringBooking";
 
-
 function App() {
   return (
     <BrowserRouter>
       <Navbar />
 
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/events" element={<Events />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/packages/:id" element={<PackageDetail />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/custom" element={<Custom />} />
-        <Route path="/custom/:id" element={<CategoryProducts />} />
-        <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/product-booking" element={<ProductBooking />} />
-        <Route path="/my-bookings" element={<MyBookings />} />
-        <Route path="/catering" element={<Catering />} />
-        <Route path="/catering/:id" element={<CateringMenu />} />
-        <Route
-  path="/catering-booking/:menuId"
-  element={<CateringBooking />}
-/>
 
-        {/* ✅ KEEP THIS INSIDE ROUTES */}
+        <Route path="/" element={<Home />} />
+
+        <Route path="/events" element={<Events />} />
+
+        <Route path="/login" element={<Login />} />
+
+        <Route path="/register" element={<Register />} />
+
+        {/* Forgot Password */}
+        <Route
+          path="/forgot-password"
+          element={<ForgotPassword />}
+        />
+
+        {/* Reset Password */}
+        <Route
+          path="/reset-password/:token"
+          element={<ResetPassword />}
+        />
+
+        <Route
+          path="/packages/:id"
+          element={<PackageDetail />}
+        />
+
+        <Route
+          path="/contact"
+          element={<Contact />}
+        />
+
+        <Route
+          path="/about"
+          element={<About />}
+        />
+
+        <Route
+          path="/custom"
+          element={<Custom />}
+        />
+
+        <Route
+          path="/custom/:id"
+          element={<CategoryProducts />}
+        />
+
+        <Route
+          path="/product/:id"
+          element={<ProductDetail />}
+        />
+
+        <Route
+          path="/product-booking"
+          element={<ProductBooking />}
+        />
+
+        <Route
+          path="/my-bookings"
+          element={<MyBookings />}
+        />
+
+        <Route
+          path="/catering"
+          element={<Catering />}
+        />
+
+        <Route
+          path="/catering/:id"
+          element={<CateringMenu />}
+        />
+
+        <Route
+          path="/catering-booking/:menuId"
+          element={<CateringBooking />}
+        />
+
+        {/* Booking */}
         <Route
           path="/booking/:id"
           element={
@@ -54,6 +112,7 @@ function App() {
             </PrivateRoute>
           }
         />
+
       </Routes>
 
       <Footer />

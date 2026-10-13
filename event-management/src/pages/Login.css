@@ -562,3 +562,37 @@ padding:14px;
 }
 
 }
+/* ======================================================
+   RESET PASSWORD SUCCESS
+====================================================== */
+
+.success-box {
+    background: rgba(0, 200, 100, .18);
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    color: #ffffff;
+
+    margin-bottom: 20px;
+
+    text-align: center;
+
+    border: 1px solid rgba(0, 255, 150, .25);
+}
+
+
+/* ======================================================
+   DISABLED BUTTON
+====================================================== */
+
+.login-btn:disabled {
+    opacity: .65;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow: 0 12px 30px rgba(251,133,0,.25);
+}

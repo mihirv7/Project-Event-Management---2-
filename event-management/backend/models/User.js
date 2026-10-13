@@ -22,11 +22,23 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true
     },
+
     role: {
-    type: String,
-    enum: ["user", "admin"],
-    default: "user"
-  }
+      type: String,
+      enum: ["user", "admin"],
+      default: "user"
+    },
+
+    // Forgot Password fields
+    resetPasswordToken: {
+      type: String,
+      default: null
+    },
+
+    resetPasswordExpires: {
+      type: Date,
+      default: null
+    }
   },
   { timestamps: true }
 );
