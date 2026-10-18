@@ -42,7 +42,10 @@ const handleLogin = async (e) => {
     }
 
     // Save authentication
+    // Save admin authentication
+    localStorage.removeItem("token");
     localStorage.setItem("adminToken", res.data.token);
+
     localStorage.setItem(
       "adminUser",
       JSON.stringify(res.data.user)

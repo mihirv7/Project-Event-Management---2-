@@ -1,90 +1,87 @@
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import axios from "axios";
 
 import StatCard from "../components/StatCard";
 import SimpleTable from "../components/SimpleTable";
 
+const API = "http://localhost:5000/api";
+
+// Get the administrator's authentication token
+const getAuthConfig = () => {
+  const token = localStorage.getItem("adminToken");
+
+  if (!token) {
+    throw new Error("Admin token not found. Please log in again.");
+  }
+
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+};
+
 export default function Dashboard() {
-
-  // =========================
-  // STATES
-  // =========================
   const [stats, setStats] = useState([]);
-
   const [upcomingBookings, setUpcomingBookings] = useState([]);
 
-  // =========================
-  // FETCH DATA
-  // =========================
   useEffect(() => {
-
     fetchDashboardData();
-
   }, []);
 
-  // =========================
-  // MAIN FUNCTION
-  // =========================
   const fetchDashboardData = async () => {
-
     try {
+      const authConfig = getAuthConfig();
 
-      // =========================
-      // API CALLS
-      // =========================
+      // Fetch data
       const usersRes = await axios.get(
-        "http://localhost:5000/api/users"
+        `${API}/users`,
+        authConfig
       );
 
       const productsRes = await axios.get(
-  "http://localhost:5000/api/products"
-);
+        `${API}/products`,
+        authConfig
+      );
 
       const packagesRes = await axios.get(
-        "http://localhost:5000/api/packages"
+        `${API}/packages`,
+        authConfig
       );
 
       const bookingsRes = await axios.get(
-        "http://localhost:5000/api/booking/admin"
+        `${API}/booking/admin`,
+        authConfig
       );
 
       const productBookingsRes = await axios.get(
-        "http://localhost:5000/api/product-bookings/admin"
+        `${API}/product-bookings/admin`,
+        authConfig
       );
 
-      // =========================
-      // TOTAL COUNTS
-      // =========================
+      // Total counts
       const totalUsers = usersRes.data.length;
-
       const totalCustomEvents = productsRes.data.length;
-
       const totalPackages = packagesRes.data.length;
 
       const totalOrders =
         bookingsRes.data.length +
         productBookingsRes.data.length;
 
-      // =========================
-      // REVENUE
-      // =========================
+      // Revenue
       const packageRevenue = bookingsRes.data.reduce(
-        (sum, item) => sum + (item.amount || 0),
+        (sum, item) => sum + (Number(item.amount) || 0),
         0
       );
 
       const productRevenue = productBookingsRes.data.reduce(
-        (sum, item) => sum + (item.amount || 0),
+        (sum, item) => sum + (Number(item.amount) || 0),
         0
       );
 
-      const totalRevenue =
-        packageRevenue + productRevenue;
+      const totalRevenue = packageRevenue + productRevenue;
 
-      // =========================
-      // 6 CARDS
-      // =========================
+      // Dashboard cards
       setStats([
         {
           label: "Total Users",
@@ -112,14 +109,13 @@ export default function Dashboard() {
         },
       ]);
 
-      // =========================
-      // UPCOMING BOOKINGS
-      // =========================
+      // Upcoming package bookings
       const today = new Date();
 
       const upcoming = bookingsRes.data
         .filter(
           (item) =>
+            item.startingDate &&
             new Date(item.startingDate) >= today
         )
         .sort(
@@ -130,95 +126,68 @@ export default function Dashboard() {
         .slice(0, 5);
 
       setUpcomingBookings(upcoming);
-
     } catch (error) {
-
-      console.log(error);
+      console.error(
+        "Error fetching dashboard data:",
+        error.response?.data || error.message
+      );
     }
   };
 
   return (
-
     <div>
-
-      {/* ========================= */}
-      {/* 6 STAT CARDS */}
-      {/* ========================= */}
-
+      {/* Dashboard cards */}
       <div
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
           gap: "20px",
-          marginBottom: "30px"
+          marginBottom: "30px",
         }}
       >
-
         {stats.map((item, index) => (
-
           <StatCard
             key={item.label}
             item={item}
             index={index}
           />
         ))}
-
       </div>
 
-      {/* ========================= */}
-      {/* UPCOMING BOOKINGS TABLE */}
-      {/* ========================= */}
-
+      {/* Upcoming package bookings */}
       <SimpleTable
-
         title="Upcoming Package Bookings"
-
         subtitle="Next 5 upcoming package bookings"
-
         columns={[
-
           {
             key: "userName",
-            label: "Customer"
+            label: "Customer",
           },
-
           {
             key: "packageName",
-            label: "Package"
+            label: "Package",
           },
-
           {
             key: "startingDate",
-            label: "Start Date"
+            label: "Start Date",
           },
-
           {
             key: "guestCount",
-            label: "Guests"
+            label: "Guests",
           },
-
           {
             key: "location",
-            label: "Location"
+            label: "Location",
           },
         ]}
-
         data={upcomingBookings.map((item) => ({
-
           ...item,
-
-          packageName:
-            item.packageId?.name || "Package",
-
-          startingDate:
-            new Date(
-              item.startingDate
-            ).toLocaleDateString()
-
+          packageName: item.packageId?.name || "Package",
+          startingDate: new Date(
+            item.startingDate
+          ).toLocaleDateString("en-IN"),
         }))}
-
       />
-
     </div>
   );
 }

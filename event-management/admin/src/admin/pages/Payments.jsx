@@ -24,60 +24,76 @@ export default function ProductPayments() {
   // =========================
   // PACKAGE BOOKINGS
   // =========================
-  const fetchPackagePayments = async () => {
+ const fetchPackagePayments = async () => {
+  try {
+    const token = localStorage.getItem("adminToken");
 
-    try {
+    const res = await axios.get(
+      "http://localhost:5000/api/booking/admin",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-      const res = await axios.get(
-        "http://localhost:5000/api/booking/admin"
-      );
-
-      setPackagePayments(res.data);
-
-    } catch (err) {
-
-      console.log(err);
-    }
-  };
+    setPackagePayments(res.data);
+  } catch (err) {
+    console.error(
+      "Error fetching package payments:",
+      err.response?.data || err.message
+    );
+  }
+};
 
   // =========================
   // PRODUCT BOOKINGS
   // =========================
   const fetchProductPayments = async () => {
+  try {
+    const token = localStorage.getItem("adminToken");
 
-    try {
+    const res = await axios.get(
+      "http://localhost:5000/api/product-bookings/admin",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-      const res = await axios.get(
-        "http://localhost:5000/api/product-bookings/admin"
-      );
-
-      setProductPayments(res.data);
-
-    } catch (err) {
-
-      console.log(err);
-    }
-  };
+    setProductPayments(res.data);
+  } catch (err) {
+    console.error(
+      "Error fetching product payments:",
+      err.response?.data || err.message
+    );
+  }
+};
   // =========================
 // CATERING BOOKINGS
 // =========================
 const fetchCateringPayments = async () => {
-
   try {
+    const token = localStorage.getItem("adminToken");
 
     const res = await axios.get(
-      "http://localhost:5000/api/catering-booking"
+      "http://localhost:5000/api/catering-booking",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
 
     setCateringPayments(res.data);
-
   } catch (err) {
-
-    console.log(err);
-
+    console.error(
+      "Error fetching catering payments:",
+      err.response?.data || err.message
+    );
   }
 };
-
   // =========================
   // TOTAL REVENUE
   // =========================

@@ -16,6 +16,22 @@
     overflow:hidden;
 
 }
+.cancellation-info {
+  margin-top: 14px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.cancellation-info p {
+  margin: 0;
+  padding: 0;
+}
+
+.cancellation-info strong {
+  font-weight: 600;
+  color: #222;
+}
 
 /* =====================================================
                     HERO SECTION

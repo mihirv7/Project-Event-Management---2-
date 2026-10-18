@@ -156,12 +156,15 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    // create token
-    const token = jwt.sign(
-      { id: user._id },
-      "secretkey",
-      { expiresIn: "1d" }
-    );
+    // Create token with user ID and role
+const token = jwt.sign(
+  {
+    id: user._id,
+    role: user.role || "user"
+  },
+  "secretkey",
+  { expiresIn: "1d" }
+);
 
     res.json({
       message: "Login successful",
@@ -211,7 +214,7 @@ router.post("/forgot-password", async (req, res) => {
     await user.save();
 
     // Reset password link
-    const resetLink = `http://localhost:5174/reset-password/${resetToken}`;
+    const resetLink = `http://localhost:5175/reset-password/${resetToken}`;
 
     // Send email
     try {

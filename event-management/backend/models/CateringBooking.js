@@ -86,6 +86,49 @@ const cateringBookingSchema = new mongoose.Schema(
       enum: ["Pending", "Confirmed", "Cancelled"],
       default: "Pending",
     },
+        cancellationStatus: {
+      type: String,
+      enum: ["NotRequested", "Requested", "Approved", "Rejected"],
+      default: "NotRequested",
+    },
+
+    cancellationReason: {
+      type: String,
+      default: "",
+    },
+
+    cancellationDate: {
+      type: Date,
+      default: null,
+    },
+
+    refundAmount: {
+      type: Number,
+      default: 0,
+    },
+
+    refundStatus: {
+      type: String,
+      enum: [
+        "NotRequested",
+        "Pending",
+        "Processing",
+        "Processed",
+        "Failed",
+        "Rejected",
+      ],
+      default: "NotRequested",
+    },
+
+    refundDate: {
+      type: Date,
+      default: null,
+    },
+
+    refundNote: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,

@@ -48,23 +48,80 @@ const bookingSchema = new mongoose.Schema(
       type: Number,
       required: true
     },
+
+    // Existing payment details
     paymentId: {
-  type: String
-},
+      type: String
+    },
 
-orderId: {
-  type: String
-},
+    orderId: {
+      type: String
+    },
 
-paymentStatus: {
-  type: String,
-  default: "Pending"
-},
-amount: {
-  type: Number,
-  required: true
-},
-    specialRequest: String
+    paymentStatus: {
+      type: String,
+      default: "Pending"
+    },
+
+    amount: {
+      type: Number,
+      required: true
+    },
+
+    specialRequest: String,
+
+    // NEW: Booking status
+    bookingStatus: {
+      type: String,
+      enum: ["Pending", "Confirmed", "Cancelled"],
+      default: "Confirmed"
+    },
+
+    // NEW: Cancellation details
+    cancellationStatus: {
+      type: String,
+      enum: ["NotRequested", "Requested", "Approved", "Rejected"],
+      default: "NotRequested"
+    },
+
+    cancellationReason: {
+      type: String,
+      default: ""
+    },
+
+    cancellationDate: {
+      type: Date,
+      default: null
+    },
+
+    // NEW: Manual refund details
+    refundAmount: {
+      type: Number,
+      default: 0
+    },
+
+    refundStatus: {
+      type: String,
+      enum: [
+        "NotRequested",
+        "Pending",
+        "Processing",
+        "Processed",
+        "Failed",
+        "Rejected"
+      ],
+      default: "NotRequested"
+    },
+
+    refundDate: {
+      type: Date,
+      default: null
+    },
+
+    refundNote: {
+      type: String,
+      default: ""
+    }
   },
   { timestamps: true }
 );
