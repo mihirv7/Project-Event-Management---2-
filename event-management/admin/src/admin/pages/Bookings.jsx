@@ -65,6 +65,31 @@ const headingStyle = {
   whiteSpace: "nowrap",
   borderBottom: "1px solid #3b4558",
 };
+// Booking status badge styles
+const getBookingStatusStyle = (status) => {
+  const normalizedStatus = (status || "Pending").toLowerCase();
+
+  let color = "#f59e0b";
+  let background = "rgba(245, 158, 11, 0.12)";
+
+  if (normalizedStatus === "cancelled") {
+    color = "#ef4444";
+    background = "rgba(239, 68, 68, 0.15)";
+  } else if (normalizedStatus === "confirmed") {
+    color = "#22c55e";
+    background = "rgba(34, 197, 94, 0.12)";
+  }
+
+  return {
+    color,
+    background,
+    padding: "5px 10px",
+    borderRadius: "6px",
+    fontWeight: 600,
+    display: "inline-block",
+    whiteSpace: "nowrap",
+  };
+};
 
 // ======================================
 // MAIN COMPONENT
@@ -629,7 +654,9 @@ export default function Bookings() {
                     </td>
 
                     <td style={cellStyle}>
-                      {b.bookingStatus || "Confirmed"}
+                      <span style={getBookingStatusStyle(b.bookingStatus || "Confirmed")}>
+                        {b.bookingStatus || "Confirmed"}
+                      </span>
                     </td>
 
                     <td style={cellStyle}>
@@ -838,7 +865,9 @@ export default function Bookings() {
                     </td>
 
                     <td style={cellStyle}>
-                      {b.bookingStatus || "Confirmed"}
+                      <span style={getBookingStatusStyle(b.bookingStatus || "Confirmed")}>
+                        {b.bookingStatus || "Confirmed"}
+                      </span>
                     </td>
 
                     <td style={cellStyle}>
@@ -1035,7 +1064,9 @@ export default function Bookings() {
                     </td>
 
                     <td style={cellStyle}>
-                      {b.bookingStatus || "Pending"}
+                      <span style={getBookingStatusStyle(b.bookingStatus || "Pending")}>
+                        {b.bookingStatus || "Pending"}
+                      </span>
                     </td>
 
                     <td style={cellStyle}>

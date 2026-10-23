@@ -1634,7 +1634,7 @@ const closeReceipt = () => {
 
                         <div>
 
-                          <label>Status</label>
+                          <label>Payment Status</label>
 
                           <span>
 

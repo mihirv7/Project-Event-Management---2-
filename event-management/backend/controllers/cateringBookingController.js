@@ -6,7 +6,15 @@ const sendEmail = require("../utils/sendEmail");
 // ========================================
 const addBooking = async (req, res) => {
   try {
-    const booking = await CateringBooking.create(req.body);
+    const bookingData = { ...req.body };
+
+      if (bookingData.paymentStatus === "Success") {
+        bookingData.bookingStatus = "Confirmed";
+      } else {
+        bookingData.bookingStatus = "Pending";
+      }
+
+      const booking = await CateringBooking.create(bookingData);
 
     // Send booking confirmation email
     try {
