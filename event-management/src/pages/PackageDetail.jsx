@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./PackageDetail.css";
+import { FiMapPin } from "react-icons/fi";
 
 export default function PackageDetail() {
   const { id } = useParams();
@@ -82,13 +83,26 @@ export default function PackageDetail() {
 
           <div className="info-row">
 
-            <span className="label">Venue</span>
+  <span className="label">Venue</span>
 
-            <span className="value">
-              {pkg.venue}
-            </span>
+  <span
+    className="value venue-link"
+    onClick={() => {
+      const venue = encodeURIComponent(pkg.venue);
 
-          </div>
+      window.open(
+        `https://www.google.com/maps/search/?api=1&query=${venue}`,
+        "_blank"
+      );
+    }}
+    title="Open venue in Google Maps"
+  >
+     <FiMapPin />
+     
+    {pkg.venue}
+  </span>
+
+</div>
 
           <div className="info-row">
 

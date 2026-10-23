@@ -1849,6 +1849,27 @@ transform:translateY(0);
 
 
 /* =====================================================
+            VENUE GOOGLE MAPS
+===================================================== */
+
+.venue-box{
+    cursor:pointer;
+    transition:all .3s ease;
+}
+
+.venue-box:hover{
+    border-color:#FB8500;
+    background:#fff9ef;
+    transform:translateY(-4px);
+    box-shadow:0 8px 20px rgba(251,133,0,.15);
+}
+
+.venue-box:hover span{
+    color:#FB8500;
+}
+
+
+/* =====================================================
                     MOBILE
 ===================================================== */
 
@@ -1927,3 +1948,4 @@ transform:translateY(0);
     }
 
 }
+

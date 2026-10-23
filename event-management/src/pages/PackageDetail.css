@@ -324,6 +324,23 @@
 }
 
 /* ===========================
+   VENUE GOOGLE MAPS
+=========================== */
+
+.venue-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.venue-link:hover {
+  color: #FB8500;
+  text-decoration: underline;
+}
+
+
+
+/* ===========================
    RESPONSIVE
 =========================== */
 

@@ -971,23 +971,35 @@ const closeReceipt = () => {
 
                       </div>
 
-                      <div className="info-box">
+                      <div
+  className="info-box venue-box"
+  onClick={(e) => {
+    e.stopPropagation();
 
-                        <FiMapPin />
+    const venue = encodeURIComponent(b.location);
 
-                        <div>
+    window.open(
+      `https://www.google.com/maps/search/?api=1&query=${venue}`,
+      "_blank",
+      "noopener,noreferrer"
+    );
+  }}
+  title="Open venue in Google Maps"
+>
 
-                          <label>Venue</label>
+  <FiMapPin />
 
-                          <span>
+  <div>
 
-                            {b.location}
+    <label>Venue</label>
 
-                          </span>
+    <span>
+      {b.location}
+    </span>
 
-                        </div>
+  </div>
 
-                      </div>
+</div>
 
                       <div className="info-box">
 
