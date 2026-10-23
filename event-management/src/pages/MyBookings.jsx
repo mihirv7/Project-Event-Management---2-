@@ -567,7 +567,7 @@ const handleCancelProduct = async (booking) => {
       Object.keys(booking.customizations).length > 0
     ) {
 
-      y += 10;
+      y += 25;
 
       doc.setTextColor(...orange);
       doc.setFont("helvetica", "bold");
@@ -669,6 +669,56 @@ const handleCancelProduct = async (booking) => {
       booking.paymentStatus || "Success"
     );
   }
+
+  /* =========================
+   CANCELLATION & REFUND POLICY
+========================= */
+
+if (y > 220) {
+  doc.addPage();
+  y = 25;
+}
+
+y += 18;
+
+doc.setTextColor(...orange);
+doc.setFont("helvetica", "bold");
+doc.setFontSize(13);
+
+doc.text(
+  "Cancellation & Refund Policy",
+  25,
+  y
+);
+
+y += 12;
+
+const refundPolicy = [
+  ["More than 7 days before event", "100%"],
+  ["3–7 days before event", "75%"],
+  ["1–2 days before event", "50%"],
+  ["Same day", "0%"]
+];
+
+refundPolicy.forEach(([period, refund]) => {
+
+  y += 13;
+
+  doc.setTextColor(...gray);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+
+  doc.text(period, 30, y);
+
+  doc.setTextColor(...dark);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(11);
+
+  doc.text(refund, 170, y);
+
+  doc.setDrawColor(230, 230, 230);
+  doc.line(25, y + 6, 185, y + 6);
+});
 
   /* =========================
      FOOTER
