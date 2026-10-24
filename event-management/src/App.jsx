@@ -96,7 +96,7 @@ function App() {
         <Route
           path="/catering/:id"
           element={<CateringMenu />}
-        />
+        />  
 
         <Route
           path="/catering-booking/:menuId"

@@ -1468,7 +1468,7 @@ const closeReceipt = () => {
                     className="booking-card premium-card"
                     onClick={() =>
                       navigate(
-                        `/catering/${b.menuId?._id || b.menuIdId}`
+                        `/catering/${b.menuId?.categoryId}`
                       )
                     }
                   >
