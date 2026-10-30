@@ -244,18 +244,19 @@ const handleDelete = async (id) => {
     border: "1px solid rgba(255,255,255,0.1)",
     padding: "10px",
     borderRadius: "10px",
-    color: "#ffffff",
+    color: "#fff8f8",
     outline: "none",
     appearance: "none",
     WebkitAppearance: "none",
     cursor: "pointer"}}
 >
-  <option value="" style={{ background: "#1e293b", color: "#ffffff" }}>Select Category</option>
+  <option value="" style={{ background: "#1e293b", color: "#ece4e4" }}>Select Category</option>
 
   {categories.map(category=>(
     <option
       key={category._id}
       value={category._id}
+      style={{ background: "#1e293b", color: "#ffffff" }}
     >
       {category.name}
     </option>
