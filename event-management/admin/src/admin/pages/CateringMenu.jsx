@@ -239,8 +239,18 @@ const handleDelete = async (id) => {
 <select
   value={categoryId}
   onChange={(e)=>setCategoryId(e.target.value)}
+  style={{
+    background: "rgba(255,255,255,0.05)",
+    border: "1px solid rgba(255,255,255,0.1)",
+    padding: "10px",
+    borderRadius: "10px",
+    color: "#ffffff",
+    outline: "none",
+    appearance: "none",
+    WebkitAppearance: "none",
+    cursor: "pointer"}}
 >
-  <option value="">Select Category</option>
+  <option value="" style={{ background: "#1e293b", color: "#ffffff" }}>Select Category</option>
 
   {categories.map(category=>(
     <option
@@ -256,9 +266,20 @@ const handleDelete = async (id) => {
 <select
   value={foodType}
   onChange={(e)=>setFoodType(e.target.value)}
+  style={{
+    background: "rgba(255,255,255,0.05)",
+    border: "1px solid rgba(255,255,255,0.1)",
+    padding: "10px",
+    borderRadius: "10px",
+    color: "#ffffff",
+    outline: "none",
+    appearance: "none",
+    WebkitAppearance: "none",
+    cursor: "pointer"
+  }}
 >
-  <option value="Regular">Regular</option>
-  <option value="Jain">Jain</option>
+  <option value="Regular"  style={{ background: "#1e293b", color: "#ffffff" }}>Regular</option>
+  <option value="Jain" style={{ background: "#1e293b", color: "#ffffff" }}>Jain</option>
 </select>
 
 <textarea
@@ -270,9 +291,19 @@ const handleDelete = async (id) => {
 <select
   value={status}
   onChange={(e)=>setStatus(e.target.value==="true")}
+  style={{
+    background: "rgba(255,255,255,0.05)",
+    border: "1px solid rgba(255,255,255,0.1)",
+    padding: "10px",
+    borderRadius: "10px",
+    color: "#ffffff",
+    outline: "none",
+    appearance: "none",
+    WebkitAppearance: "none",
+    cursor: "pointer"}}
 >
-  <option value={true}>Active</option>
-  <option value={false}>Inactive</option>
+  <option value={true} style={{ background: "#1e293b", color: "#ffffff" }}>Active</option>
+  <option value={false} style={{ background: "#1e293b", color: "#ffffff" }}>Inactive</option>
 </select>
 
 <div className="file-upload">

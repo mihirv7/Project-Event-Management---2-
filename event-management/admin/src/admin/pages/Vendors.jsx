@@ -387,7 +387,7 @@ setImage(null); // refresh table
     cursor: "pointer",
     marginRight: "5px"
   }}>Edit</button>
-              <button onClick={() => handleDelete(p.id)} onClick={() => handleDelete(event._id)}
+              <button onClick={() => handleDelete(p.id)}
     style={{
     background: "#ff4d4f",
     color: "white",
